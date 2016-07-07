@@ -31,10 +31,10 @@
         tools:context="com.fredzqm.historicaldocs.MainActivity"
         tools:showIn="@layout/app_bar_main">
 
-        <fragment class="com.fredzqm.jobee.account.LoginFragment"
-            android:id="@+id/titles"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <!--<fragment class="com.fredzqm.jobee.account.LoginFragment"-->
+            <!--android:id="@+id/titles"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
 
     </FrameLayout>
 

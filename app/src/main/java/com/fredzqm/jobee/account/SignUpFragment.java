@@ -3,6 +3,7 @@ package com.fredzqm.jobee.account;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,11 @@ import com.fredzqm.jobee.R;
  * to handle interaction events.
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment {
+public class SignUpFragment extends Fragment {
+    private static final String TAG = "SignUpFragment";
     private Callback mCallback;
 
-    public LoginFragment() {
+    public SignUpFragment() {
         // Required empty public constructor
     }
 
@@ -35,23 +37,23 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         final Switch accountTypeSwitch = (Switch) view.findViewById(R.id.login_account_type_switch);
-        final EditText userNameEditText = (EditText) view.findViewById(R.id.login_username_edit_text);
-        final EditText passwordEditText = (EditText) view.findViewById(R.id.login_password_edit_text);
+        final EditText userNameEditText = (EditText) view.findViewById(R.id.signup_username_edit_text);
+        final EditText passwordEditText = (EditText) view.findViewById(R.id.signup_password_edit_text);
+        final EditText repeatEditText = (EditText) view.findViewById(R.id.signup_repeat_password_edit_text);
 
-        final Button loginButton = (Button) view.findViewById(R.id.login_button_login_in);
-        Button signUpButton = (Button) view.findViewById(R.id.login_button_sign_up);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCallback.login(userNameEditText.getText().toString(), passwordEditText.getText().toString(), accountTypeSwitch.isChecked());
-            }
-        });
+        Button signUpButton = (Button) view.findViewById(R.id.signup_button_sign_up);
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.signUp();
+                String a = passwordEditText.getText().toString();
+                String b = repeatEditText.getText().toString();
+                if (a!= null && a.equals(b))
+                    mCallback.signUp(userNameEditText.getText().toString(), a, accountTypeSwitch.isChecked());
+                else
+                    Log.d(TAG, "password does not match");
             }
         });
         return view;
@@ -91,9 +93,7 @@ public class LoginFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void login(String userName, String password, boolean isRecruiter);
-        void signUp();
-        // TODO: Update argument type and name
+        void signUp(String userName, String password, boolean isRecruiter);
     }
 
 }

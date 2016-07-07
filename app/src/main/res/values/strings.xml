@@ -7,8 +7,12 @@
     <string name="action_settings">Settings</string>
     <string name="acount_type_job_seeker">Job Seeker</string>
     <string name="account_type_recruiter">Recruiter</string>
-    <string name="login_user_name">UserName</string>
-    <string name="login_password_label">Password</string>
-    <string name="login_button_sign_up">Sign Up</string>
+    <string name="user_name_label">UserName</string>
+    <string name="password_label">Password</string>
+    <string name="button_sign_up_text">Sign Up</string>
     <string name="login_button_log_in">Log In</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="repeat_password_lable">Repeat</string>
 </resources>
