@@ -8,4 +8,7 @@
     <string name="acount_type_job_seeker">Job Seeker</string>
     <string name="account_type_recruiter">Recruiter</string>
     <string name="login_user_name">UserName</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_button_sign_up">Sign Up</string>
+    <string name="login_button_log_in">Log In</string>
 </resources>
