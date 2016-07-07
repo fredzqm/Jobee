@@ -3,7 +3,6 @@ package com.fredzqm.jobee.account;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,7 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCallback.login(userNameEditText.getText(), passwordEditText.getText());
+                mCallback.login(userNameEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
         signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +91,7 @@ public class LoginFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void login(Editable text, Editable text1);
+        void login(String userName, String password);
         void signUp();
         // TODO: Update argument type and name
     }
