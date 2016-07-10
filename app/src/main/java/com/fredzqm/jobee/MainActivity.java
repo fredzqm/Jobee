@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,9 +18,10 @@ import android.view.View;
 
 import com.fredzqm.jobee.account.LoginFragment;
 import com.fredzqm.jobee.account.SignUpFragment;
+import com.fredzqm.jobee.job_seeker.ResumeFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.Callback, SignUpFragment.Callback {
+        implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.Callback, SignUpFragment.Callback, ResumeFragment.Callback {
 
     private static final String TAG = "MainActivity";
 
@@ -111,23 +113,31 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void swapFragment(Fragment fragment, String backStackTag){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, fragment);
+        if (backStackTag != null)
+            ft.addToBackStack(backStackTag);
+        ft.commit();
+    }
+
 
     @Override
     public void login(String userName, String password, boolean isRecruiter) {
         Log.d(TAG, "log in with\nuserName " + userName +"password "+ password + "isRecruiter " + isRecruiter);
+        // TODO: verfiy the password
+        swapFragment(ResumeFragment.newInstance(userName), null);
     }
 
     @Override
     public void signUp() {
         Log.d(TAG, "Sign up");
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, new SignUpFragment());
-        ft.addToBackStack("signUp");
-        ft.commit();
+        swapFragment(new SignUpFragment(), "signUp");
     }
 
     @Override
     public void signUp(String userName, String password, boolean isRecruiter) {
         Log.d(TAG, "Sign up\nuserName " + userName +"password "+ password + "isRecruiter " + isRecruiter);
     }
+
 }
