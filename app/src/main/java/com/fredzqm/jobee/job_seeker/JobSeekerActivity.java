@@ -1,4 +1,4 @@
-package com.fredzqm.jobee;
+package com.fredzqm.jobee.job_seeker;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,24 +11,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.fredzqm.jobee.account.LoginFragment;
-import com.fredzqm.jobee.account.SignUpFragment;
-import com.fredzqm.jobee.job_seeker.ResumeFragment;
+import com.fredzqm.jobee.R;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.Callback, SignUpFragment.Callback, ResumeFragment.Callback {
+public class JobSeekerActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "JobSeekerActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_resume);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity
 
         if (savedInstanceState == null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.fragment_container, new LoginFragment());
+            ft.add(R.id.fragment_container_resume, ResumeFragment.newInstance("userName"));
             ft.commit();
         }
     }
@@ -115,29 +112,11 @@ public class MainActivity extends AppCompatActivity
 
     private void swapFragment(Fragment fragment, String backStackTag){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, fragment);
+        ft.replace(R.id.fragment_container_resume, fragment);
         if (backStackTag != null)
             ft.addToBackStack(backStackTag);
         ft.commit();
     }
 
-
-    @Override
-    public void login(String userName, String password, boolean isRecruiter) {
-        Log.d(TAG, "log in with\nuserName " + userName +"password "+ password + "isRecruiter " + isRecruiter);
-        // TODO: verfiy the password
-        swapFragment(ResumeFragment.newInstance(userName), null);
-    }
-
-    @Override
-    public void signUp() {
-        Log.d(TAG, "Sign up");
-        swapFragment(new SignUpFragment(), "signUp");
-    }
-
-    @Override
-    public void signUp(String userName, String password, boolean isRecruiter) {
-        Log.d(TAG, "Sign up\nuserName " + userName +"password "+ password + "isRecruiter " + isRecruiter);
-    }
 
 }
