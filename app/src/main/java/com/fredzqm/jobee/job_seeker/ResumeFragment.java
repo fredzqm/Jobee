@@ -1,5 +1,6 @@
 package com.fredzqm.jobee.job_seeker;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -71,7 +72,7 @@ public class ResumeFragment extends Fragment implements JobSeekerFragment {
         mSkillRecyclerView = (RecyclerView) view.findViewById(R.id.resume_skill_list);
         mSkillAdapter = setItemAdapter(mSkillRecyclerView);
 
-        mExperinceRecyclerView = (RecyclerView) view.findViewById(R.id.resume_skill_list);
+        mExperinceRecyclerView = (RecyclerView) view.findViewById(R.id.resume_experience_list);
         mExperienceAdpater = setItemAdapter(mExperinceRecyclerView);
 
         return view;

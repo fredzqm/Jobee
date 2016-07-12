@@ -82,29 +82,18 @@
 
         </TableLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/resume_skill_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="71dp" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/resume_skill_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="71dp" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/resume_experience_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="71dp" />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/resume_experience_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="71dp" />
-
-        </RelativeLayout>
 
     </LinearLayout>
 

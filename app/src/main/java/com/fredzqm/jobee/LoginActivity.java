@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mEmailView;
             cancel = true;
         }
-
+        // TODO: remove this line to enable input validation, it's here for debugging purpose
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
