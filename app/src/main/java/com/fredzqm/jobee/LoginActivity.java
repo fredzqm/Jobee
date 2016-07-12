@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
@@ -74,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private Switch mAccoutnTypeSwitch;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -88,6 +90,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+        mAccoutnTypeSwitch = (Switch) findViewById(R.id.login_account_type_switch);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
@@ -96,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin(true);
                     return true;
                 }
                 return false;
@@ -107,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptLogin(true);
             }
         });
 
@@ -115,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptSignUp();
+                attemptLogin(false);
             }
         });
 
@@ -175,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptLogin(boolean isSignIn) {
         if (mAuthTask != null) {
             return;
         }
@@ -187,6 +190,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        boolean accountType = mAccoutnTypeSwitch.isSelected();
 
         boolean cancel = false;
         View focusView = null;
@@ -217,54 +221,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginSignUpTask(email, password, true);
-            mAuthTask.execute((Void) null);
-        }
-    }
-
-    private void attemptSignUp() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginSignUpTask(email, password, false);
+            mAuthTask = new UserLoginSignUpTask(email, password, accountType, isSignIn);
             mAuthTask.execute((Void) null);
         }
     }
@@ -417,11 +374,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private final boolean mIsRecruiter;
         private final boolean mIsSignIn;
 
-        UserLoginSignUpTask(String email, String password, boolean isSignIn) {
+        UserLoginSignUpTask(String email, String password, boolean isRecruiter , boolean isSignIn) {
             mEmail = email;
             mPassword = password;
+            mIsRecruiter = isRecruiter;
             mIsSignIn = isSignIn;
         }
 
@@ -456,9 +415,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
-                inputIntent.putExtra(SIGNIN_EMAIL, mEmail);
-                startActivityForResult(inputIntent, REQUEST_CODE);
+                if (mIsRecruiter){
+
+                }else{
+                    Intent inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
+                    inputIntent.putExtra(SIGNIN_EMAIL, mEmail);
+                    startActivityForResult(inputIntent, REQUEST_CODE);
+                }
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
