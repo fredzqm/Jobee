@@ -15,12 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 
 public class JobSeekerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
-
+        implements NavigationView.OnNavigationItemSelectedListener, ResumeFragment.Callback{
     private static final String TAG = "JobSeekerActivity";
+
+    private String mEmailAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +49,10 @@ public class JobSeekerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mEmailAccount = getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL);
         if (savedInstanceState == null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.fragment_container_resume, ResumeFragment.newInstance("userName"));
+            ft.add(R.id.fragment_container_resume, ResumeFragment.newInstance(mEmailAccount));
             ft.commit();
         }
     }
