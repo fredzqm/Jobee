@@ -3,7 +3,8 @@ package com.fredzqm.jobee.job_seeker;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +20,18 @@ import com.fredzqm.jobee.R;
  * Use the {@link ResumeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ResumeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+public class ResumeFragment extends Fragment implements JobSeekerFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = "ResumeFragment";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String USER_NAME = "USER_NAME";
 
-    // TODO: Rename and change types of parameters
     private String mUserName;
-    private String mParam2;
 
-    private Callback mListener;
+    private Callback mCallback;
+    private ItemAdapter mSkillAdapter;
+    private ItemAdapter mExperienceAdpater;
+    private RecyclerView mSkillRecyclerView;
+    private RecyclerView mExperinceRecyclerView;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -43,11 +44,10 @@ public class ResumeFragment extends Fragment {
      * @param userName Parameter 1.
      * @return A new instance of fragment ResumeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ResumeFragment newInstance(String userName) {
         ResumeFragment fragment = new ResumeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, userName);
+        args.putString(USER_NAME, userName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +56,7 @@ public class ResumeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mUserName = getArguments().getString(ARG_PARAM1);
+            mUserName = getArguments().getString(USER_NAME);
         }
     }
 
@@ -67,15 +67,29 @@ public class ResumeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_resume, container, false);
         EditText emailEditText = (EditText) view.findViewById(R.id.resume_email);
         emailEditText.setText(mUserName);
-        Log.d(TAG, "STR "+mUserName);
+
+        mSkillRecyclerView = (RecyclerView) view.findViewById(R.id.resume_skill_list);
+        mSkillAdapter = setItemAdapter(mSkillRecyclerView);
+
+        mExperinceRecyclerView = (RecyclerView) view.findViewById(R.id.resume_skill_list);
+        mExperienceAdpater = setItemAdapter(mExperinceRecyclerView);
+
         return view;
+    }
+
+    private ItemAdapter setItemAdapter(RecyclerView recyclerView){
+        ItemAdapter adapter = new ItemAdapter(getContext(), recyclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
+        return adapter;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Callback) {
-            mListener = (Callback) context;
+            mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement Callback");
@@ -83,10 +97,21 @@ public class ResumeFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mCallback = null;
     }
+
+    @Override
+    public void clickFab() {
+        mSkillAdapter.addName();
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -99,5 +124,6 @@ public class ResumeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
+
     }
 }

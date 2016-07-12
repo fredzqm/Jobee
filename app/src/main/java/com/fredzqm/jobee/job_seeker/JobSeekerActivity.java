@@ -3,7 +3,6 @@ package com.fredzqm.jobee.job_seeker;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -36,8 +35,8 @@ public class JobSeekerActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                JobSeekerFragment container = ((JobSeekerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_resume));
+                container.clickFab();
             }
         });
 
@@ -118,6 +117,5 @@ public class JobSeekerActivity extends AppCompatActivity
             ft.addToBackStack(backStackTag);
         ft.commit();
     }
-
 
 }
