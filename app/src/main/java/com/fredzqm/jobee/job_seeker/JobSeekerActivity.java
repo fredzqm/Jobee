@@ -103,7 +103,7 @@ public class JobSeekerActivity extends AppCompatActivity
                 swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()));
                 break;
             case R.id.js_nav_job_list:
-                swapFragment(JobListFragment.newInstance(mAccount.getEmailAccount()));
+                swapFragment(JobListFragment.newInstance(10));
                 break;
             case R.id.js_nav_applied:
                 swapFragment(AppliedJobFragment.newInstance(10));
