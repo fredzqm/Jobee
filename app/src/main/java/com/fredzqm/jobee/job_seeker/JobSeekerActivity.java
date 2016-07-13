@@ -26,7 +26,7 @@ public class JobSeekerActivity extends AppCompatActivity
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, AppliedJobFragment.Callback{
     private static final String TAG = "JobSeekerActivity";
 
-    private String mEmailAccount;
+    private Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +53,9 @@ public class JobSeekerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mEmailAccount = getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL);
+        mAccount = new Account(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
         if (savedInstanceState == null){
-            swapFragment(HomeFragment.newInstance(mEmailAccount));
+            swapFragment(HomeFragment.newInstance(mAccount));
         }
     }
 
@@ -97,13 +97,13 @@ public class JobSeekerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
             case R.id.js_nav_home:
-                swapFragment(HomeFragment.newInstance(mEmailAccount));
+                swapFragment(HomeFragment.newInstance(mAccount));
                 break;
             case R.id.js_nav_resume:
-                swapFragment(ResumeFragment.newInstance(mEmailAccount));
+                swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()));
                 break;
             case R.id.js_nav_job_list:
-                swapFragment(JobListFragment.newInstance(mEmailAccount));
+                swapFragment(JobListFragment.newInstance(mAccount.getEmailAccount()));
                 break;
             case R.id.js_nav_applied:
                 swapFragment(AppliedJobFragment.newInstance(10));
@@ -122,6 +122,13 @@ public class JobSeekerActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container_resume, fragment);
         ft.commit();
+    }
+
+    @Override
+    public void saveAccountUpdates(String name, String email, String address) {
+        mAccount.setName(name);
+        mAccount.setEmailAccount(email);
+        mAccount.setAddress(address);
     }
 
 }

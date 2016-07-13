@@ -29,4 +29,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="home">Home</string>
+    <string name="resume">Resume</string>
+    <string name="job_list">Job List</string>
+    <string name="applied_jobs">Applied Jobs</string>
 </resources>

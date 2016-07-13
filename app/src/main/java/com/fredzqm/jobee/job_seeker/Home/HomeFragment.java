@@ -1,16 +1,16 @@
 package com.fredzqm.jobee.job_seeker.Home;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
+import android.widget.Button;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.job_seeker.Account;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
 
 /**
@@ -25,12 +25,13 @@ public class HomeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String EMAIL_ACCOUNT = "param1";
 
-    private String mEmailAccount;
+    private Account mAccount;
     private Callback mCallback;
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
     private AutoCompleteTextView addressEditText;
+    private Button mSaveChangesButton;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -40,13 +41,13 @@ public class HomeFragment extends ContainedFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param emailAccount Parameter 1.
+     * @param account the account of the game
      * @return A new instance of fragment JobListFragment.
      */
-    public static HomeFragment newInstance(String emailAccount) {
+    public static HomeFragment newInstance(Account account) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(EMAIL_ACCOUNT, emailAccount);
+        args.putParcelable(EMAIL_ACCOUNT, account);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +56,7 @@ public class HomeFragment extends ContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mEmailAccount = getArguments().getString(EMAIL_ACCOUNT);
+            mAccount = getArguments().getParcelable(EMAIL_ACCOUNT);
         }
     }
 
@@ -67,8 +68,27 @@ public class HomeFragment extends ContainedFragment {
         nameEditText = (AutoCompleteTextView) view.findViewById(R.id.home_name);
         emailEditText = (AutoCompleteTextView) view.findViewById(R.id.home_email);
         addressEditText = (AutoCompleteTextView) view.findViewById(R.id.home_address);
-        emailEditText.setText(mEmailAccount);
+        mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
+
+        nameEditText.setText(mAccount.getName());
+        emailEditText.setText(mAccount.getEmailAccount());
+        addressEditText.setText(mAccount.getEmailAccount());
+        mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = nameEditText.getText().toString();
+                String email = emailEditText.getText().toString();
+                String address = addressEditText.getText().toString();
+                mCallback.saveAccountUpdates(name, email, address);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -104,6 +124,6 @@ public class HomeFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-
+        void saveAccountUpdates(String name, String email, String address);
     }
 }
