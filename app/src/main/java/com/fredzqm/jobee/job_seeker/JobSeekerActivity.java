@@ -3,6 +3,7 @@ package com.fredzqm.jobee.job_seeker;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -29,7 +30,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 {
     private static final String TAG = "JobSeekerActivity";
 
-    private Account mAccount;
+    private JobSeekerAccount mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAccount = new Account(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
+        mAccount = new JobSeekerAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
         if (savedInstanceState == null){
             swapFragment(HomeFragment.newInstance(mAccount), null);
         }
@@ -121,8 +122,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(AppliedJobFragment.newInstance(10), null);
                 break;
             default:
-                Log.d(TAG, "Not implemented navigation bar yet");
-                return  true;
+                throw new RuntimeException("Not implemented navigation bar yet");
+        }
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
+            fm.popBackStackImmediate();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

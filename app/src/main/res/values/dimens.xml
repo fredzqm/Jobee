@@ -12,7 +12,7 @@
     <dimen name="resume_container_margin">20dp</dimen>
     <dimen name="resume_label_margin">1dp</dimen>
     <dimen name="resume_label_font">17sp</dimen>
-    <dimen name="text_margin">16dp</dimen>
+    <dimen name="small_margin">3dp</dimen>
     <dimen name="card_view_corner_radius">5dp</dimen>
     <dimen name="content_padding">2dp</dimen>
     <dimen name="card_view_margin">2dp</dimen>

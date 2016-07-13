@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.Account;
+import com.fredzqm.jobee.job_seeker.JobSeekerAccount;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
 
 /**
@@ -25,7 +25,7 @@ public class HomeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String EMAIL_ACCOUNT = "param1";
 
-    private Account mAccount;
+    private JobSeekerAccount mAccount;
     private Callback mCallback;
 
     private AutoCompleteTextView nameEditText;
@@ -44,7 +44,7 @@ public class HomeFragment extends ContainedFragment {
      * @param account the account of the game
      * @return A new instance of fragment JobListFragment.
      */
-    public static HomeFragment newInstance(Account account) {
+    public static HomeFragment newInstance(JobSeekerAccount account) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putParcelable(EMAIL_ACCOUNT, account);

@@ -10,6 +10,7 @@ import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment.Callback;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -19,11 +20,11 @@ import java.util.List;
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHolder> {
 
     private final List<Job> mValues;
-    private final Callback mListener;
+    private final Callback mCallback;
 
-    public JobListAdapter(List<Job> items, Callback listener) {
+    public JobListAdapter(List<Job> items, Callback callback) {
         mValues = items;
-        mListener = listener;
+        mCallback = callback;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mJob = mValues.get(position);
-        holder.mContentView.setText(mValues.get(position).title);
+        holder.updateView();
     }
 
     @Override
@@ -45,25 +46,41 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mContentView;
+        public final TextView mTitleTextView;
+        public final TextView mCityTextView;
+        public final TextView mDateTextView;
+        public final TextView mCompanyTextView;
+
         public Job mJob;
 
         public ViewHolder(View view) {
             super(view);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mTitleTextView = (TextView) view.findViewById(R.id.js_list_item_title);
+            mCompanyTextView = (TextView) view.findViewById(R.id.js_list_item_company);
+            mDateTextView = (TextView) view.findViewById(R.id.js_list_item_date);
+            mCityTextView = (TextView) view.findViewById(R.id.js_list_item_city);
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (null != mListener) {
-                        mListener.showJobDetail(mJob);
+                    if (null != mCallback) {
+                        mCallback.showJobDetail(mJob);
                     }
                 }
             });
         }
 
+        public void updateView() {
+            mTitleTextView.setText(mJob.getTitle());
+            mCompanyTextView.setText(mJob.getCompany());
+            mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+            mCityTextView.setText(mJob.getCity());
+        }
+
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mTitleTextView.getText() + "'";
         }
+
     }
 }

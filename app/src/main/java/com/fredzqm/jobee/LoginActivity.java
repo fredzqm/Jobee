@@ -402,7 +402,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
+                    // JobSeekerAccount exists, return true if the password matches.
                     return pieces[1].equals(mPassword);
                 }
             }

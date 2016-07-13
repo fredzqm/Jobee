@@ -6,34 +6,34 @@ import android.os.Parcelable;
 /**
  * Created by zhang on 7/12/2016.
  */
-public class Account implements Parcelable {
+public class JobSeekerAccount implements Parcelable {
     private String emailAccount;
     private String name;
     private String address;
 
-    public Account(){
+    public JobSeekerAccount(){
         // empty constructor required by Jackson
     }
 
-    public Account(String emailAccount) {
+    public JobSeekerAccount(String emailAccount) {
         this.emailAccount = emailAccount;
     }
 
-    protected Account(Parcel in) {
+    protected JobSeekerAccount(Parcel in) {
         emailAccount = in.readString();
         name = in.readString();
         address = in.readString();
     }
 
-    public static final Creator<Account> CREATOR = new Creator<Account>() {
+    public static final Creator<JobSeekerAccount> CREATOR = new Creator<JobSeekerAccount>() {
         @Override
-        public Account createFromParcel(Parcel in) {
-            return new Account(in);
+        public JobSeekerAccount createFromParcel(Parcel in) {
+            return new JobSeekerAccount(in);
         }
 
         @Override
-        public Account[] newArray(int size) {
-            return new Account[size];
+        public JobSeekerAccount[] newArray(int size) {
+            return new JobSeekerAccount[size];
         }
     };
 
