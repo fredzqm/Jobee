@@ -58,7 +58,7 @@ public class AppliedJobFragment extends ContainedFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.js_appliedJob_frag, container, false);
+        View view = inflater.inflate(R.layout.js_appliedjob_frag, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {

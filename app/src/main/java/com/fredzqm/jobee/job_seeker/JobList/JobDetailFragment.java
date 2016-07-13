@@ -66,7 +66,7 @@ public class JobDetailFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_jobDetail_frag, container, false);
+        View view = inflater.inflate(R.layout.js_jobdetail_frag, container, false);
         mTitleTextView = (TextView) view.findViewById(R.id.js_job_detail_title);
         mCompanyTextView = (TextView) view.findViewById(R.id.js_job_detail_company);
         mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
