@@ -1,6 +1,5 @@
-package com.fredzqm.jobee.job_seeker;
+package com.fredzqm.jobee.job_seeker.resume;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.job_seeker.ContainedFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +21,7 @@ import com.fredzqm.jobee.R;
  * Use the {@link ResumeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ResumeFragment extends Fragment implements JobSeekerFragment {
+public class ResumeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = "ResumeFragment";
     private static final String USER_NAME = "USER_NAME";
@@ -65,7 +65,7 @@ public class ResumeFragment extends Fragment implements JobSeekerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_resume, container, false);
+        View view = inflater.inflate(R.layout.js_fragment_resume, container, false);
         EditText emailEditText = (EditText) view.findViewById(R.id.resume_email);
         emailEditText.setText(mUserName);
 

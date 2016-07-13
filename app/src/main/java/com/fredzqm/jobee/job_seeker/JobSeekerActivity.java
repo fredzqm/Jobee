@@ -3,7 +3,6 @@ package com.fredzqm.jobee.job_seeker;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,9 +16,14 @@ import android.view.View;
 
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
+import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
+import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
+import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
 
 public class JobSeekerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ResumeFragment.Callback{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, AppliedJobFragment.Callback{
     private static final String TAG = "JobSeekerActivity";
 
     private String mEmailAccount;
@@ -27,7 +31,7 @@ public class JobSeekerActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_job_seeker);
+        setContentView(R.layout.activity_js);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,7 +39,7 @@ public class JobSeekerActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                JobSeekerFragment container = ((JobSeekerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_resume));
+                ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_resume));
                 container.clickFab();
             }
         });
@@ -95,10 +99,13 @@ public class JobSeekerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
             case R.id.js_nav_home:
+                swapFragment(HomeFragment.newInstance(mEmailAccount), null);
                 break;
             case R.id.js_nav_job_list:
+                swapFragment(JobListFragment.newInstance(mEmailAccount), null);
                 break;
             case R.id.js_nav_applied:
+                swapFragment(AppliedJobFragment.newInstance(10), null);
                 break;
             default:
                 Log.d(TAG, "Not implemented navigation bar yet");
@@ -110,7 +117,7 @@ public class JobSeekerActivity extends AppCompatActivity
         return true;
     }
 
-    private void swapFragment(Fragment fragment, String backStackTag){
+    private void swapFragment(ContainedFragment fragment, String backStackTag){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container_resume, fragment);
         if (backStackTag != null)
