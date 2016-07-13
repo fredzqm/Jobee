@@ -119,7 +119,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(JobListFragment.newInstance(), null);
                 break;
             case R.id.js_nav_applied:
-                swapFragment(AppliedJobFragment.newInstance(10), null);
+                swapFragment(AppliedJobFragment.newInstance(2), null);
                 break;
             default:
                 throw new RuntimeException("Not implemented navigation bar yet");

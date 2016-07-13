@@ -12,6 +12,8 @@ import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
 
+import java.text.SimpleDateFormat;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -26,7 +28,12 @@ public class JobDetailFragment extends ContainedFragment {
 
     private Job mJob;
     private Callback mCallback;
+
     private TextView mTitleTextView;
+    private TextView mCompanyTextView;
+    private TextView mDetailsTextView;
+    private TextView mDateTextView;
+    private TextView mCityTextView;
 
     public JobDetailFragment() {
         // Required empty public constructor
@@ -60,7 +67,18 @@ public class JobDetailFragment extends ContainedFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.js_fragment_job_detail, container, false);
-        mTitleTextView = (TextView) view.findViewById(R.id.job_detail_title);
+        mTitleTextView = (TextView) view.findViewById(R.id.js_job_detail_title);
+        mCompanyTextView = (TextView) view.findViewById(R.id.js_job_detail_company);
+        mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
+        mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
+        mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
+
+        mTitleTextView.setText(mJob.getTitle());
+        mCompanyTextView.setText(mJob.getCompany());
+        mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+        mCityTextView.setText(mJob.getCity());
+        mDetailsTextView.setText(mJob.getDetails());
+
         mTitleTextView.setText(mJob.getTitle());
         return view;
     }
