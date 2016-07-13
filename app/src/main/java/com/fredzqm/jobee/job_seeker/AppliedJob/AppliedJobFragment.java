@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.AppliedJob.dummy.DummyContent;
-import com.fredzqm.jobee.job_seeker.AppliedJob.dummy.DummyContent.DummyItem;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
 
 /**
@@ -69,7 +69,7 @@ public class AppliedJobFragment extends ContainedFragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyAppliedJobAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyAppliedJobAdapter(Job.ITEMS, mListener));
         }
         return view;
     }

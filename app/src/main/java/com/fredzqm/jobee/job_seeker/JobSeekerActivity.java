@@ -14,16 +14,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
 import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
+import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
 
-public class JobSeekerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, AppliedJobFragment.Callback{
+public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
+        AppliedJobFragment.Callback, JobDetailFragment.Callback
+{
     private static final String TAG = "JobSeekerActivity";
 
     private Account mAccount;
@@ -55,8 +58,17 @@ public class JobSeekerActivity extends AppCompatActivity
 
         mAccount = new Account(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
         if (savedInstanceState == null){
-            swapFragment(HomeFragment.newInstance(mAccount));
+            swapFragment(HomeFragment.newInstance(mAccount), null);
         }
+    }
+
+
+    private void swapFragment(ContainedFragment fragment, String tag){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container_resume, fragment);
+        if (tag != null)
+            ft.addToBackStack(tag);
+        ft.commit();
     }
 
     @Override
@@ -97,16 +109,16 @@ public class JobSeekerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
             case R.id.js_nav_home:
-                swapFragment(HomeFragment.newInstance(mAccount));
+                swapFragment(HomeFragment.newInstance(mAccount), null);
                 break;
             case R.id.js_nav_resume:
-                swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()));
+                swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()), null);
                 break;
             case R.id.js_nav_job_list:
-                swapFragment(JobListFragment.newInstance(10));
+                swapFragment(JobListFragment.newInstance(), null);
                 break;
             case R.id.js_nav_applied:
-                swapFragment(AppliedJobFragment.newInstance(10));
+                swapFragment(AppliedJobFragment.newInstance(10), null);
                 break;
             default:
                 Log.d(TAG, "Not implemented navigation bar yet");
@@ -118,12 +130,6 @@ public class JobSeekerActivity extends AppCompatActivity
         return true;
     }
 
-    private void swapFragment(ContainedFragment fragment){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container_resume, fragment);
-        ft.commit();
-    }
-
     @Override
     public void saveAccountUpdates(String name, String email, String address) {
         mAccount.setName(name);
@@ -131,4 +137,8 @@ public class JobSeekerActivity extends AppCompatActivity
         mAccount.setAddress(address);
     }
 
+    @Override
+    public void showJobDetail(Job job) {
+        swapFragment(JobDetailFragment.newInstance(job), "Job Detail");
+    }
 }
