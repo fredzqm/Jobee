@@ -65,8 +65,8 @@ public class ResumeFragment extends ContainedFragment {
         View view = inflater.inflate(R.layout.js_resume_frag, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.resume_contents_list);
-        ResumeAdapter adapter = new ResumeAdapter(getContext(), mRecyclerView);
-        mRecyclerView.setAdapter(adapter);
+        mContentAdapter = new ResumeAdapter(getContext(), mRecyclerView);
+        mRecyclerView.setAdapter(mContentAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setHasFixedSize(true);
 
@@ -82,11 +82,6 @@ public class ResumeFragment extends ContainedFragment {
             throw new RuntimeException(context.toString()
                     + " must implement Callback");
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

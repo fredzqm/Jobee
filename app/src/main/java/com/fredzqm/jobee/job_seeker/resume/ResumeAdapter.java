@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
@@ -20,17 +23,17 @@ import java.util.Random;
 public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder> {
 
     private Context mContext;
-//    private ArrayList<String> mStrings = new ArrayList<>();
-    private Random mRandom = new Random();
     private Resume mResume;
+    private RecyclerView mRecycleView;
     private boolean mEditing;
 
-    private RecyclerView mRecycleView;
+    private Random mRandom = new Random();
 
     public ResumeAdapter(Context context, RecyclerView recyclerView) {
         mContext = context;
         mEditing = false;
         mRecycleView = recyclerView;
+        mResume = new Resume();
         for (int i = 0; i < 5; i++) {
             mResume.add(getRandomName());
         }
@@ -64,7 +67,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mResumeContent = mResume.get(position);
+        holder.mResumeContent = this.mResume.get(position);
         holder.updateUI();
     }
 
@@ -74,13 +77,17 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mEditText;
+        TextView mTypeTextView;
+        LinearLayout mLinearLayout;
         ResumeContent mResumeContent;
+        boolean setUp;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mEditText = (TextView) itemView.findViewById(R.id.item_view_item_text);
-            mEditText.setOnClickListener(new View.OnClickListener() {
+            mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
+            mLinearLayout = (LinearLayout) itemView.findViewById(R.id.js_resume_item_content_detail_list);
+
+            mTypeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (!mEditing) {
@@ -111,7 +118,16 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         }
 
         public void updateUI() {
-            mEditText.setText(mResumeContent.getType());
+            Log.d("OK", "updateUI " + setUp);
+            if (!setUp) {
+                setUp = true;
+                mTypeTextView.setText(mResumeContent.getType());
+                for (String str : mResumeContent) {
+                    TextView view = new TextView(mContext);
+                    view.setText(str);
+                    mLinearLayout.addView(view);
+                }
+            }
         }
     }
 }

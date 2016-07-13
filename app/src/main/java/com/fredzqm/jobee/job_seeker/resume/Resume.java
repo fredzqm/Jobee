@@ -13,8 +13,8 @@ import java.util.ListIterator;
  */
 public class Resume extends ArrayList<ResumeContent>{
 
-    public Resume(ArrayList<ResumeContent> contents) {
-        super(contents);
+    public Resume() {
+        super();
     }
 
 }
