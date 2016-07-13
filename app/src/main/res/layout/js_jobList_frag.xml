@@ -11,4 +11,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment"
-    tools:listitem="@layout/js_fragment_job_list_item"/>
+    tools:listitem="@layout/js_jobList_item"/>

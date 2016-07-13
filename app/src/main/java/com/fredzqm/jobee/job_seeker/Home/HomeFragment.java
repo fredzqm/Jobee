@@ -64,7 +64,7 @@ public class HomeFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_fragment_home, container, false);
+        View view = inflater.inflate(R.layout.js_home_frag, container, false);
         nameEditText = (AutoCompleteTextView) view.findViewById(R.id.home_name);
         emailEditText = (AutoCompleteTextView) view.findViewById(R.id.home_email);
         addressEditText = (AutoCompleteTextView) view.findViewById(R.id.home_address);

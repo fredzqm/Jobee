@@ -12,68 +12,70 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by zhang on 5/29/2016.
  */
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
+public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<String> mStrings = new ArrayList<>();
+//    private ArrayList<String> mStrings = new ArrayList<>();
     private Random mRandom = new Random();
+    private Resume mResume;
     private boolean mEditing;
 
     private RecyclerView mRecycleView;
 
-    public ItemAdapter(Context context, RecyclerView recyclerView) {
+    public ResumeAdapter(Context context, RecyclerView recyclerView) {
         mContext = context;
         mEditing = false;
         mRecycleView = recyclerView;
         for (int i = 0; i < 5; i++) {
-            mStrings.add(getRandomName());
+            mResume.add(getRandomName());
         }
     }
 
-    private String getRandomName() {
+    private ResumeContent getRandomName() {
         String[] names = new String[]{
                 "Hannah", "Emily", "Sarah", "Madison", "Brianna",
                 "Kaylee", "Kaitlyn", "Hailey", "Alexis", "Elizabeth",
                 "Michael", "Jacob", "Matthew", "Nicholas", "Christopher",
                 "Joseph", "Zachary", "Joshua", "Andrew", "William"
         };
-        return names[mRandom.nextInt(names.length)];
+        return new ResumeContent(names[mRandom.nextInt(names.length)]);
     }
 
     public void addName() {
-        mStrings.add(0, getRandomName());
+        mResume.add(0, getRandomName());
         notifyDataSetChanged();
     }
 
     public void removeName(int position) {
-        mStrings.remove(position);
+        mResume.remove(position);
         notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.js_resume_item_content, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mEditText.setText(mStrings.get(position));
+        holder.mResumeContent = mResume.get(position);
+        holder.updateUI();
     }
 
     @Override
     public int getItemCount() {
-        return mStrings.size();
+        return mResume.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mEditText;
+        ResumeContent mResumeContent;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -84,14 +86,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     if (!mEditing) {
                         mEditing = true;
                         final EditText editText = new EditText(mContext);
-                        editText.setText(mStrings.get(getAdapterPosition()));
+                        editText.setText(mResumeContent.getType());
                         new AlertDialog.Builder(mContext)
                                 .setView(editText)
                                 .setTitle("Edit")
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mStrings.set(getAdapterPosition(), editText.getText().toString());
+                                        mResumeContent.setType(editText.getText().toString());
                                         notifyDataSetChanged();
                                     }
                                 })
@@ -106,6 +108,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     }
                 }
             });
+        }
+
+        public void updateUI() {
+            mEditText.setText(mResumeContent.getType());
         }
     }
 }

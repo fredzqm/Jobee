@@ -31,7 +31,7 @@ public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.js_fragment_job_list_item, parent, false);
+                .inflate(R.layout.js_jobList_item, parent, false);
         return new ViewHolder(view);
     }
 

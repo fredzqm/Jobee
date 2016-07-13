@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
@@ -29,10 +28,8 @@ public class ResumeFragment extends ContainedFragment {
     private String mUserName;
 
     private Callback mCallback;
-    private ItemAdapter mSkillAdapter;
-    private ItemAdapter mExperienceAdpater;
-    private RecyclerView mSkillRecyclerView;
-    private RecyclerView mExperinceRecyclerView;
+    private ResumeAdapter mContentAdapter;
+    private RecyclerView mRecyclerView;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -65,25 +62,15 @@ public class ResumeFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_fragment_resume, container, false);
-        EditText emailEditText = (EditText) view.findViewById(R.id.resume_email);
-        emailEditText.setText(mUserName);
+        View view = inflater.inflate(R.layout.js_resume_frag, container, false);
 
-        mSkillRecyclerView = (RecyclerView) view.findViewById(R.id.resume_skill_list);
-        mSkillAdapter = setItemAdapter(mSkillRecyclerView);
-
-        mExperinceRecyclerView = (RecyclerView) view.findViewById(R.id.resume_experience_list);
-        mExperienceAdpater = setItemAdapter(mExperinceRecyclerView);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.resume_contents_list);
+        ResumeAdapter adapter = new ResumeAdapter(getContext(), mRecyclerView);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setHasFixedSize(true);
 
         return view;
-    }
-
-    private ItemAdapter setItemAdapter(RecyclerView recyclerView){
-        ItemAdapter adapter = new ItemAdapter(getContext(), recyclerView);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setHasFixedSize(true);
-        return adapter;
     }
 
     @Override
@@ -110,7 +97,7 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        mSkillAdapter.addName();
+        mContentAdapter.addName();
     }
 
 
