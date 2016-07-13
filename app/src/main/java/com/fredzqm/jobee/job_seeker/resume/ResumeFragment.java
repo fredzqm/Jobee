@@ -125,6 +125,5 @@ public class ResumeFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-
     }
 }

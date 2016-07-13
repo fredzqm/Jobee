@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
@@ -24,8 +26,11 @@ public class HomeFragment extends ContainedFragment {
     private static final String EMAIL_ACCOUNT = "param1";
 
     private String mEmailAccount;
-
     private Callback mCallback;
+
+    private AutoCompleteTextView nameEditText;
+    private AutoCompleteTextView emailEditText;
+    private AutoCompleteTextView addressEditText;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -38,7 +43,6 @@ public class HomeFragment extends ContainedFragment {
      * @param emailAccount Parameter 1.
      * @return A new instance of fragment JobListFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String emailAccount) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -59,7 +63,12 @@ public class HomeFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.js_fragment_job_list, container, false);
+        View view = inflater.inflate(R.layout.js_fragment_home, container, false);
+        nameEditText = (AutoCompleteTextView) view.findViewById(R.id.home_name);
+        emailEditText = (AutoCompleteTextView) view.findViewById(R.id.home_email);
+        addressEditText = (AutoCompleteTextView) view.findViewById(R.id.home_address);
+        emailEditText.setText(mEmailAccount);
+        return view;
     }
 
     @Override

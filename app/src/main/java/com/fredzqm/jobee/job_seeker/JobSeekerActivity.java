@@ -55,9 +55,7 @@ public class JobSeekerActivity extends AppCompatActivity
 
         mEmailAccount = getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL);
         if (savedInstanceState == null){
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.fragment_container_resume, ResumeFragment.newInstance(mEmailAccount));
-            ft.commit();
+            swapFragment(HomeFragment.newInstance(mEmailAccount));
         }
     }
 
@@ -99,13 +97,16 @@ public class JobSeekerActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
             case R.id.js_nav_home:
-                swapFragment(HomeFragment.newInstance(mEmailAccount), null);
+                swapFragment(HomeFragment.newInstance(mEmailAccount));
+                break;
+            case R.id.js_nav_resume:
+                swapFragment(ResumeFragment.newInstance(mEmailAccount));
                 break;
             case R.id.js_nav_job_list:
-                swapFragment(JobListFragment.newInstance(mEmailAccount), null);
+                swapFragment(JobListFragment.newInstance(mEmailAccount));
                 break;
             case R.id.js_nav_applied:
-                swapFragment(AppliedJobFragment.newInstance(10), null);
+                swapFragment(AppliedJobFragment.newInstance(10));
                 break;
             default:
                 Log.d(TAG, "Not implemented navigation bar yet");
@@ -117,11 +118,9 @@ public class JobSeekerActivity extends AppCompatActivity
         return true;
     }
 
-    private void swapFragment(ContainedFragment fragment, String backStackTag){
+    private void swapFragment(ContainedFragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container_resume, fragment);
-        if (backStackTag != null)
-            ft.addToBackStack(backStackTag);
         ft.commit();
     }
 
