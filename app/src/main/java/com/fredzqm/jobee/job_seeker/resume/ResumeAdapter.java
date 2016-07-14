@@ -133,8 +133,10 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 //                    view.setText(str);
 ////                    mLinearLayout.addView(view);
 //                }
-
-                ListAdapter adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mResumeContent);
+                String[] ar = new String[2];
+                ar[0] = "23";
+                ar[1] = "ok";
+                ListAdapter adapter = new ArrayAdapter<String>(mContext, R.layout.js_resume_item_content_item, R.id.js_resume_item_content_detail, ar);
                 mListView.setAdapter(adapter);
             }
         }

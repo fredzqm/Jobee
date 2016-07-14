@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:text="element"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
 </RelativeLayout>

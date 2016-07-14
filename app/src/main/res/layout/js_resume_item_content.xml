@@ -21,19 +21,15 @@
             android:textSize="@dimen/resume_label_font" />
 
 
-            <com.fredzqm.jobee.job_seeker.resume.NestedListView
-                android:id="@+id/listviewTasks"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_weight="1"
-                android:cacheColorHint="#00000000" >
-            </com.fredzqm.jobee.job_seeker.resume.NestedListView>
-
-            <!--<include-->
-                <!--layout="@layout/js_resume_item_content_item"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content" />-->
+        <com.fredzqm.jobee.job_seeker.resume.NestedListView
+            android:id="@+id/listviewTasks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/js_resume_item_content_title"
+            >
+        </com.fredzqm.jobee.job_seeker.resume.NestedListView>
 
     </RelativeLayout>
 
