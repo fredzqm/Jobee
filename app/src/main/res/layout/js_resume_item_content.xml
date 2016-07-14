@@ -20,22 +20,20 @@
             android:text="type"
             android:textSize="@dimen/resume_label_font" />
 
-        <LinearLayout
-            android:id="@+id/js_resume_item_content_detail_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/js_job_detail_title"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
+
+            <com.fredzqm.jobee.job_seeker.resume.NestedListView
+                android:id="@+id/listviewTasks"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:cacheColorHint="#00000000" >
+            </com.fredzqm.jobee.job_seeker.resume.NestedListView>
 
             <!--<include-->
                 <!--layout="@layout/js_resume_item_content_item"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content" />-->
-
-        </LinearLayout>
 
     </RelativeLayout>
 

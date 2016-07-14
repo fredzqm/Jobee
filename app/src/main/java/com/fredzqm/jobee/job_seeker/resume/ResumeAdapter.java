@@ -8,13 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -78,14 +82,16 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mTypeTextView;
-        LinearLayout mLinearLayout;
+//        LinearLayout mLinearLayout;
+        ListView mListView;
         ResumeContent mResumeContent;
         boolean setUp;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
-            mLinearLayout = (LinearLayout) itemView.findViewById(R.id.js_resume_item_content_detail_list);
+//            mLinearLayout = (LinearLayout) itemView.findViewById(R.id.js_resume_item_content_detail_list);
+            mListView = (ListView) itemView.findViewById(R.id.listviewTasks);
 
             mTypeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,11 +128,14 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             if (!setUp) {
                 setUp = true;
                 mTypeTextView.setText(mResumeContent.getType());
-                for (String str : mResumeContent) {
-                    TextView view = new TextView(mContext);
-                    view.setText(str);
-                    mLinearLayout.addView(view);
-                }
+//                for (String str : mResumeContent) {
+//                    TextView view = new TextView(mContext);
+//                    view.setText(str);
+////                    mLinearLayout.addView(view);
+//                }
+
+                ListAdapter adapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_list_item_1, mResumeContent);
+                mListView.setAdapter(adapter);
             }
         }
     }
