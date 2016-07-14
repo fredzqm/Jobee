@@ -86,12 +86,14 @@ public class ResumeFragment extends ContainedFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.js_resume_frag, container, false);
 
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.resume_contents_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setAutoMeasureEnabled(true);
+        mRecyclerView.setLayoutManager(layoutManager);
         mContentAdapter = new ResumeAdapter(getContext(), mRecyclerView);
         mRecyclerView.setAdapter(mContentAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setHasFixedSize(true);
-
+        mRecyclerView.setHasFixedSize(false);
         return view;
     }
 

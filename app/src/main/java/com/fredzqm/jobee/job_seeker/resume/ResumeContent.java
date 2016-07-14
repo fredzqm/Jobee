@@ -1,6 +1,7 @@
 package com.fredzqm.jobee.job_seeker.resume;
 
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 
 import java.util.ArrayList;
 
@@ -11,11 +12,8 @@ import java.util.ArrayList;
 public class ResumeContent extends ArrayList<String> {
     private String type;
 
-    public ResumeContent(String type) {
+    public ResumeContent() {
         super();
-        this.type = type;
-        this.add("Element 1");
-        this.add("Element 2");
     }
 
     public String getType() {
@@ -24,5 +22,17 @@ public class ResumeContent extends ArrayList<String> {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void addContent(String str){
+        this.add(str);
+    }
+
+    public static ResumeContent newInstance() {
+        ResumeContent resumeContent = new ResumeContent();
+        resumeContent.setType("type");
+        resumeContent.addContent("Element 1");
+        resumeContent.addContent("Element 2");
+        return resumeContent;
     }
 }

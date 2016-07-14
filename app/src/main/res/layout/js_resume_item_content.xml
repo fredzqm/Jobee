@@ -20,15 +20,14 @@
             android:text="type"
             android:textSize="@dimen/resume_label_font" />
 
-
         <com.fredzqm.jobee.job_seeker.resume.NestedListView
             android:id="@+id/listviewTasks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_alignParentRight="true"
-            android:focusable="false"
             android:layout_below="@+id/js_resume_item_content_title"
+            android:focusable="false"
             >
         </com.fredzqm.jobee.job_seeker.resume.NestedListView>
 
