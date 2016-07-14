@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -82,7 +83,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView mTypeTextView;
-//        LinearLayout mLinearLayout;
         ListView mListView;
         ResumeContent mResumeContent;
         boolean setUp;
@@ -90,7 +90,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
-//            mLinearLayout = (LinearLayout) itemView.findViewById(R.id.js_resume_item_content_detail_list);
             mListView = (ListView) itemView.findViewById(R.id.listviewTasks);
 
             mTypeTextView.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +120,36 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                     }
                 }
             });
+
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, final View view, final int position, long id) {
+                    if (!mEditing) {
+                        mEditing = true;
+                        final EditText editText = new EditText(mContext);
+                        editText.setText(mResumeContent.get(position));
+                        new AlertDialog.Builder(mContext)
+                                .setView(editText)
+                                .setTitle("Edit")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String str = editText.getText().toString();
+                                        mResumeContent.set(position, str);
+                                        ((TextView)view.findViewById(R.id.js_resume_item_content_detail)).setText(str);
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialogInterface) {
+                                        mEditing = false;
+                                    }
+                                })
+                                .show();
+                    }
+                }
+            });
         }
 
         public void updateUI() {
@@ -128,15 +157,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             if (!setUp) {
                 setUp = true;
                 mTypeTextView.setText(mResumeContent.getType());
-//                for (String str : mResumeContent) {
-//                    TextView view = new TextView(mContext);
-//                    view.setText(str);
-////                    mLinearLayout.addView(view);
-//                }
-                String[] ar = new String[2];
-                ar[0] = "23";
-                ar[1] = "ok";
-                ListAdapter adapter = new ArrayAdapter<String>(mContext, R.layout.js_resume_item_content_item, R.id.js_resume_item_content_detail, ar);
+                ListAdapter adapter = new ArrayAdapter<String>(mContext, R.layout.js_resume_item_content_item, R.id.js_resume_item_content_detail, mResumeContent);
                 mListView.setAdapter(adapter);
             }
         }
