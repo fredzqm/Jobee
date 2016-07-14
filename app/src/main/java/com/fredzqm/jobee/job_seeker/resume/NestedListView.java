@@ -2,16 +2,12 @@ package com.fredzqm.jobee.job_seeker.resume;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class NestedListView extends ListView implements OnTouchListener, OnScrollListener {
+public class NestedListView extends ListView {
 
     private int listViewTouchAction;
     private static final int MAXIMUM_LIST_ITEMS_VIEWABLE = 99;
@@ -19,22 +15,6 @@ public class NestedListView extends ListView implements OnTouchListener, OnScrol
     public NestedListView(Context context, AttributeSet attrs) {
         super(context, attrs);
         listViewTouchAction = -1;
-        setOnScrollListener(this);
-        setOnTouchListener(this);
-    }
-
-    @Override
-    public void onScroll(AbsListView view, int firstVisibleItem,
-                         int visibleItemCount, int totalItemCount) {
-        if (getAdapter() != null && getAdapter().getCount() > MAXIMUM_LIST_ITEMS_VIEWABLE) {
-            if (listViewTouchAction == MotionEvent.ACTION_MOVE) {
-                scrollBy(0, -1);
-            }
-        }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
     @Override
@@ -72,13 +52,4 @@ public class NestedListView extends ListView implements OnTouchListener, OnScrol
         setMeasuredDimension(getMeasuredWidth(), newHeight);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if (getAdapter() != null && getAdapter().getCount() > MAXIMUM_LIST_ITEMS_VIEWABLE) {
-            if (listViewTouchAction == MotionEvent.ACTION_MOVE) {
-                scrollBy(0, 1);
-            }
-        }
-        return false;
-    }
 }

@@ -91,7 +91,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             super(itemView);
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
             mListView = (ListView) itemView.findViewById(R.id.listviewTasks);
-
+            mListView.setTextFilterEnabled(true);
             mTypeTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
