@@ -48,6 +48,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.js_resume_item_content, parent, false);
+//        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.list_content, parent, false);
         return new ViewHolder(view);
     }
 
@@ -186,6 +187,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view;
                 if (convertView == null) {
+//                    view = LayoutInflater.from(mContext).inflate(R.layout.js_resume_item_content_item_view, parent, false);
                     view = LayoutInflater.from(mContext).inflate(R.layout.js_resume_item_content_item_view, parent, false);
                 } else {
                     view = convertView;

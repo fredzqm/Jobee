@@ -33,6 +33,7 @@ public class ResumeContent extends ArrayList<String> {
         resumeContent.setType("type");
         resumeContent.addContent("Element 1");
         resumeContent.addContent("Element 2");
+        resumeContent.addContent("Element 3");
         return resumeContent;
     }
 }

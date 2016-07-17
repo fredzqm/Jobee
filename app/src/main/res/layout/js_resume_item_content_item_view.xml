@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/js_resume_item_content_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lineSpacingMultiplier="@android:integer/config_shortAnimTime"
-        android:text="element"
-        android:textSize="20sp" />
-
-</RelativeLayout>
+    android:id="@+id/js_resume_item_content_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:text="element"
+    android:textSize="20sp" />

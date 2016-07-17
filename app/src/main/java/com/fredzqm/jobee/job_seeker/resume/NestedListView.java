@@ -28,18 +28,21 @@ public class NestedListView extends ListView {
             ListAdapter listAdapter = getAdapter();
             if (listAdapter != null && !listAdapter.isEmpty()) {
                 int listPosition = 0;
-                for (listPosition = 0; listPosition < listAdapter.getCount()
+                int count = listAdapter.getCount();
+                for (listPosition = 0; listPosition < count
                         && listPosition < MAXIMUM_LIST_ITEMS_VIEWABLE; listPosition++) {
                     View listItem = listAdapter.getView(listPosition, null, this);
                     //now it will not throw a NPE if listItem is a ViewGroup instance
-                    if (listItem instanceof ViewGroup) {
-                        listItem.setLayoutParams(new LayoutParams(
-                                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-                    }
+//                    if (listItem instanceof ViewGroup) {
+//                        listItem.setLayoutParams(new LayoutParams(
+//                                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+//                    }
                     listItem.measure(widthMeasureSpec, heightMeasureSpec);
-                    newHeight += listItem.getMeasuredHeight();
+                    int height = listItem.getMeasuredHeight();
+                    newHeight += height;
                 }
-                newHeight += getDividerHeight() * listPosition;
+                int divHeight = getDividerHeight();
+                newHeight += divHeight * listPosition;
             }
             if ((heightMode == MeasureSpec.AT_MOST) && (newHeight > heightSize)) {
                 if (newHeight > heightSize) {
