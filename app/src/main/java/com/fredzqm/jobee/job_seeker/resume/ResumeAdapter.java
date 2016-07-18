@@ -3,19 +3,14 @@ package com.fredzqm.jobee.job_seeker.resume;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
@@ -73,7 +68,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         ResumeCategory mResumeCategory;
 
         TextView mTypeTextView;
-        ImageButton mEditButton;
+        ImageButton mAddButton;
         LinearLayout mListView;
 
         public ViewHolder(final View itemView) {
@@ -82,8 +77,8 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
             mTypeTextView.setOnClickListener(this);
-            mEditButton = (ImageButton) itemView.findViewById(R.id.edit_button);
-            mEditButton.setOnClickListener(this);
+            mAddButton = (ImageButton) itemView.findViewById(R.id.add_button);
+            mAddButton.setOnClickListener(this);
             mListView = (LinearLayout) itemView.findViewById(R.id.listviewTasks);
         }
 
@@ -93,21 +88,25 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             mListView.removeAllViews();
             for (int i = 0 ; i < mResumeCategory.size(); i++) {
                 String s = mResumeCategory.get(i);
-                TextView tv = new TextView(mContext);
-                tv.setGravity(Gravity.CENTER_VERTICAL);
-                tv.setId(i);
-                tv.setTextSize(20);
-                tv.setText(s);
-                tv.setOnClickListener(this);
-                mListView.addView(tv);
+                appendDetailToListView(s);
             }
+        }
+
+        private void appendDetailToListView(String s) {
+            TextView tv = new TextView(mContext);
+            tv.setGravity(Gravity.CENTER_VERTICAL);
+            tv.setId(mListView.getChildCount());
+            tv.setTextSize(20);
+            tv.setText(s);
+            tv.setOnClickListener(this);
+            mListView.addView(tv);
         }
 
         @Override
         public void onClick(View view) {
             if (!mEditing) {
                 mEditing = true;
-                if (view == mTypeTextView || view == mEditButton) {
+                if (view == mTypeTextView) {
                     final EditText editText = new EditText(mContext);
                     editText.setText(mResumeCategory.getType());
                     new AlertDialog.Builder(mContext)
@@ -135,10 +134,31 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                                 }
                             })
                             .show();
+                }else if (view == mAddButton){
+                    final EditText editText = new EditText(mContext);
+                    editText.setText(mResumeCategory.getType());
+                    new AlertDialog.Builder(mContext)
+                            .setView(editText)
+                            .setTitle("Add " + mResumeCategory.getType())
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    String str = editText.getText().toString();
+                                    mResumeCategory.add(str);
+                                    appendDetailToListView(str);
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialogInterface) {
+                                    mEditing = false;
+                                }
+                            })
+                            .show();
                 }else{
                     final int position = view.getId();
                     final EditText editText = new EditText(mContext);
-                    editText.setText(mResumeCategory.get(position));
                     new AlertDialog.Builder(mContext)
                             .setView(editText)
                             .setTitle("Edit")

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,14 +21,10 @@ import com.fredzqm.jobee.job_seeker.ContainedFragment;
  */
 public class JobListFragment extends ContainedFragment {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
     private Callback mListener;
 
     public static JobListFragment newInstance() {
         JobListFragment fragment = new JobListFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(ARG_COLUMN_COUNT, columnCount);
-//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -41,9 +38,6 @@ public class JobListFragment extends ContainedFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-//        }
     }
 
     @Override
@@ -55,6 +49,18 @@ public class JobListFragment extends ContainedFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.js_job_list_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
+        SearchView searchView = (SearchView) view.findViewById(R.id.js_job_list_search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return view;
     }
 

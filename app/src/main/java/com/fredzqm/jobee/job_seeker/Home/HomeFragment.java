@@ -72,7 +72,7 @@ public class HomeFragment extends ContainedFragment {
 
         nameEditText.setText(mAccount.getName());
         emailEditText.setText(mAccount.getEmailAccount());
-        addressEditText.setText(mAccount.getEmailAccount());
+        addressEditText.setText(mAccount.getAddress());
         mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
