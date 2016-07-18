@@ -34,26 +34,4 @@ public class Resume extends ArrayList<ResumeCategory>{
         return name;
     }
 
-    public boolean isStub() {
-        return false;
-    }
-
-
-    public static Resume newStub(String name) {
-       return new ResumeStub(name);
-    }
-
-    /**
-     * Created by zhang on 7/18/2016.
-     */
-    public static class ResumeStub extends Resume{
-        public ResumeStub(String name){
-            super(name);
-        }
-
-        public boolean isStub(){
-            return true;
-        }
-
-    }
 }

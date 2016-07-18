@@ -71,8 +71,8 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, AdapterView.OnItemClickListener {
         TextView mTypeTextView;
         ListView mListView;
-        ResumeContentListAdapter mAdapter;
         ResumeCategory mResumeCategory;
+        ResumeContentListAdapter mAdapter;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -179,7 +179,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view;
                 if (convertView == null) {
-//                    view = LayoutInflater.from(mContext).inflate(R.layout.js_resume_item_content_item_view, parent, false);
                     view = LayoutInflater.from(mContext).inflate(R.layout.js_resume_item_content_item_view, parent, false);
                 } else {
                     view = convertView;
