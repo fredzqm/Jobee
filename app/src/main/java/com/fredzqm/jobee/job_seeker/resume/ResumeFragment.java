@@ -42,6 +42,7 @@ public class ResumeFragment extends ContainedFragment {
 
     private RecyclerView mRecyclerView;
     private ResumeAdapter mResumeAdapter;
+    private ArrayAdapter<String> mSwitchAdapter;
 
     private ArrayList<Resume> mResumes;
 
@@ -73,7 +74,7 @@ public class ResumeFragment extends ContainedFragment {
         MenuItem item = menu.findItem(R.id.action_switch);
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
         final Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
-        spinner.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, android.R.id.text1){
+        mSwitchAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, android.R.id.text1){
             public int getCount(){
                 return mResumes.size() + 1;
             }
@@ -84,7 +85,8 @@ public class ResumeFragment extends ContainedFragment {
                 }
                 return mResumes.get(position).getName();
             }
-        });
+        };
+        spinner.setAdapter(mSwitchAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
@@ -101,7 +103,7 @@ public class ResumeFragment extends ContainedFragment {
                                     Resume created = Resume.newInstance(editText.getText().toString());
                                     mResumes.add(created);
                                     mResumeAdapter.setResume(created);
-                                    spinner.setPrompt(created.getName());
+                                    mSwitchAdapter.notifyDataSetChanged();
                                 }
                             })
                             .show();
