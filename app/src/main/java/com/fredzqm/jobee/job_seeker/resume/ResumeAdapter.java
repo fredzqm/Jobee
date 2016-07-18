@@ -47,7 +47,8 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.updateUI(this.mResume.get(position));
+        holder.mResumeCategory = this.mResume.get(position);
+        holder.updateUI();
     }
 
     @Override
@@ -60,11 +61,11 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public Resume getResume(){
+    public Resume getResume() {
         return mResume;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ResumeCategory mResumeCategory;
 
         TextView mTypeTextView;
@@ -82,11 +83,10 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             mListView = (LinearLayout) itemView.findViewById(R.id.listviewTasks);
         }
 
-        public void updateUI(ResumeCategory resumeCategory) {
-            this.mResumeCategory = resumeCategory;
+        public void updateUI() {
             mTypeTextView.setText(mResumeCategory.getType());
             mListView.removeAllViews();
-            for (int i = 0 ; i < mResumeCategory.size(); i++) {
+            for (int i = 0; i < mResumeCategory.size(); i++) {
                 String s = mResumeCategory.get(i);
                 appendDetailToListView(s);
             }
@@ -103,83 +103,63 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(final View view) {
             if (!mEditing) {
                 mEditing = true;
+                final EditText editText = new EditText(mContext);
+                final int position = view.getId();
+                String title;
                 if (view == mTypeTextView) {
-                    final EditText editText = new EditText(mContext);
                     editText.setText(mResumeCategory.getType());
-                    new AlertDialog.Builder(mContext)
-                            .setView(editText)
-                            .setTitle("Edit Category")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mResumeCategory.setType(editText.getText().toString());
-                                    notifyDataSetChanged();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    mResume.remove(mResumeCategory);
-                                    notifyDataSetChanged();
-                                }
-                            })
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-                                    mEditing = false;
-                                }
-                            })
-                            .show();
-                }else if (view == mAddButton){
-                    final EditText editText = new EditText(mContext);
-                    editText.setText(mResumeCategory.getType());
-                    new AlertDialog.Builder(mContext)
-                            .setView(editText)
-                            .setTitle("Add " + mResumeCategory.getType())
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String str = editText.getText().toString();
-                                    mResumeCategory.add(str);
-                                    appendDetailToListView(str);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-                                    mEditing = false;
-                                }
-                            })
-                            .show();
-                }else{
-                    final int position = view.getId();
-                    final EditText editText = new EditText(mContext);
-                    new AlertDialog.Builder(mContext)
-                            .setView(editText)
-                            .setTitle("Edit")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    String str = editText.getText().toString();
-                                    mResumeCategory.set(position, str);
-                                    TextView textView = (TextView) mListView.getChildAt(position);
-                                    textView.setText(str);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-                                    mEditing = false;
-                                }
-                            })
-                            .show();
+                    title = "Edit Category";
+                } else if (view == mAddButton) {
+                    editText.setHint(mResumeCategory.getType());
+                    title = "Add " + mResumeCategory.getType();
+                } else { // detail in the list
+                    editText.setText(mResumeCategory.get(position));
+                    title = "Edit";
                 }
+                new AlertDialog.Builder(mContext)
+                    .setView(editText)
+                    .setTitle(title)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String str = editText.getText().toString();
+                            if (view == mTypeTextView) {
+                                mResumeCategory.setType(str);
+                                notifyDataSetChanged();
+                            } else if (view == mAddButton) {
+                                mResumeCategory.add(str);
+                                appendDetailToListView(str);
+                            } else { // detail in the list
+                                mResumeCategory.set(position, str);
+                                TextView textView = (TextView) mListView.getChildAt(position);
+                                textView.setText(str);
+                            }
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (view == mTypeTextView) {
+                                mResume.remove(mResumeCategory);
+                                notifyDataSetChanged();
+                            } else if (view == mAddButton) {
+                            } else { // detail in the list
+                                mResumeCategory.remove(position);
+                                updateUI();
+                            }
+                        }
+                    })
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            mEditing = false;
+                        }
+                    })
+                    .show();
             }
         }
 
