@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        boolean accountType = mAccoutnTypeSwitch.isSelected();
+        boolean accountType = mAccoutnTypeSwitch.isChecked();
 
         boolean cancel = false;
         View focusView = null;
@@ -412,10 +412,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-
             if (success) {
                 if (mIsRecruiter){
-
+                    Intent inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
+                    inputIntent.putExtra(SIGNIN_EMAIL, mEmail);
+                    startActivityForResult(inputIntent, REQUEST_CODE);
                 }else{
                     Intent inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
                     inputIntent.putExtra(SIGNIN_EMAIL, mEmail);
