@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,7 +47,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.js_resume_item_content, parent, false);
-//        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.list_content, parent, false);
         return new ViewHolder(view);
     }
 
@@ -74,6 +75,8 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
             mTypeTextView.setOnClickListener(this);
+            ImageButton button = (ImageButton) itemView.findViewById(R.id.edit_button);
+            button.setOnClickListener(this);
             mListView = (ListView) itemView.findViewById(R.id.listviewTasks);
             mListView.setTextFilterEnabled(true);
             mListView.setOnItemClickListener(this);
@@ -88,7 +91,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                 editText.setText(mResumeCategory.getType());
                 new AlertDialog.Builder(mContext)
                         .setView(editText)
-                        .setTitle("Edit")
+                        .setTitle("Edit Category")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -97,6 +100,13 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)
+                        .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mResume.remove(mResumeCategory);
+                                notifyDataSetChanged();
+                            }
+                        })
                         .setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {

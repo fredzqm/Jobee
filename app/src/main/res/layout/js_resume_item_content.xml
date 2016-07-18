@@ -20,6 +20,16 @@
             android:text="type"
             android:textSize="@dimen/resume_label_font" />
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_edit"
+            android:id="@+id/edit_button"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:padding="0dp"
+            />
+
         <com.fredzqm.jobee.job_seeker.resume.NestedListView
             android:id="@+id/listviewTasks"
             android:layout_width="match_parent"
@@ -30,6 +40,8 @@
             android:focusable="false"
             >
         </com.fredzqm.jobee.job_seeker.resume.NestedListView>
+
+
 
     </RelativeLayout>
 
