@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.ContainedFragment;
+import com.fredzqm.jobee.ContainedFragment;
 
 /**
  * A fragment representing a list of Items.

@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.job_seeker.AppliedJob;
+package com.fredzqm.jobee.recruiter.AppliedJob;
 
 import android.content.Context;
 import android.os.Bundle;

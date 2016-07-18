@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;

@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.job_seeker.Home;
+package com.fredzqm.jobee.recruiter.JobList;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,34 +6,36 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
+import android.widget.TextView;
 
+import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.JobSeekerAccount;
 import com.fredzqm.jobee.ContainedFragment;
+
+import java.text.SimpleDateFormat;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link Callback} interface
  * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link JobDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends ContainedFragment {
+public class JobDetailFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String EMAIL_ACCOUNT = "param1";
+    private static final String JOB_ARGUMENT = "param1";
 
-    private JobSeekerAccount mAccount;
+    private Job mJob;
     private Callback mCallback;
 
-    private AutoCompleteTextView nameEditText;
-    private AutoCompleteTextView emailEditText;
-    private AutoCompleteTextView addressEditText;
-    private Button mSaveChangesButton;
+    private TextView mTitleTextView;
+    private TextView mCompanyTextView;
+    private TextView mDetailsTextView;
+    private TextView mDateTextView;
+    private TextView mCityTextView;
 
-    public HomeFragment() {
+    public JobDetailFragment() {
         // Required empty public constructor
     }
 
@@ -41,13 +43,13 @@ public class HomeFragment extends ContainedFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param account the account of the game
-     * @return A new instance of fragment JobListFragment.
+     * @param job Parameter 1.
+     * @return A new instance of fragment JobDetailFragment.
      */
-    public static HomeFragment newInstance(JobSeekerAccount account) {
-        HomeFragment fragment = new HomeFragment();
+    public static JobDetailFragment newInstance(Job job) {
+        JobDetailFragment fragment = new JobDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable(EMAIL_ACCOUNT, account);
+        args.putParcelable(JOB_ARGUMENT, job);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +58,7 @@ public class HomeFragment extends ContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mAccount = getArguments().getParcelable(EMAIL_ACCOUNT);
+            mJob = getArguments().getParcelable(JOB_ARGUMENT);
         }
     }
 
@@ -64,32 +66,23 @@ public class HomeFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_home_frag, container, false);
-        nameEditText = (AutoCompleteTextView) view.findViewById(R.id.home_name);
-        emailEditText = (AutoCompleteTextView) view.findViewById(R.id.home_email);
-        addressEditText = (AutoCompleteTextView) view.findViewById(R.id.home_address);
-        mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
+        View view = inflater.inflate(R.layout.js_jobdetail_frag, container, false);
+        mTitleTextView = (TextView) view.findViewById(R.id.js_job_detail_title);
+        mCompanyTextView = (TextView) view.findViewById(R.id.js_job_detail_company);
+        mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
+        mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
+        mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
 
-        nameEditText.setText(mAccount.getName());
-        emailEditText.setText(mAccount.getEmailAccount());
-        addressEditText.setText(mAccount.getAddress());
-        mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = nameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String address = addressEditText.getText().toString();
-                mCallback.saveAccountUpdates(name, email, address);
-            }
-        });
+        mTitleTextView.setText(mJob.getTitle());
+        mCompanyTextView.setText(mJob.getCompany());
+        mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+        mCityTextView.setText(mJob.getCity());
+        mDetailsTextView.setText(mJob.getDetails());
 
+        mTitleTextView.setText(mJob.getTitle());
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -118,12 +111,11 @@ public class HomeFragment extends ContainedFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void saveAccountUpdates(String name, String email, String address);
     }
 }

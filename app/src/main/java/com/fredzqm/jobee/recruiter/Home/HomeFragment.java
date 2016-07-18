@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.job_seeker.Home;
+package com.fredzqm.jobee.recruiter.Home;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.JobSeekerAccount;
+import com.fredzqm.jobee.recruiter.JobSeekerAccount;
 import com.fredzqm.jobee.ContainedFragment;
 
 /**

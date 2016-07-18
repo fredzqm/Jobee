@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.Job;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.ContainedFragment;
+import com.fredzqm.jobee.ContainedFragment;
 
 import java.text.SimpleDateFormat;
 

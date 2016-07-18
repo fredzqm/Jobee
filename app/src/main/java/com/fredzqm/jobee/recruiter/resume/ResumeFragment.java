@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.job_seeker.resume;
+package com.fredzqm.jobee.recruiter.resume;
 
 import android.content.Context;
 import android.content.DialogInterface;

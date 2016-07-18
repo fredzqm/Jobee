@@ -34,6 +34,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
+import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
