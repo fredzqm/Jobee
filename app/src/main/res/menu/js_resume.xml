@@ -8,10 +8,22 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_switch"
+        android:orderInCategory="100"
+        android:title="Switch"
+        android:icon="@drawable/ic_menu_slideshow"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_add"
         android:orderInCategory="100"
         android:title="Add"
         android:icon="@drawable/ic_add"
-        app:showAsAction="always" />
-
+        app:showAsAction="always">
+        <Spinner
+            android:id="@+id/planets_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </item>
+    
 </menu>

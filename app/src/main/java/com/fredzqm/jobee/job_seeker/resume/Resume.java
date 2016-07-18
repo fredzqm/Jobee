@@ -28,4 +28,8 @@ public class Resume extends ArrayList<ResumeCategory>{
     public void setName(String name) {
         this.name = name;
     }
+
+    public String toString(){
+        return name;
+    }
 }

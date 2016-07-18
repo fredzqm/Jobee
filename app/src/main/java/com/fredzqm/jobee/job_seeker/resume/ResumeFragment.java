@@ -1,5 +1,6 @@
 package com.fredzqm.jobee.job_seeker.resume;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,7 +15,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
@@ -40,7 +43,7 @@ public class ResumeFragment extends ContainedFragment {
     private RecyclerView mRecyclerView;
     private TextView mResumeNameTextView;
     private ResumeAdapter mContentAdapter;
-    private ArrayList<Resume> mResumes;
+    private ArrayAdapter<Resume> mResumes;
     private Resume mCurResume;
 
     public ResumeFragment() {
@@ -67,6 +70,10 @@ public class ResumeFragment extends ContainedFragment {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.js_resume, menu);
+        MenuItem item = menu.findItem(R.id.action_switch);
+        final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
+        Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
+        spinner.setAdapter(mResumes);
     }
 
     @Override
@@ -74,7 +81,7 @@ public class ResumeFragment extends ContainedFragment {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 break;
             case R.id.action_add:
@@ -92,6 +99,8 @@ public class ResumeFragment extends ContainedFragment {
                         })
                         .show();
                 break;
+            default:
+                throw new RuntimeException("Not implemented");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -103,8 +112,8 @@ public class ResumeFragment extends ContainedFragment {
             mUserName = getArguments().getString(USER_NAME);
         }
         setHasOptionsMenu(true);
-        mResumes = new ArrayList<>();
         mCurResume = Resume.newResume("Resume 1");
+        mResumes = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, android.R.id.text1);
         mResumes.add(mCurResume);
     }
 
@@ -114,8 +123,6 @@ public class ResumeFragment extends ContainedFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.js_resume_frag, container, false);
 
-        mResumeNameTextView = (TextView) view.findViewById(R.id.resume_name);
-        mResumeNameTextView.setText(mCurResume.getName());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.resume_contents_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
