@@ -50,8 +50,8 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mResumeCategory = this.mResume.get(position);
-        holder.mAdapter.notifyDataSetChanged();
         holder.mTypeTextView.setText(holder.mResumeCategory.getType());
+        holder.mAdapter.notifyDataSetChanged();
     }
 
     @Override

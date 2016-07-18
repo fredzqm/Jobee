@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by zhang on 7/13/2016.
  */
 public class Resume extends ArrayList<ResumeCategory>{
+    public static Resume createResumeStub = new Resume("Create Resume");
     private String name;
 
     public Resume(String resumeName) {

@@ -39,7 +39,7 @@ public class ResumeFragment extends ContainedFragment {
     private Callback mCallback;
     private RecyclerView mRecyclerView;
     private ResumeAdapter mResumeAdapter;
-    private ArrayAdapter<Resume> mResumes;
+    private ResumeSwitchListAdapter mSwitchListAdapter;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -68,12 +68,12 @@ public class ResumeFragment extends ContainedFragment {
         MenuItem item = menu.findItem(R.id.action_switch);
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
         Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
-        spinner.setAdapter(mResumes);
+        spinner.setAdapter(mSwitchListAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-                Resume selected = mResumes.getItem(position);
-                if (selected.isStub()){
+                Resume selected = mSwitchListAdapter.getItem(position);
+                if (selected == Resume.createResumeStub){
                     final EditText editText = new EditText(getContext());
                     editText.setHint("Resume name");
                     editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
@@ -84,7 +84,7 @@ public class ResumeFragment extends ContainedFragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Resume created = Resume.newInstance(editText.getText().toString());
-                                    mResumes.insert(created, mResumes.getCount() - 1);
+                                    mSwitchListAdapter.add(created);
                                     mResumeAdapter.setResume(created);
                                 }
                             })
@@ -138,12 +138,11 @@ public class ResumeFragment extends ContainedFragment {
         }
         setHasOptionsMenu(true);
         mResumeAdapter = new ResumeAdapter(getContext());
-        mResumes = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, android.R.id.text1);
-        mResumes.add(Resume.newStub("new resume"));
+        mSwitchListAdapter = new ResumeSwitchListAdapter(getContext());
         // TODO: replace those with resume from database
         Resume resume = Resume.newInstance("Resume 1");
         mResumeAdapter.setResume(resume);
-        mResumes.insert(resume, 0);
+        mSwitchListAdapter.add(resume);
     }
 
     @Override
