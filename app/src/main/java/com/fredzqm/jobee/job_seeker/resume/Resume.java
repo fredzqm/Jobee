@@ -13,7 +13,7 @@ public class Resume extends ArrayList<ResumeCategory>{
         this.name = resumeName;
     }
 
-    public static Resume newResume(String resumeName) {
+    public static Resume newInstance(String resumeName) {
         Resume resume = new Resume(resumeName);
         resume.add(ResumeCategory.newInstance("Skills"));
         resume.add(ResumeCategory.newInstance("Education"));
@@ -31,5 +31,28 @@ public class Resume extends ArrayList<ResumeCategory>{
 
     public String toString(){
         return name;
+    }
+
+    public boolean isStub() {
+        return false;
+    }
+
+
+    public static Resume newStub(String name) {
+       return new ResumeStub(name);
+    }
+
+    /**
+     * Created by zhang on 7/18/2016.
+     */
+    public static class ResumeStub extends Resume{
+        public ResumeStub(String name){
+            super(name);
+        }
+
+        public boolean isStub(){
+            return true;
+        }
+
     }
 }

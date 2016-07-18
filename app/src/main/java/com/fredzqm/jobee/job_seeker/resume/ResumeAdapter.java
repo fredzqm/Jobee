@@ -30,10 +30,9 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     private Random mRandom = new Random();
 
-    public ResumeAdapter(Context context, Resume resume) {
+    public ResumeAdapter(Context context) {
         mContext = context;
         mEditing = false;
-        mResume = resume;
     }
 
     public void addCategory(String category) {
@@ -58,6 +57,15 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mResume.size();
+    }
+
+    public void setResume(Resume resume) {
+        mResume = resume;
+        notifyDataSetChanged();
+    }
+
+    public Resume getResume(){
+        return mResume;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, AdapterView.OnItemClickListener {

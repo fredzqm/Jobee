@@ -1,6 +1,5 @@
 package com.fredzqm.jobee.job_seeker.resume;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -15,15 +14,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,10 +38,8 @@ public class ResumeFragment extends ContainedFragment {
     private String mUserName;
     private Callback mCallback;
     private RecyclerView mRecyclerView;
-    private TextView mResumeNameTextView;
-    private ResumeAdapter mContentAdapter;
+    private ResumeAdapter mResumeAdapter;
     private ArrayAdapter<Resume> mResumes;
-    private Resume mCurResume;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -74,6 +69,36 @@ public class ResumeFragment extends ContainedFragment {
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
         Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
         spinner.setAdapter(mResumes);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
+                Resume selected = mResumes.getItem(position);
+                if (selected.isStub()){
+                    final EditText editText = new EditText(getContext());
+                    editText.setHint("Resume name");
+                    editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                    new AlertDialog.Builder(getContext())
+                            .setView(editText)
+                            .setTitle("Create new resume")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Resume created = Resume.newInstance(editText.getText().toString());
+                                    mResumes.insert(created, mResumes.getCount() - 1);
+                                    mResumeAdapter.setResume(created);
+                                }
+                            })
+                            .show();
+                }else{
+                    mResumeAdapter.setResume(selected);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override
@@ -94,7 +119,7 @@ public class ResumeFragment extends ContainedFragment {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mContentAdapter.addCategory(editText.getText().toString());
+                                mResumeAdapter.addCategory(editText.getText().toString());
                             }
                         })
                         .show();
@@ -112,9 +137,13 @@ public class ResumeFragment extends ContainedFragment {
             mUserName = getArguments().getString(USER_NAME);
         }
         setHasOptionsMenu(true);
-        mCurResume = Resume.newResume("Resume 1");
+        mResumeAdapter = new ResumeAdapter(getContext());
         mResumes = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, android.R.id.text1);
-        mResumes.add(mCurResume);
+        mResumes.add(Resume.newStub("new resume"));
+        // TODO: replace those with resume from database
+        Resume resume = Resume.newInstance("Resume 1");
+        mResumeAdapter.setResume(resume);
+        mResumes.insert(resume, 0);
     }
 
     @Override
@@ -127,8 +156,7 @@ public class ResumeFragment extends ContainedFragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
         mRecyclerView.setLayoutManager(layoutManager);
-        mContentAdapter = new ResumeAdapter(getContext(), Resume.newResume("Resume1"));
-        mRecyclerView.setAdapter(mContentAdapter);
+        mRecyclerView.setAdapter(mResumeAdapter);
         mRecyclerView.setHasFixedSize(false);
 
         return view;
@@ -153,7 +181,7 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        mContentAdapter.addCategory("New category");
+        mResumeAdapter.addCategory("New category");
     }
 
 
