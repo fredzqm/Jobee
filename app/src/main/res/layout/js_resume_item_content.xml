@@ -30,8 +30,9 @@
             android:padding="0dp"
             />
 
-        <com.fredzqm.jobee.job_seeker.resume.NestedListView
+        <LinearLayout
             android:id="@+id/listviewTasks"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -39,7 +40,7 @@
             android:layout_below="@+id/js_resume_item_content_title"
             android:focusable="false"
             >
-        </com.fredzqm.jobee.job_seeker.resume.NestedListView>
+        </LinearLayout>
 
 
 

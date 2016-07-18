@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -37,9 +39,12 @@ public class ResumeFragment extends ContainedFragment {
 
     private String mUserName;
     private Callback mCallback;
+
     private RecyclerView mRecyclerView;
     private ResumeAdapter mResumeAdapter;
-    private ResumeSwitchListAdapter mSwitchListAdapter;
+
+    private ArrayList<Resume> mResumes;
+
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -67,13 +72,23 @@ public class ResumeFragment extends ContainedFragment {
         inflater.inflate(R.menu.js_resume, menu);
         MenuItem item = menu.findItem(R.id.action_switch);
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
-        Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
-        spinner.setAdapter(mSwitchListAdapter);
+        final Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
+        spinner.setAdapter(new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, android.R.id.text1){
+            public int getCount(){
+                return mResumes.size() + 1;
+            }
+
+            public String getItem(int position){
+                if (position == mResumes.size()){
+                    return "Create new";
+                }
+                return mResumes.get(position).getName();
+            }
+        });
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-                Resume selected = mSwitchListAdapter.getItem(position);
-                if (selected == Resume.createResumeStub){
+                if (position == mResumes.size()){
                     final EditText editText = new EditText(getContext());
                     editText.setHint("Resume name");
                     editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
@@ -84,13 +99,14 @@ public class ResumeFragment extends ContainedFragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Resume created = Resume.newInstance(editText.getText().toString());
-                                    mSwitchListAdapter.add(created);
+                                    mResumes.add(created);
                                     mResumeAdapter.setResume(created);
+                                    spinner.setPrompt(created.getName());
                                 }
                             })
                             .show();
                 }else{
-                    mResumeAdapter.setResume(selected);
+                    mResumeAdapter.setResume(mResumes.get(position));
                 }
             }
 
@@ -138,11 +154,11 @@ public class ResumeFragment extends ContainedFragment {
         }
         setHasOptionsMenu(true);
         mResumeAdapter = new ResumeAdapter(getContext());
-        mSwitchListAdapter = new ResumeSwitchListAdapter(getContext());
         // TODO: replace those with resume from database
         Resume resume = Resume.newInstance("Resume 1");
         mResumeAdapter.setResume(resume);
-        mSwitchListAdapter.add(resume);
+        mResumes = new ArrayList<>();
+        mResumes.add(resume);
     }
 
     @Override
