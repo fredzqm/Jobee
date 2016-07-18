@@ -26,16 +26,14 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     private Context mContext;
     private Resume mResume;
-    private RecyclerView mRecycleView;
     private boolean mEditing;
 
     private Random mRandom = new Random();
 
-    public ResumeAdapter(Context context, RecyclerView recyclerView) {
+    public ResumeAdapter(Context context, Resume resume) {
         mContext = context;
         mEditing = false;
-        mRecycleView = recyclerView;
-        mResume = Resume.newResume();
+        mResume = resume;
     }
 
     public void addCategory(String category) {

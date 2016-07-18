@@ -15,9 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,8 +37,11 @@ public class ResumeFragment extends ContainedFragment {
 
     private String mUserName;
     private Callback mCallback;
-    private ResumeAdapter mContentAdapter;
     private RecyclerView mRecyclerView;
+    private TextView mResumeNameTextView;
+    private ResumeAdapter mContentAdapter;
+    private ArrayList<Resume> mResumes;
+    private Resume mCurResume;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -97,6 +103,9 @@ public class ResumeFragment extends ContainedFragment {
             mUserName = getArguments().getString(USER_NAME);
         }
         setHasOptionsMenu(true);
+        mResumes = new ArrayList<>();
+        mCurResume = Resume.newResume("Resume 1");
+        mResumes.add(mCurResume);
     }
 
     @Override
@@ -105,14 +114,16 @@ public class ResumeFragment extends ContainedFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.js_resume_frag, container, false);
 
-
+        mResumeNameTextView = (TextView) view.findViewById(R.id.resume_name);
+        mResumeNameTextView.setText(mCurResume.getName());
         mRecyclerView = (RecyclerView) view.findViewById(R.id.resume_contents_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
         mRecyclerView.setLayoutManager(layoutManager);
-        mContentAdapter = new ResumeAdapter(getContext(), mRecyclerView);
+        mContentAdapter = new ResumeAdapter(getContext(), Resume.newResume("Resume1"));
         mRecyclerView.setAdapter(mContentAdapter);
         mRecyclerView.setHasFixedSize(false);
+
         return view;
     }
 

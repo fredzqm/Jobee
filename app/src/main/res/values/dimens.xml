@@ -16,4 +16,5 @@
     <dimen name="card_view_corner_radius">5dp</dimen>
     <dimen name="content_padding">2dp</dimen>
     <dimen name="card_view_margin">2dp</dimen>
+    <dimen name="resume_name_text_size">30sp</dimen>
 </resources>
