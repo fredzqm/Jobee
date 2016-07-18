@@ -1,16 +1,20 @@
 package com.fredzqm.jobee.job_seeker.resume;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.SingleLineTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.ContainedFragment;
@@ -29,7 +33,6 @@ public class ResumeFragment extends ContainedFragment {
     private static final String USER_NAME = "USER_NAME";
 
     private String mUserName;
-
     private Callback mCallback;
     private ResumeAdapter mContentAdapter;
     private RecyclerView mRecyclerView;
@@ -56,6 +59,7 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.js_resume, menu);
     }
 
@@ -66,6 +70,21 @@ public class ResumeFragment extends ContainedFragment {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()){
             case R.id.action_settings:
+                break;
+            case R.id.action_add:
+                final EditText editText = new EditText(getContext());
+                editText.setHint("Category");
+                editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                new AlertDialog.Builder(getContext())
+                        .setView(editText)
+                        .setTitle("Add new Category")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mContentAdapter.addCategory(editText.getText().toString());
+                            }
+                        })
+                        .show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -116,7 +135,7 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        mContentAdapter.addName();
+        mContentAdapter.addCategory("New category");
     }
 
 

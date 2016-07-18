@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,14 +33,12 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         mContext = context;
         mEditing = false;
         mRecycleView = recyclerView;
-        mResume = new Resume();
-        for (int i = 0; i < 5; i++) {
-            mResume.add(0, ResumeContent.newInstance());
-        }
+        mResume = Resume.newResume();
     }
 
-    public void addName() {
-        mResume.add(0, ResumeContent.newInstance());
+    public void addCategory(String category) {
+        category = category.replace("\n", " ");
+        mResume.add(ResumeCategory.newInstance(category));
         notifyDataSetChanged();
     }
 
@@ -54,30 +51,9 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mResumeContent = this.mResume.get(position);
+        holder.mResumeCategory = this.mResume.get(position);
         holder.mAdapter.notifyDataSetChanged();
-//        setListViewHeightBasedOnChildren(holder.mListView);
-        holder.mTypeTextView.setText(holder.mResumeContent.getType());
-    }
-
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-
-        int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
+        holder.mTypeTextView.setText(holder.mResumeCategory.getType());
     }
 
     @Override
@@ -89,12 +65,12 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         TextView mTypeTextView;
         ListView mListView;
         ResumeContentListAdapter mAdapter;
-        ResumeContent mResumeContent;
+        ResumeCategory mResumeCategory;
 
         public ViewHolder(final View itemView) {
             super(itemView);
             mAdapter = new ResumeContentListAdapter();
-            mResumeContent = new ResumeContent();
+            mResumeCategory = new ResumeCategory();
 
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
             mTypeTextView.setOnClickListener(this);
@@ -109,14 +85,14 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             if (!mEditing) {
                 mEditing = true;
                 final EditText editText = new EditText(mContext);
-                editText.setText(mResumeContent.getType());
+                editText.setText(mResumeCategory.getType());
                 new AlertDialog.Builder(mContext)
                         .setView(editText)
                         .setTitle("Edit")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mResumeContent.setType(editText.getText().toString());
+                                mResumeCategory.setType(editText.getText().toString());
                                 notifyDataSetChanged();
                             }
                         })
@@ -136,7 +112,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
             if (!mEditing) {
                 mEditing = true;
                 final EditText editText = new EditText(mContext);
-                editText.setText(mResumeContent.get(position));
+                editText.setText(mResumeCategory.get(position));
                 new AlertDialog.Builder(mContext)
                         .setView(editText)
                         .setTitle("Edit")
@@ -144,7 +120,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String str = editText.getText().toString();
-                                mResumeContent.set(position, str);
+                                mResumeCategory.set(position, str);
                                 mAdapter.notifyDataSetChanged();
                             }
                         })
@@ -170,17 +146,17 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
             @Override
             public int getCount() {
-                return mResumeContent.size();
+                return mResumeCategory.size();
             }
 
             @Override
             public Object getItem(int i) {
-                return mResumeContent.get(i);
+                return mResumeCategory.get(i);
             }
 
             @Override
             public long getItemId(int i) {
-                return mResumeContent.get(i).hashCode();
+                return mResumeCategory.get(i).hashCode();
             }
 
             @Override
@@ -192,7 +168,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                 } else {
                     view = convertView;
                 }
-                String name = mResumeContent.get(position);
+                String name = mResumeCategory.get(position);
                 TextView nameTextView = (TextView) view.findViewById(R.id.js_resume_item_content_detail);
                 nameTextView.setText(name);
                 return view;

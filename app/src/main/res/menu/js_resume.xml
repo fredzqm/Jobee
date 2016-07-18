@@ -12,6 +12,6 @@
         android:orderInCategory="100"
         android:title="Add"
         android:icon="@drawable/ic_add"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 
 </menu>
