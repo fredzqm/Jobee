@@ -3,6 +3,7 @@ package com.fredzqm.jobee.job_seeker.resume;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -176,7 +177,9 @@ public class ResumeFragment extends ContainedFragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mResumeAdapter);
         mRecyclerView.setHasFixedSize(false);
-
+        FloatingActionButton fab = mCallback.getFab();
+        fab.setImageResource(android.R.drawable.ic_menu_camera);
+        fab.show();
         return view;
     }
 
@@ -199,7 +202,8 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        mResumeAdapter.addCategory("New category");
+        mCallback.openQRCode();
+//        mResumeAdapter.addCategory("New category");
     }
 
 
@@ -214,6 +218,7 @@ public class ResumeFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-
+        FloatingActionButton getFab();
+        void openQRCode();
     }
 }

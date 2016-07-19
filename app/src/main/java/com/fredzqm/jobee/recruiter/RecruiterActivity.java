@@ -31,6 +31,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     private static final String TAG = "JobSeekerActivity";
 
     private RecruiterAccount mAccount;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,8 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.re_fragment_container));
@@ -65,6 +66,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
 
     private void swapFragment(ContainedFragment fragment, String tag){
+        mFab.hide();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.re_fragment_container, fragment);
         if (tag != null)
@@ -144,5 +146,9 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void showJobDetail(Job job) {
         swapFragment(JobDetailFragment.newInstance(job), "Job Detail");
+    }
+
+    public FloatingActionButton getFab(){
+        return mFab;
     }
 }

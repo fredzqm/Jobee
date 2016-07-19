@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.job_seeker.resume.QRCodeFragment;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
@@ -26,11 +27,12 @@ import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
-        AppliedJobFragment.Callback, JobDetailFragment.Callback
+        AppliedJobFragment.Callback, JobDetailFragment.Callback, QRCodeFragment.Callback
 {
     private static final String TAG = "JobSeekerActivity";
 
     private JobSeekerAccount mAccount;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +41,8 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.js_fragment_container));
@@ -65,6 +67,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
 
     private void swapFragment(ContainedFragment fragment, String tag){
+        mFab.hide();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.js_fragment_container, fragment);
         if (tag != null)
@@ -144,5 +147,15 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void showJobDetail(Job job) {
         swapFragment(JobDetailFragment.newInstance(job), "Job Detail");
+    }
+
+    @Override
+    public FloatingActionButton getFab(){
+        return mFab;
+    }
+
+    @Override
+    public void openQRCode() {
+        swapFragment(QRCodeFragment.newInstance(), "QR code");
     }
 }
