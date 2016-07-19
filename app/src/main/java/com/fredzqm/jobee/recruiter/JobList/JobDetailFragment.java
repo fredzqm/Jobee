@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fredzqm.jobee.Job;
+import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
 

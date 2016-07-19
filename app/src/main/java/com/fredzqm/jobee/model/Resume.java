@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.recruiter.resume;
+package com.fredzqm.jobee.model;
 
 import java.util.ArrayList;
 

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fredzqm.jobee.Job;
+import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
 
@@ -98,6 +98,6 @@ public class JobListFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void showJobDetail(com.fredzqm.jobee.Job mItem);
+        void showJobDetail(Job mItem);
     }
 }

@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.Job;
+import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
@@ -43,7 +43,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_resume));
+                ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.js_fragment_container));
                 container.clickFab();
             }
         });
@@ -66,7 +66,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
     private void swapFragment(ContainedFragment fragment, String tag){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container_resume, fragment);
+        ft.replace(R.id.js_fragment_container, fragment);
         if (tag != null)
             ft.addToBackStack(tag);
         ft.commit();

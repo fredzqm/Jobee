@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.Job;
+import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.recruiter.AppliedJob.AppliedJobFragment;
@@ -30,12 +30,12 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 {
     private static final String TAG = "JobSeekerActivity";
 
-    private JobSeekerAccount mAccount;
+    private RecruiterAccount mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.js_activity);
+        setContentView(R.layout.re_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,7 +43,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container_resume));
+                ContainedFragment container = ((ContainedFragment) getSupportFragmentManager().findFragmentById(R.id.re_fragment_container));
                 container.clickFab();
             }
         });
@@ -57,7 +57,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAccount = new JobSeekerAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
+        mAccount = new RecruiterAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
         if (savedInstanceState == null){
             swapFragment(HomeFragment.newInstance(mAccount), null);
         }
@@ -66,7 +66,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     private void swapFragment(ContainedFragment fragment, String tag){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container_resume, fragment);
+        ft.replace(R.id.re_fragment_container, fragment);
         if (tag != null)
             ft.addToBackStack(tag);
         ft.commit();
@@ -138,7 +138,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     public void saveAccountUpdates(String name, String email, String address) {
         mAccount.setName(name);
         mAccount.setEmailAccount(email);
-        mAccount.setAddress(address);
+        mAccount.setCompany(address);
     }
 
     @Override

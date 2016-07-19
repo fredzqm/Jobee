@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.recruiter.resume;
+package com.fredzqm.jobee.model;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,6 @@ public class ResumeCategory extends ArrayList<String> {
         resumeCategory.setType(type);
         resumeCategory.addContent("Element 1");
         resumeCategory.addContent("Element 2");
-        resumeCategory.addContent("Element 3");
         return resumeCategory;
     }
 }

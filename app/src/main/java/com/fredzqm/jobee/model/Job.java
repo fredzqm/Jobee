@@ -1,4 +1,4 @@
-package com.fredzqm.jobee;
+package com.fredzqm.jobee.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

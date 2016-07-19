@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.Resume;
+import com.fredzqm.jobee.model.ResumeCategory;
 
 import java.util.Random;
 

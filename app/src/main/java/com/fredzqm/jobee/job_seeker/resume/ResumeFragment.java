@@ -21,6 +21,7 @@ import android.widget.Spinner;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.Resume;
 
 import java.util.ArrayList;
 
