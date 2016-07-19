@@ -64,11 +64,11 @@ public class HomeFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_home_frag, container, false);
-        nameEditText = (AutoCompleteTextView) view.findViewById(R.id.home_name);
-        emailEditText = (AutoCompleteTextView) view.findViewById(R.id.home_email);
-        addressEditText = (AutoCompleteTextView) view.findViewById(R.id.home_address);
-        mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
+        View view = inflater.inflate(R.layout.re_home_frag, container, false);
+        nameEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_name);
+        emailEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_email);
+        addressEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_company);
+        mSaveChangesButton = (Button) view.findViewById(R.id.re_home_save_changes);
 
         nameEditText.setText(mAccount.getName());
         emailEditText.setText(mAccount.getEmailAccount());
@@ -78,8 +78,8 @@ public class HomeFragment extends ContainedFragment {
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
-                String address = addressEditText.getText().toString();
-                mCallback.saveAccountUpdates(name, email, address);
+                String company = addressEditText.getText().toString();
+                mCallback.saveAccountUpdates(name, email, company);
             }
         });
 
@@ -124,6 +124,6 @@ public class HomeFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void saveAccountUpdates(String name, String email, String address);
+        void saveAccountUpdates(String name, String email, String company);
     }
 }
