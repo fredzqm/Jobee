@@ -44,6 +44,8 @@ public class ResumeFragment extends ContainedFragment {
 
     private RecyclerView mRecyclerView;
     private ResumeAdapter mResumeAdapter;
+
+    private Spinner mSpinner;
     private ArrayAdapter<String> mSwitchAdapter;
 
     private ArrayList<Resume> mResumes;
@@ -75,7 +77,7 @@ public class ResumeFragment extends ContainedFragment {
         inflater.inflate(R.menu.js_resume, menu);
         MenuItem item = menu.findItem(R.id.action_switch);
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
-        final Spinner spinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
+        mSpinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
         mSwitchAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, android.R.id.text1){
             public int getCount(){
                 return mResumes.size() + 1;
@@ -88,8 +90,8 @@ public class ResumeFragment extends ContainedFragment {
                 return mResumes.get(position).getName();
             }
         };
-        spinner.setAdapter(mSwitchAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinner.setAdapter(mSwitchAdapter);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
                 if (position == mResumes.size()){
@@ -99,6 +101,7 @@ public class ResumeFragment extends ContainedFragment {
                     new AlertDialog.Builder(getContext())
                             .setView(editText)
                             .setTitle("Create new resume")
+                            .setNegativeButton(android.R.string.cancel, null)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -144,6 +147,15 @@ public class ResumeFragment extends ContainedFragment {
                         })
                         .show();
                 break;
+            case R.id.action_delete:
+                mResumes.remove(mResumeAdapter.getResume());
+                if (mResumes.isEmpty()){
+                    mResumes.add(Resume.newInstance("Resume 1"));
+                }
+                mResumeAdapter.setResume(mResumes.get(0));
+                mSwitchAdapter.notifyDataSetChanged();
+                mSpinner.setSelection(0);
+                break;
             default:
                 throw new RuntimeException("Not implemented");
         }
@@ -157,12 +169,10 @@ public class ResumeFragment extends ContainedFragment {
             mUserName = getArguments().getString(USER_NAME);
         }
         setHasOptionsMenu(true);
-        mResumeAdapter = new ResumeAdapter(getContext());
-        // TODO: replace those with resume from database
-        Resume resume = Resume.newInstance("Resume 1");
-        mResumeAdapter.setResume(resume);
         mResumes = new ArrayList<>();
-        mResumes.add(resume);
+        mResumes.add(Resume.newInstance("Resume 1"));
+        mResumeAdapter = new ResumeAdapter(getContext());
+        mResumeAdapter.setResume(mResumes.get(0));
     }
 
     @Override

@@ -77,12 +77,18 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         public ViewHolder(final View itemView) {
             super(itemView);
             mResumeCategory = new ResumeCategory();
-
             mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
             mTypeTextView.setOnClickListener(this);
             mAddButton = (ImageButton) itemView.findViewById(R.id.add_button);
             mAddButton.setOnClickListener(this);
             mListView = (LinearLayout) itemView.findViewById(R.id.listviewTasks);
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    ViewHolder.this.onClick(mTypeTextView);
+                    return false;
+                }
+            });
         }
 
         public void updateUI() {
