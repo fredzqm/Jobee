@@ -251,6 +251,5 @@ public class ResumeFragment extends ContainedFragment {
     public interface Callback {
         FloatingActionButton getFab();
 
-        void openQRCode();
     }
 }
