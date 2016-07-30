@@ -4,18 +4,10 @@
     android:layout_height="match_parent"
     tools:context=".job_seeker.resume.ResumeFragment">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/resume_contents_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/resume_container_margin">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/resume_contents_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
+        android:padding="@dimen/card_view_margin"/>\
 
 </RelativeLayout>

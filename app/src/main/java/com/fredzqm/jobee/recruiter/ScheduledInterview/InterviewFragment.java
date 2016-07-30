@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.recruiter.AppliedJob;
+package com.fredzqm.jobee.recruiter.ScheduledInterview;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import com.fredzqm.jobee.ContainedFragment;
  * Activities containing this fragment MUST implement the {@link Callback}
  * interface.
  */
-public class AppliedJobFragment extends ContainedFragment {
+public class InterviewFragment extends ContainedFragment {
 
     // TODO: Customize parameters
     private int mColumnCount = 1;
@@ -31,8 +31,8 @@ public class AppliedJobFragment extends ContainedFragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static AppliedJobFragment newInstance(int columnCount) {
-        AppliedJobFragment fragment = new AppliedJobFragment();
+    public static InterviewFragment newInstance(int columnCount) {
+        InterviewFragment fragment = new InterviewFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -43,7 +43,7 @@ public class AppliedJobFragment extends ContainedFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AppliedJobFragment() {
+    public InterviewFragment() {
     }
 
     @Override
@@ -69,7 +69,7 @@ public class AppliedJobFragment extends ContainedFragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyAppliedJobAdapter(Job.ITEMS, mListener));
+            recyclerView.setAdapter(new InterviewAdapter(Job.ITEMS, mListener));
         }
         return view;
     }

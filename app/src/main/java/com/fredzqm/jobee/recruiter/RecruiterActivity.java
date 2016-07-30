@@ -18,15 +18,15 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.recruiter.AppliedJob.AppliedJobFragment;
+import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
-import com.fredzqm.jobee.recruiter.JobList.JobDetailFragment;
-import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeReviewFragment;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 import com.fredzqm.jobee.recruiter.resume.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
-        AppliedJobFragment.Callback, JobDetailFragment.Callback
+        ResumeFragment.Callback, HomeFragment.Callback, ResumeListFragment.Callback,
+        InterviewFragment.Callback, ResumeReviewFragment.Callback
 {
     private static final String TAG = "JobSeekerActivity";
 
@@ -118,10 +118,10 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()), null);
                 break;
             case R.id.js_nav_job_list:
-                swapFragment(JobListFragment.newInstance(), null);
+                swapFragment(ResumeListFragment.newInstance(), null);
                 break;
             case R.id.js_nav_applied:
-                swapFragment(AppliedJobFragment.newInstance(2), null);
+                swapFragment(InterviewFragment.newInstance(2), null);
                 break;
             default:
                 throw new RuntimeException("Not implemented navigation bar yet");
@@ -145,7 +145,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void showJobDetail(Job job) {
-        swapFragment(JobDetailFragment.newInstance(job), "Job Detail");
+        swapFragment(ResumeReviewFragment.newInstance(job), "Job Detail");
     }
 
     public FloatingActionButton getFab(){

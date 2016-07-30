@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.recruiter.AppliedJob;
+package com.fredzqm.jobee.recruiter.ResumeList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,24 +8,23 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.recruiter.AppliedJob.AppliedJobFragment.Callback;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment.Callback;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Job} and makes a call to the
- * specified {@link AppliedJobFragment.Callback}.
- * TODO: Replace the implementation with code for your data type.
+ * specified {@link Callback}.
  */
-public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapter.ViewHolder> {
+public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.ViewHolder> {
 
     private final List<Job> mValues;
-    private final AppliedJobFragment.Callback mListener;
+    private final Callback mCallback;
 
-    public MyAppliedJobAdapter(List<Job> items, Callback listener) {
+    public ResumeListAdapter(List<Job> items, Callback callback) {
         mValues = items;
-        mListener = listener;
+        mCallback = callback;
     }
 
     @Override
@@ -60,6 +59,15 @@ public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapte
             mCompanyTextView = (TextView) view.findViewById(R.id.js_list_item_company);
             mDateTextView = (TextView) view.findViewById(R.id.js_list_item_date);
             mCityTextView = (TextView) view.findViewById(R.id.js_list_item_city);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mCallback) {
+                        mCallback.showJobDetail(mJob);
+                    }
+                }
+            });
         }
 
         public void updateView() {

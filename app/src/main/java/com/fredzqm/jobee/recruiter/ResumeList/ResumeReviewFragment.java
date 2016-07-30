@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.job_seeker.JobList;
+package com.fredzqm.jobee.recruiter.ResumeList;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,10 +19,10 @@ import java.text.SimpleDateFormat;
  * Activities that contain this fragment must implement the
  * {@link Callback} interface
  * to handle interaction events.
- * Use the {@link JobDetailFragment#newInstance} factory method to
+ * Use the {@link ResumeReviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobDetailFragment extends ContainedFragment {
+public class ResumeReviewFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String JOB_ARGUMENT = "param1";
 
@@ -35,7 +35,7 @@ public class JobDetailFragment extends ContainedFragment {
     private TextView mDateTextView;
     private TextView mCityTextView;
 
-    public JobDetailFragment() {
+    public ResumeReviewFragment() {
         // Required empty public constructor
     }
 
@@ -46,8 +46,8 @@ public class JobDetailFragment extends ContainedFragment {
      * @param job Parameter 1.
      * @return A new instance of fragment JobFragment.
      */
-    public static JobDetailFragment newInstance(Job job) {
-        JobDetailFragment fragment = new JobDetailFragment();
+    public static ResumeReviewFragment newInstance(Job job) {
+        ResumeReviewFragment fragment = new ResumeReviewFragment();
         Bundle args = new Bundle();
         args.putParcelable(JOB_ARGUMENT, job);
         fragment.setArguments(args);

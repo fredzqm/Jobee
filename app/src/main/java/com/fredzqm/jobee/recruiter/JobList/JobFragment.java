@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.Job;
 
 import java.text.SimpleDateFormat;
 
@@ -19,10 +19,10 @@ import java.text.SimpleDateFormat;
  * Activities that contain this fragment must implement the
  * {@link Callback} interface
  * to handle interaction events.
- * Use the {@link JobDetailFragment#newInstance} factory method to
+ * Use the {@link JobFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobDetailFragment extends ContainedFragment {
+public class JobFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String JOB_ARGUMENT = "param1";
 
@@ -35,7 +35,7 @@ public class JobDetailFragment extends ContainedFragment {
     private TextView mDateTextView;
     private TextView mCityTextView;
 
-    public JobDetailFragment() {
+    public JobFragment() {
         // Required empty public constructor
     }
 
@@ -44,10 +44,10 @@ public class JobDetailFragment extends ContainedFragment {
      * this fragment using the provided parameters.
      *
      * @param job Parameter 1.
-     * @return A new instance of fragment JobDetailFragment.
+     * @return A new instance of fragment JobFragment.
      */
-    public static JobDetailFragment newInstance(Job job) {
-        JobDetailFragment fragment = new JobDetailFragment();
+    public static JobFragment newInstance(Job job) {
+        JobFragment fragment = new JobFragment();
         Bundle args = new Bundle();
         args.putParcelable(JOB_ARGUMENT, job);
         fragment.setArguments(args);

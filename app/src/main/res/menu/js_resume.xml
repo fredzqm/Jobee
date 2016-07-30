@@ -33,7 +33,7 @@
     <item
         android:id="@+id/action_delete"
         android:orderInCategory="100"
-        android:title="@string/delete"
+        android:title="@string/delete_this_resume"
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="never">
     </item>

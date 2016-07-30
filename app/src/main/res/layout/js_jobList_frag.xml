@@ -6,9 +6,9 @@
     android:name="com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/recyclerview_margin"
-    android:layout_marginRight="@dimen/recyclerview_margin"
-    android:paddingTop="@dimen/recyclerview_padding"
+    android:layout_marginLeft="@dimen/card_view_margin"
+    android:layout_marginRight="@dimen/card_view_margin"
+    android:paddingTop="@dimen/card_view_margin"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment"
     tools:listitem="@layout/js_joblist_item" />

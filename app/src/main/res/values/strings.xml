@@ -40,8 +40,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="delete">Delete</string>
     <string name="Switch">Switch</string>
     <string name="add_new_resume">Add new resume</string>
     <string name="add_new_category">Add new category</string>
+    <string name="delete_this_resume">Delete this resume</string>
 </resources>

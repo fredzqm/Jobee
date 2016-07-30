@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.recruiter.JobList;
+package com.fredzqm.jobee.recruiter.ResumeList;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
+import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.ContainedFragment;
 
 /**
  * A fragment representing a list of Items.
@@ -18,12 +18,12 @@ import com.fredzqm.jobee.model.Job;
  * Activities containing this fragment MUST implement the {@link Callback}
  * interface.
  */
-public class JobListFragment extends ContainedFragment {
+public class ResumeListFragment extends ContainedFragment {
 
     private Callback mListener;
 
-    public static JobListFragment newInstance() {
-        JobListFragment fragment = new JobListFragment();
+    public static ResumeListFragment newInstance() {
+        ResumeListFragment fragment = new ResumeListFragment();
         return fragment;
     }
 
@@ -31,7 +31,7 @@ public class JobListFragment extends ContainedFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public JobListFragment() {
+    public ResumeListFragment() {
     }
 
     @Override
@@ -47,7 +47,7 @@ public class JobListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.js_job_list_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
+        recyclerView.setAdapter(new ResumeListAdapter(Job.ITEMS, mListener));
         return view;
     }
 
