@@ -49,18 +49,6 @@ public class JobListFragment extends ContainedFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.js_job_list_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
-        SearchView searchView = (SearchView) view.findViewById(R.id.js_job_list_search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
         return view;
     }
 

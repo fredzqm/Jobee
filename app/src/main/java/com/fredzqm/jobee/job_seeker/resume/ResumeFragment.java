@@ -76,7 +76,7 @@ public class ResumeFragment extends ContainedFragment {
         menu.clear();
         inflater.inflate(R.menu.js_resume, menu);
         MenuItem item = menu.findItem(R.id.action_switch);
-        final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
+        item.setActionView(R.layout.resume_switch_list);
         mSpinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
         mSwitchAdapter = new ArrayAdapter<String>(getContext(), R.layout.resume_switch_list_content, R.id.resume_name) {
             public int getCount() {
