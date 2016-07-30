@@ -1,7 +1,9 @@
 package com.fredzqm.jobee.job_seeker.resume;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -19,10 +21,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Resume;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -144,7 +149,7 @@ public class ResumeFragment extends ContainedFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 Resume created = Resume.newInstance(editText.getText().toString());
                                 mResumes.add(created);
-                                switchTo(mResumes.size()-1);
+                                switchTo(mResumes.size() - 1);
                             }
                         })
                         .show();
@@ -212,8 +217,22 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        mCallback.openQRCode();
-//        mResumeAdapter.addCategory("New category");
+        new IntentIntegrator((Activity)mCallback).initiateScan(); // `this` is the current Activity
+    }
+
+    // Get the results:
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText((Context)mCallback, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText((Context)mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 

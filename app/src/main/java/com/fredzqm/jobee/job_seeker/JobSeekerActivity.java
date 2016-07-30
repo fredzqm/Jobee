@@ -1,5 +1,6 @@
 package com.fredzqm.jobee.job_seeker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -135,6 +136,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getSupportFragmentManager().findFragmentById(R.id.js_fragment_container).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
