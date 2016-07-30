@@ -78,7 +78,7 @@ public class ResumeFragment extends ContainedFragment {
         MenuItem item = menu.findItem(R.id.action_switch);
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
         mSpinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
-        mSwitchAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, android.R.id.text1){
+        mSwitchAdapter = new ArrayAdapter<String>(getContext(),R.layout.resume_switch_list_content, R.id.resume_name){
             public int getCount(){
                 return mResumes.size() + 1;
             }
@@ -90,6 +90,7 @@ public class ResumeFragment extends ContainedFragment {
                 return mResumes.get(position).getName();
             }
         };
+        mSwitchAdapter.setDropDownViewResource(R.layout.resume_switch_list_content);
         mSpinner.setAdapter(mSwitchAdapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
