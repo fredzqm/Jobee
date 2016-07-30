@@ -30,7 +30,7 @@ public class HomeFragment extends ContainedFragment {
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
-    private AutoCompleteTextView addressEditText;
+    private AutoCompleteTextView companyEditText;
     private Button mSaveChangesButton;
 
     public HomeFragment() {
@@ -67,18 +67,18 @@ public class HomeFragment extends ContainedFragment {
         View view = inflater.inflate(R.layout.re_home_frag, container, false);
         nameEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_name);
         emailEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_email);
-        addressEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_company);
+        companyEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_company);
         mSaveChangesButton = (Button) view.findViewById(R.id.re_home_save_changes);
 
         nameEditText.setText(mAccount.getName());
         emailEditText.setText(mAccount.getEmailAccount());
-        addressEditText.setText(mAccount.getCompany());
+        companyEditText.setText(mAccount.getCompany());
         mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
-                String company = addressEditText.getText().toString();
+                String company = companyEditText.getText().toString();
                 mCallback.saveAccountUpdates(name, email, company);
             }
         });

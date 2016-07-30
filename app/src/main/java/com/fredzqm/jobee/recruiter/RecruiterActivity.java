@@ -19,11 +19,12 @@ import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.RecruiterAccount;
+import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeReviewFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
-import com.fredzqm.jobee.recruiter.resume.ResumeFragment;
+import com.fredzqm.jobee.recruiter.ResumeList.resume.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, ResumeListFragment.Callback,
@@ -108,10 +109,10 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(HomeFragment.newInstance(mAccount), null);
                 break;
             case R.id.re_nav_resume:
-                swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()), null);
+                swapFragment(ResumeListFragment.newInstance(), null);
                 break;
             case R.id.re_nav_joblist:
-                swapFragment(ResumeListFragment.newInstance(), null);
+                swapFragment(JobListFragment.newInstance(), null);
                 break;
             case R.id.re_nav_interview:
                 swapFragment(InterviewFragment.newInstance(2), null);
