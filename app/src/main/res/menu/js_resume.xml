@@ -15,11 +15,19 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_add"
+        android:id="@+id/action_add_resume"
         android:orderInCategory="100"
-        android:title="Add"
+        android:title="Add new resume"
         android:icon="@drawable/ic_add"
-        app:showAsAction="always">
+        app:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/action_add_category"
+        android:orderInCategory="100"
+        android:title="Add new category"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="never">
     </item>
 
     <item

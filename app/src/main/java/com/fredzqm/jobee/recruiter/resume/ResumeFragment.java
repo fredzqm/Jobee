@@ -120,34 +120,6 @@ public class ResumeFragment extends ContainedFragment {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                break;
-            case R.id.action_add:
-                final EditText editText = new EditText(getContext());
-                editText.setHint("Category");
-                editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
-                new AlertDialog.Builder(getContext())
-                        .setView(editText)
-                        .setTitle("Add new Category")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mResumeAdapter.addCategory(editText.getText().toString());
-                            }
-                        })
-                        .show();
-                break;
-            default:
-                throw new RuntimeException("Not implemented");
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

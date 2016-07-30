@@ -78,15 +78,12 @@ public class ResumeFragment extends ContainedFragment {
         MenuItem item = menu.findItem(R.id.action_switch);
         final MenuItem menuItem = item.setActionView(R.layout.resume_switch_list);
         mSpinner = (Spinner) item.getActionView().findViewById(R.id.resume_switch_spiner);
-        mSwitchAdapter = new ArrayAdapter<String>(getContext(),R.layout.resume_switch_list_content, R.id.resume_name){
-            public int getCount(){
-                return mResumes.size() + 1;
+        mSwitchAdapter = new ArrayAdapter<String>(getContext(), R.layout.resume_switch_list_content, R.id.resume_name) {
+            public int getCount() {
+                return mResumes.size();
             }
 
-            public String getItem(int position){
-                if (position == mResumes.size()){
-                    return "Create new";
-                }
+            public String getItem(int position) {
                 return mResumes.get(position).getName();
             }
         };
@@ -94,28 +91,8 @@ public class ResumeFragment extends ContainedFragment {
         mSpinner.setAdapter(mSwitchAdapter);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-                if (position == mResumes.size()){
-                    final EditText editText = new EditText(getContext());
-                    editText.setHint("Resume name");
-                    editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
-                    new AlertDialog.Builder(getContext())
-                            .setView(editText)
-                            .setTitle("Create new resume")
-                            .setNegativeButton(android.R.string.cancel, null)
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Resume created = Resume.newInstance(editText.getText().toString());
-                                    mResumes.add(created);
-                                    mResumeAdapter.setResume(created);
-                                    mSwitchAdapter.notifyDataSetChanged();
-                                }
-                            })
-                            .show();
-                }else{
-                    mResumeAdapter.setResume(mResumes.get(position));
-                }
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mResumeAdapter.setResume(mResumes.get(position));
             }
 
             @Override
@@ -130,11 +107,11 @@ public class ResumeFragment extends ContainedFragment {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        final EditText editText = new EditText(getContext());
         switch (item.getItemId()) {
             case R.id.action_settings:
                 break;
-            case R.id.action_add:
-                final EditText editText = new EditText(getContext());
+            case R.id.action_add_category:
                 editText.setHint("Category");
                 editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
                 new AlertDialog.Builder(getContext())
@@ -150,17 +127,39 @@ public class ResumeFragment extends ContainedFragment {
                 break;
             case R.id.action_delete:
                 mResumes.remove(mResumeAdapter.getResume());
-                if (mResumes.isEmpty()){
+                if (mResumes.isEmpty()) {
                     mResumes.add(Resume.newInstance("Resume 1"));
                 }
-                mResumeAdapter.setResume(mResumes.get(0));
-                mSwitchAdapter.notifyDataSetChanged();
-                mSpinner.setSelection(0);
+                switchTo(0);
+                break;
+            case R.id.action_add_resume:
+                editText.setHint("Resume name");
+                editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                new AlertDialog.Builder(getContext())
+                        .setView(editText)
+                        .setTitle("Create new resume")
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Resume created = Resume.newInstance(editText.getText().toString());
+                                mResumes.add(created);
+                                switchTo(mResumes.size()-1);
+                            }
+                        })
+                        .show();
                 break;
             default:
                 throw new RuntimeException("Not implemented");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void switchTo(int index) {
+        mResumeAdapter.setResume(mResumes.get(index));
+        mResumeAdapter.notifyDataSetChanged();
+        mSwitchAdapter.notifyDataSetChanged();
+        mSpinner.setSelection(index);
     }
 
     @Override
@@ -230,6 +229,7 @@ public class ResumeFragment extends ContainedFragment {
      */
     public interface Callback {
         FloatingActionButton getFab();
+
         void openQRCode();
     }
 }
