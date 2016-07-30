@@ -217,7 +217,9 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        new IntentIntegrator((Activity)mCallback).initiateScan(); // `this` is the current Activity
+        IntentIntegrator integrator = new IntentIntegrator((Activity)mCallback);
+        integrator.setOrientationLocked(false);
+        integrator.initiateScan();
     }
 
     // Get the results:
