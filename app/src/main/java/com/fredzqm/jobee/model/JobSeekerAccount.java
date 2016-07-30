@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.recruiter;
+package com.fredzqm.jobee.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,34 +6,34 @@ import android.os.Parcelable;
 /**
  * Created by zhang on 7/12/2016.
  */
-public class RecruiterAccount implements Parcelable {
+public class JobSeekerAccount implements Parcelable {
     private String emailAccount;
     private String name;
-    private String company;
+    private String address;
 
-    public RecruiterAccount(){
+    public JobSeekerAccount(){
         // empty constructor required by Jackson
     }
 
-    public RecruiterAccount(String emailAccount) {
+    public JobSeekerAccount(String emailAccount) {
         this.emailAccount = emailAccount;
     }
 
-    protected RecruiterAccount(Parcel in) {
+    protected JobSeekerAccount(Parcel in) {
         emailAccount = in.readString();
         name = in.readString();
-        company = in.readString();
+        address = in.readString();
     }
 
-    public static final Creator<RecruiterAccount> CREATOR = new Creator<RecruiterAccount>() {
+    public static final Creator<JobSeekerAccount> CREATOR = new Creator<JobSeekerAccount>() {
         @Override
-        public RecruiterAccount createFromParcel(Parcel in) {
-            return new RecruiterAccount(in);
+        public JobSeekerAccount createFromParcel(Parcel in) {
+            return new JobSeekerAccount(in);
         }
 
         @Override
-        public RecruiterAccount[] newArray(int size) {
-            return new RecruiterAccount[size];
+        public JobSeekerAccount[] newArray(int size) {
+            return new JobSeekerAccount[size];
         }
     };
 
@@ -45,12 +45,12 @@ public class RecruiterAccount implements Parcelable {
         this.name = name;
     }
 
-    public String getCompany() {
-        return company;
+    public String getAddress() {
+        return address;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmailAccount() {
@@ -70,6 +70,6 @@ public class RecruiterAccount implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(emailAccount);
         parcel.writeString(name);
-        parcel.writeString(company);
+        parcel.writeString(address);
     }
 }

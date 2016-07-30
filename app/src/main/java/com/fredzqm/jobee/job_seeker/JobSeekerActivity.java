@@ -24,6 +24,7 @@ import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
+import com.fredzqm.jobee.model.JobSeekerAccount;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
@@ -56,7 +57,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.js_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mAccount = new JobSeekerAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
@@ -113,7 +114,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
             case R.id.js_nav_resume:
                 swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()), null);
                 break;
-            case R.id.js_nav_job_list:
+            case R.id.js_nav_joblist:
                 swapFragment(JobListFragment.newInstance(), null);
                 break;
             case R.id.js_nav_applied:

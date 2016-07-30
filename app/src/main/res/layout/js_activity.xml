@@ -52,12 +52,12 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/js_nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/js_activity_nav_header"
-        app:menu="@menu/activity_job_seeker_drawer" />
+        app:menu="@menu/js_activity_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

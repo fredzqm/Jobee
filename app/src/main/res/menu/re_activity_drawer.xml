@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/re_nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/re_nav_joblist"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/opening_list" />
+        <item
+            android:id="@+id/re_nav_resume"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/review_resume" />
+
+        <item
+            android:id="@+id/re_nav_interview"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/scheduled_interview" />
+
+    </group>
+
+</menu>

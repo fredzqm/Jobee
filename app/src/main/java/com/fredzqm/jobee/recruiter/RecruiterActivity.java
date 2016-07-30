@@ -18,6 +18,7 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.RecruiterAccount;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeReviewFragment;
@@ -55,7 +56,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.re_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mAccount = new RecruiterAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
@@ -86,41 +87,33 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()){
-            case R.id.js_nav_home:
+            case R.id.re_nav_home:
                 swapFragment(HomeFragment.newInstance(mAccount), null);
                 break;
-            case R.id.js_nav_resume:
+            case R.id.re_nav_resume:
                 swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()), null);
                 break;
-            case R.id.js_nav_job_list:
+            case R.id.re_nav_joblist:
                 swapFragment(ResumeListFragment.newInstance(), null);
                 break;
-            case R.id.js_nav_applied:
+            case R.id.re_nav_interview:
                 swapFragment(InterviewFragment.newInstance(2), null);
                 break;
             default:

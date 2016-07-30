@@ -44,4 +44,7 @@
     <string name="add_new_resume">Add new resume</string>
     <string name="add_new_category">Add new category</string>
     <string name="delete_this_resume">Delete this resume</string>
+    <string name="opening_list">Opening List</string>
+    <string name="review_resume">Review Resume</string>
+    <string name="scheduled_interview">Scheduled Interview</string>
 </resources>

@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.recruiter.RecruiterAccount;
+import com.fredzqm.jobee.model.RecruiterAccount;
 import com.fredzqm.jobee.ContainedFragment;
 
 /**

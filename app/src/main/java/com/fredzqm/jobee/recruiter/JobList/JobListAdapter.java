@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment.Callback;
+import com.fredzqm.jobee.recruiter.JobList.JobListFragment.Callback;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
