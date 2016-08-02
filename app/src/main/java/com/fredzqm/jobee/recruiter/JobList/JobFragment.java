@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
  * create an instance of this fragment.
  */
 public class JobFragment extends ContainedFragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String JOB_ARGUMENT = "param1";
 
     private Job mJob;

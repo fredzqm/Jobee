@@ -31,7 +31,6 @@
     <string name="resume">Resume</string>
     <string name="job_list">Job List</string>
     <string name="applied_jobs">Applied Jobs</string>
-    <string name="title_activity_recruiter">RecruiterActivity</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="address">Address</string>

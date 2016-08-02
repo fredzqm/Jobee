@@ -30,7 +30,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.js_joblist_item, parent, false);
+                .inflate(R.layout.re_joblist_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -49,16 +49,14 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         public final TextView mTitleTextView;
         public final TextView mCityTextView;
         public final TextView mDateTextView;
-        public final TextView mCompanyTextView;
 
         public Job mJob;
 
         public ViewHolder(View view) {
             super(view);
-            mTitleTextView = (TextView) view.findViewById(R.id.js_list_item_title);
-            mCompanyTextView = (TextView) view.findViewById(R.id.js_list_item_company);
-            mDateTextView = (TextView) view.findViewById(R.id.js_list_item_date);
-            mCityTextView = (TextView) view.findViewById(R.id.js_list_item_city);
+            mTitleTextView = (TextView) view.findViewById(R.id.re_list_item_title);
+            mDateTextView = (TextView) view.findViewById(R.id.re_list_item_date);
+            mCityTextView = (TextView) view.findViewById(R.id.re_list_item_city);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,7 +70,6 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
 
         public void updateView() {
             mTitleTextView.setText(mJob.getTitle());
-            mCompanyTextView.setText(mJob.getCompany());
             mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
             mCityTextView.setText(mJob.getCity());
         }

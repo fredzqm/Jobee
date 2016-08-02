@@ -27,7 +27,7 @@ import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.resume.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        ResumeFragment.Callback, HomeFragment.Callback, ResumeListFragment.Callback,
+        ResumeFragment.Callback, HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
         InterviewFragment.Callback, ResumeReviewFragment.Callback
 {
     private static final String TAG = "JobSeekerActivity";
