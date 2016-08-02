@@ -30,7 +30,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.js_joblist_item, parent, false);
+                .inflate(R.layout.re_resumelist_item, parent, false);
         return new ViewHolder(view);
     }
 

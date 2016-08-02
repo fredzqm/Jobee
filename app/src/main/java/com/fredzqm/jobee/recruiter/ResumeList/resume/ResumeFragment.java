@@ -140,9 +140,9 @@ public class ResumeFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_resume_frag, container, false);
+        View view = inflater.inflate(R.layout.recyclerview, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.resume_contents_list);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setAutoMeasureEnabled(true);
         mRecyclerView.setLayoutManager(layoutManager);

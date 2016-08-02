@@ -42,10 +42,10 @@ public class JobListFragment extends ContainedFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.js_joblist_frag, container, false);
+        View view = inflater.inflate(R.layout.recyclerview, container, false);
 
         Context context = view.getContext();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.js_job_list_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
         return view;

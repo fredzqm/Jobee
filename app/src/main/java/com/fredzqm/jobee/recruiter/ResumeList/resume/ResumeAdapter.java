@@ -43,7 +43,7 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.js_resume_item_content, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.js_resume_category, parent, false);
         return new ViewHolder(view);
     }
 

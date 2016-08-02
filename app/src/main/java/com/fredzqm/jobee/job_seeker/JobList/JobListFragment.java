@@ -1,6 +1,5 @@
 package com.fredzqm.jobee.job_seeker.JobList;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
 
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
@@ -72,10 +70,10 @@ public class JobListFragment extends ContainedFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.js_joblist_frag, container, false);
+        View view = inflater.inflate(R.layout.recyclerview, container, false);
 
         Context context = view.getContext();
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.js_job_list_list);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
         return view;
