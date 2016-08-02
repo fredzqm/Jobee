@@ -65,16 +65,16 @@ public class JobFragment extends ContainedFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.js_jobdetail_frag, container, false);
-        mTitleTextView = (TextView) view.findViewById(R.id.js_job_detail_title);
-        mCompanyTextView = (TextView) view.findViewById(R.id.js_job_detail_company);
-        mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
-        mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
-        mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
+        View view = inflater.inflate(R.layout.re_jobdetail_frag, container, false);
+        mTitleTextView = (TextView) view.findViewById(R.id.re_job_detail_title);
+        mCompanyTextView = (TextView) view.findViewById(R.id.re_job_detail_company);
+        mDateTextView = (TextView) view.findViewById(R.id.re_job_detail_date);
+        mCityTextView = (TextView) view.findViewById(R.id.re_job_detail_city);
+        mDetailsTextView = (TextView) view.findViewById(R.id.re_job_detail_detail);
 
         mTitleTextView.setText(mJob.getTitle());
         mCompanyTextView.setText(mJob.getCompany());
-        mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+        mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd")).format(mJob.getDate()));
         mCityTextView.setText(mJob.getCity());
         mDetailsTextView.setText(mJob.getDetails());
 

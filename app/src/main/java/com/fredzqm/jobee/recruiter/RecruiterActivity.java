@@ -19,6 +19,7 @@ import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.RecruiterAccount;
+import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
@@ -28,7 +29,7 @@ import com.fredzqm.jobee.recruiter.ResumeList.resume.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
-        InterviewFragment.Callback, ResumeReviewFragment.Callback
+        InterviewFragment.Callback, ResumeReviewFragment.Callback, JobFragment.Callback
 {
     private static final String TAG = "JobSeekerActivity";
 
@@ -139,7 +140,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void showJobDetail(Job job) {
-        swapFragment(ResumeReviewFragment.newInstance(job), "Job Detail");
+        swapFragment(JobFragment.newInstance(job), "edit job");
     }
 
     public FloatingActionButton getFab(){

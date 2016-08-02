@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_weight="1.1"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_margin="@dimen/detail_view_margin"
             android:text="Title"
             android:layout_row="0"
             android:layout_column="0"/>
@@ -28,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_margin="@dimen/detail_view_margin"
             android:text="Date"
             android:layout_row="0"
             android:layout_column="1"/>
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/small_margin"
+            android:layout_margin="@dimen/detail_view_margin"
             android:text="City"
             android:layout_row="0"
             android:layout_column="2" />
