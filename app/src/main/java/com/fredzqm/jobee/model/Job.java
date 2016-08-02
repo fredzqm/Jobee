@@ -116,12 +116,12 @@ public class Job implements Parcelable {
 
     // ---------------------- static methods to load data
 
-    public Job(String id, String title, String city, String details) {
+    public Job(String id, String title, String city, String company, String details) {
         this.id = id;
         this.title = title;
         this.city = city;
         this.details = details;
-        this.company = "company";
+        this.company = company;
         this.date = new Date();
     }
 
@@ -150,7 +150,8 @@ public class Job implements Parcelable {
     }
 
     private static Job createDummyItem(int position) {
-        return new Job(String.valueOf(position), "Item " + position, "city " + position , makeDetails(position));
+        return new Job(String.valueOf(position),
+                "Item " + position, "city " + position, "company " + position , makeDetails(position));
     }
 
     private static String makeDetails(int position) {
