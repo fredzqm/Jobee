@@ -46,5 +46,9 @@
     <string name="opening_list">Opening List</string>
     <string name="review_resume">Review Resume</string>
     <string name="scheduled_interview">Scheduled Interview</string>
-    <string name="major">major</string>
+    <string name="major">Major</string>
+    <string name="weed_out">Weed Out</string>
+    <string name="decide_later">Decide Later</string>
+    <string name="next_round">Next Round</string>
+    <string name="schedule_interview">Schedule Interview</string>
 </resources>

@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/js_action_settings"
+        android:id="@+id/re_action_weed_out"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/weed_out"
+        android:icon="@drawable/ic_menu_slideshow"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/js_action_switch"
+        android:id="@+id/re_action_decide_later"
         android:orderInCategory="100"
-        android:title="@string/Switch"
-        android:icon="@drawable/ic_menu_slideshow"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/js_action_add_resume"
-        android:orderInCategory="100"
-        android:title="@string/add_new_resume"
+        android:title="@string/decide_later"
         android:icon="@drawable/ic_add"
         app:showAsAction="never">
     </item>
@@ -31,10 +26,24 @@
     </item>
 
     <item
-        android:id="@+id/js_action_delete"
+        android:id="@+id/re_action_next_round"
         android:orderInCategory="100"
-        android:title="@string/delete_this_resume"
+        android:title="@string/next_round"
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="never">
     </item>
+
+    <item
+        android:id="@+id/re_action_schedule_interview"
+        android:orderInCategory="100"
+        android:title="@string/schedule_interview"
+        android:icon="@android:drawable/ic_menu_delete"
+        app:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/re_action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
 </menu>

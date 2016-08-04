@@ -5,9 +5,12 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,6 +59,7 @@ public class ResumeFragment extends ContainedFragment {
         if (getArguments() != null) {
             mResume = getArguments().getParcelable(RESUME);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -90,4 +94,32 @@ public class ResumeFragment extends ContainedFragment {
         return mLinearLayout;
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.re_resume, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        final EditText editText = new EditText(getContext());
+        switch (item.getItemId()) {
+            case R.id.re_action_decide_later:
+                break;
+            case R.id.re_action_next_round:
+                break;
+            case R.id.re_action_schedule_interview:
+                break;
+            case R.id.re_action_weed_out:
+                break;
+            default:
+                throw new RuntimeException("Not implemented");
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

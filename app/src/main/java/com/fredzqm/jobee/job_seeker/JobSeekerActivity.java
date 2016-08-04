@@ -1,7 +1,6 @@
 package com.fredzqm.jobee.job_seeker;
 
 import android.content.Intent;
-import android.location.Address;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -95,7 +94,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.js_action_settings) {
             return true;
         }
 
