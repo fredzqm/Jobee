@@ -18,6 +18,7 @@ import java.util.List;
  * specified {@link Callback}.
  */
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHolder> {
+    private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     private final List<Job> mValues;
     private final Callback mCallback;
@@ -73,7 +74,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         public void updateView() {
             mTitleTextView.setText(mJob.getTitle());
             mCompanyTextView.setText(mJob.getCompany());
-            mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+            mDateTextView.setText(DATAFORMAT.format(mJob.getDate()));
             mCityTextView.setText(mJob.getCity());
         }
 

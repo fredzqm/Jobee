@@ -19,7 +19,7 @@ import java.util.List;
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapter.ViewHolder> {
-
+    public final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd");
     private final List<Job> mValues;
     private final AppliedJobFragment.Callback mListener;
 
@@ -65,7 +65,7 @@ public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapte
         public void updateView() {
             mTitleTextView.setText(mJob.getTitle());
             mCompanyTextView.setText(mJob.getCompany());
-            mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+            mDateTextView.setText(DATEFORMAT.format(mJob.getDate()));
             mCityTextView.setText(mJob.getCity());
         }
 
