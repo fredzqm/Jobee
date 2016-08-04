@@ -98,7 +98,6 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
         inflater.inflate(R.menu.re_resume, menu);
     }
 

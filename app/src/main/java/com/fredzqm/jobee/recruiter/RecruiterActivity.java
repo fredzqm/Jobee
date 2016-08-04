@@ -1,5 +1,6 @@
 package com.fredzqm.jobee.recruiter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -95,7 +96,10 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.re_action_settings) {
+        if (id == R.id.re_action_logout) {
+            Intent intent = this.getIntent();
+            this.setResult(RESULT_OK, intent);
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

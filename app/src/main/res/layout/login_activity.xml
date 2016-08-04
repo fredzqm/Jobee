@@ -119,23 +119,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="0.25">
-                </RelativeLayout>
+
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/google_sign_in_button"
                     android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.50"
                     android:layout_gravity="center"
-                    android:layout_marginTop="16dp" />
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="0.25">
-                </RelativeLayout>
+                    android:layout_marginTop="16dp"/>
+
+                <Button
+                    android:id="@+id/rosefire_sign_in_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/colorPrimaryDark"
+                    android:text="@string/login_with_rosefire"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

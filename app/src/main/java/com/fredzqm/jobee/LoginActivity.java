@@ -58,6 +58,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.rosehulman.rosefire.Rosefire;
+import edu.rosehulman.rosefire.RosefireResult;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -69,8 +72,9 @@ public class LoginActivity extends AppCompatActivity
     public static final String USERID = "USERID";
 
     private static final int REQUEST_MAIN_ACTIVITY = 1;
-    private static final int REQUEST_READ_CONTACTS_PERMISSION = 1;
+    private static final int REQUEST_READ_CONTACTS_PERMISSION = 2;
     private static final int REQUEST_GOOGLE_SIGN_IN = 3;
+    private static final int REQUEST_ROSEFIRE_LOGIN = 4;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -92,6 +96,7 @@ public class LoginActivity extends AppCompatActivity
     private int mLoggingIn = 0;
     private static final int EMAIL_LOGIN = 1;
     private static final int GOOGLE_LOGIN = 2;
+    private static final int ROSEFIRE_LOGIN = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +110,14 @@ public class LoginActivity extends AppCompatActivity
         Switch mAccoutnTypeSwitch = (Switch) findViewById(R.id.login_account_type_switch);
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         SignInButton mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+        View rosefireLoginButton =  findViewById(R.id.rosefire_sign_in_button);
+        rosefireLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginWithRosefire();
+            }
+        });
+
 
         mAccoutnTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -219,15 +232,18 @@ public class LoginActivity extends AppCompatActivity
                 case EMAIL_LOGIN:
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
                     mPasswordView.requestFocus();
+                    showProgress(false);
                     break;
                 case GOOGLE_LOGIN:
                     showLoginError("Google Login failed!");
+                    break;
+                case ROSEFIRE_LOGIN:
+                    showLoginError("Rosefire Login failed!");
                     break;
                 default:
                     throw new RuntimeException("not implemented login method " + mLoggingIn);
             }
         }
-        showProgress(false);
         mLoggingIn = 0;
     }
 
@@ -284,11 +300,23 @@ public class LoginActivity extends AppCompatActivity
         showProgress(true);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(client);
         startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGN_IN);
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
+        hideKeyboard();
     }
 
+    private void loginWithRosefire() {
+        if (mLoggingIn != 0) {
+            return;
+        }
+        mLoggingIn = ROSEFIRE_LOGIN;
+        
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        showProgress(true);
+        hideKeyboard();
+        Intent signInIntent = Rosefire.getSignInIntent(this, getString(R.string.rosefire_key));
+        startActivityForResult(signInIntent, REQUEST_ROSEFIRE_LOGIN);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -304,8 +332,18 @@ public class LoginActivity extends AppCompatActivity
             } else {
                 showLoginError("Google sign in failed!");
             }
+        }else if (requestCode == REQUEST_ROSEFIRE_LOGIN) {
+            RosefireResult result = Rosefire.getSignInResultFromIntent(data);
+            if (result.isSuccessful()) {
+                // The user cancelled the login
+                mAuth.signInWithCustomToken(result.getToken())
+                        .addOnCompleteListener(this, this);
+            } else {
+                showLoginError("Rosefire sign in failed!");
+            }
         }else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
-
+            showProgress(false);
+            mAuth.signOut();
         }
     }
 
@@ -377,13 +415,13 @@ public class LoginActivity extends AppCompatActivity
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS_PERMISSION);
-                        }
-                    });
+                .setAction(android.R.string.ok, new OnClickListener() {
+                    @Override
+                    @TargetApi(Build.VERSION_CODES.M)
+                    public void onClick(View v) {
+                        requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS_PERMISSION);
+                    }
+                });
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS_PERMISSION);
         }
@@ -412,6 +450,7 @@ public class LoginActivity extends AppCompatActivity
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -449,7 +488,6 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
-
     private void showLoginError(String message) {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.login_error))
@@ -457,6 +495,14 @@ public class LoginActivity extends AppCompatActivity
                 .setPositiveButton(android.R.string.ok, null)
                 .create()
                 .show();
+        showProgress(false);
+        mLoggingIn = 0;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
     }
 
 }

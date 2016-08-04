@@ -96,3 +96,4 @@ proguard/
 .idea/gradle.xml
 .idea/vcs.xml
 .idea/misc.xml
+app/src/main/res/values/keys.xml

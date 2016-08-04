@@ -61,8 +61,7 @@ public class HomeFragment extends ContainedFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.re_home_frag, container, false);
         nameEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_name);

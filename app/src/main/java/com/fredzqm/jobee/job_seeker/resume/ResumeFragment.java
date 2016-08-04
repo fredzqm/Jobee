@@ -125,7 +125,6 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
         inflater.inflate(R.menu.js_resume, menu);
         MenuItem item = menu.findItem(R.id.js_action_switch);
         item.setActionView(R.layout.resume_switch_list);
@@ -161,7 +160,7 @@ public class ResumeFragment extends ContainedFragment {
         // as you specify a parent activity in AndroidManifest.xml.
         final EditText editText = new EditText(getContext());
         switch (item.getItemId()) {
-            case R.id.js_action_settings:
+            case R.id.js_action_logout:
                 break;
             case R.id.js_action_add_category:
                 editText.setHint("Category");

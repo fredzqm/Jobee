@@ -8,6 +8,6 @@
         android:title="Search"
         android:icon="@drawable/ic_menu_slideshow"
         app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        />
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
+
 </menu>
