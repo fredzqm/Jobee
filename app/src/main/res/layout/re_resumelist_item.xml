@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/card_view_margin"
+    card_view:cardCornerRadius="@dimen/card_view_corner_radius"
+    card_view:cardElevation="5dp"
+    card_view:contentPadding="@dimen/content_padding">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/re_resumelist_item_name"
+            android:layout_width="0dp"
+            android:layout_weight="1.1"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_view_margin"
+            android:text="Title"
+            android:layout_row="0"
+            android:layout_column="0"/>
+
+        <TextView
+            android:id="@+id/re_resumelist_item_major"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_view_margin"
+            android:text="Date"
+            android:layout_row="0"
+            android:layout_column="1"/>
+
+        <TextView
+            android:id="@+id/re_resumelist_item_city"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/detail_view_margin"
+            android:text="City"
+            android:layout_row="0"
+            android:layout_column="2" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

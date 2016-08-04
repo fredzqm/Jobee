@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.Resume;
 
 /**
  * A fragment representing a list of Items.
@@ -48,7 +48,7 @@ public class ResumeListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new ResumeListAdapter(Job.ITEMS, mListener));
+        recyclerView.setAdapter(new ResumeListAdapter(Resume.ITEMS, mListener));
         return view;
     }
 
@@ -86,6 +86,6 @@ public class ResumeListFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void showJobDetail(Job mItem);
+        void showResumeDetail(Resume mItem);
     }
 }

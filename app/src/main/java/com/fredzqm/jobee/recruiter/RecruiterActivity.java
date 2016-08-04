@@ -19,6 +19,7 @@ import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.RecruiterAccount;
+import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
@@ -28,7 +29,7 @@ import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.resume.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        ResumeFragment.Callback, HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
+        HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
         InterviewFragment.Callback, ResumeReviewFragment.Callback, JobFragment.Callback
 {
     private static final String TAG = "JobSeekerActivity";
@@ -67,7 +68,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
-
     private void swapFragment(ContainedFragment fragment, String tag){
         mFab.hide();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -105,6 +105,11 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
+            fm.popBackStackImmediate();
+        }
+
         switch (item.getItemId()){
             case R.id.re_nav_home:
                 swapFragment(HomeFragment.newInstance(mAccount), null);
@@ -120,10 +125,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
                 break;
             default:
                 throw new RuntimeException("Not implemented navigation bar yet");
-        }
-        FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
-            fm.popBackStackImmediate();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -141,6 +142,11 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void showJobDetail(Job job) {
         swapFragment(JobFragment.newInstance(job), "edit job");
+    }
+
+    @Override
+    public void showResumeDetail(Resume resume) {
+        swapFragment(ResumeFragment.newInstance(resume), "edit job");
     }
 
     public FloatingActionButton getFab(){

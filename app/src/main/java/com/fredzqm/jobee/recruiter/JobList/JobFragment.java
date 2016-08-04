@@ -21,11 +21,9 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
 
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -107,6 +107,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
+            fm.popBackStackImmediate();
+        }
+
         switch (item.getItemId()){
             case R.id.js_nav_home:
                 swapFragment(HomeFragment.newInstance(mAccount), null);
@@ -122,10 +127,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
                 break;
             default:
                 throw new RuntimeException("Not implemented navigation bar yet");
-        }
-        FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
-            fm.popBackStackImmediate();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

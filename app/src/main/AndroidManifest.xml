@@ -21,15 +21,16 @@
             android:name=".job_seeker.JobSeekerActivity"
             android:label="@string/app_name"
             android:theme="@style/JobSeeker">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".recruiter.RecruiterActivity"
             android:label="@string/app_name"
             android:theme="@style/Recruiter">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
