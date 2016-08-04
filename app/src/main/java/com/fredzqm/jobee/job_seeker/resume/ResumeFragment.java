@@ -192,9 +192,6 @@ public class ResumeFragment extends ContainedFragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mResumeAdapter);
         mRecyclerView.setHasFixedSize(false);
-        FloatingActionButton fab = mCallback.getFab();
-        fab.setImageResource(android.R.drawable.ic_menu_camera);
-        fab.show();
         return view;
     }
 

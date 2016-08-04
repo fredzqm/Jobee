@@ -28,8 +28,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     private Resume mResume;
     private boolean mEditing;
 
-    private Random mRandom = new Random();
-
     public ResumeAdapter(Context context) {
         mContext = context;
         mEditing = false;

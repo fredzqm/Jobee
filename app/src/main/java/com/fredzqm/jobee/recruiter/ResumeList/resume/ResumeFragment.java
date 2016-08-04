@@ -61,8 +61,7 @@ public class ResumeFragment extends ContainedFragment {
             mResume = getArguments().getParcelable(RESUME);
         }
         setHasOptionsMenu(true);
-        mResumeAdapter = new ResumeAdapter(getContext());
-        mResumeAdapter.setResume(mResume);
+        mResumeAdapter = new ResumeAdapter(getContext(), mResume);
     }
 
     @Override
