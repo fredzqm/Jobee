@@ -1,5 +1,6 @@
 package com.fredzqm.jobee.model;
 
+import android.location.Address;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +13,8 @@ import java.util.List;
 public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
     public static Resume createResumeStub = new Resume("Create Resume");
     private String name;
+    private String major;
+    private Address address;
 
     public Resume(String resumeName) {
         super();
@@ -26,6 +29,17 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
         return resume;
     }
 
+    public String getCity() {
+        return address.getLocality();
+    }
+
+    public String toString() {
+        return name;
+    }
+
+
+    // getters and setters
+
     public String getName() {
         return name;
     }
@@ -34,8 +48,20 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
         this.name = name;
     }
 
-    public String toString(){
-        return name;
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     // static test data
@@ -74,4 +100,5 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
     }
+
 }

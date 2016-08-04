@@ -1,6 +1,7 @@
 package com.fredzqm.jobee.job_seeker;
 
 import android.content.Intent;
+import android.location.Address;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -28,8 +29,7 @@ import com.fredzqm.jobee.model.JobSeekerAccount;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
-        AppliedJobFragment.Callback, JobDetailFragment.Callback
-{
+        AppliedJobFragment.Callback, JobDetailFragment.Callback {
     private static final String TAG = "JobSeekerActivity";
 
     private JobSeekerAccount mAccount;
@@ -59,15 +59,15 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.js_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        mAccount = new JobSeekerAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
-        if (savedInstanceState == null){
+        String email = getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL);
+        mAccount = new JobSeekerAccount(email == null ? "" : email);
+        if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(mAccount), null);
         }
     }
 
 
-    private void swapFragment(ContainedFragment fragment, String tag){
+    private void swapFragment(ContainedFragment fragment, String tag) {
         mFab.hide();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.js_fragment_container, fragment);
@@ -108,11 +108,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
+        for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
             fm.popBackStackImmediate();
         }
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.js_nav_home:
                 swapFragment(HomeFragment.newInstance(mAccount), null);
                 break;
@@ -140,10 +140,13 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void saveAccountUpdates(String name, String email, String address) {
-        mAccount.setName(name);
-        mAccount.setEmailAccount(email);
-        mAccount.setAddress(address);
+    public void saveAccountUpdates(String name, String email, Address address) {
+        if (name != null)
+            mAccount.setName(name);
+        if (email != null)
+            mAccount.setEmailAccount(email);
+        if (address != null)
+            mAccount.setAddress(address);
     }
 
     @Override
@@ -152,7 +155,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public FloatingActionButton getFab(){
+    public FloatingActionButton getFab() {
         return mFab;
     }
 
