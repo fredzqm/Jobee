@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -26,9 +27,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -37,12 +40,20 @@ import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,16 +64,16 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity
-        implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult> {
+        implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult>, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "LoginActivity";
     public static final String USERID = "USERID";
 
-    private static final int REQUEST_CODE = 1;
-    private static final int REQUEST_READ_CONTACTS_PERMISSION = 0;
+    private static final int REQUEST_MAIN_ACTIVITY = 1;
+    private static final int REQUEST_READ_CONTACTS_PERMISSION = 1;
+    private static final int REQUEST_GOOGLE_SIGN_IN = 3;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
-    private Switch mAccoutnTypeSwitch;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -87,46 +98,61 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         // Set up the login form.
-        mAccoutnTypeSwitch = (Switch) findViewById(R.id.login_account_type_switch);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.login_email);
-        populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        Switch mAccoutnTypeSwitch = (Switch) findViewById(R.id.login_account_type_switch);
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        SignInButton mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+
+        mAccoutnTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mIsRecruiter = b;
+            }
+        });
+        populateAutoComplete();
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin(true);
+                    emailLogin(true);
                     return true;
                 }
                 return false;
             }
         });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin(true);
+                emailLogin(true);
             }
         });
 
-        Button mEmailSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
-        mEmailSignUpButton.setOnClickListener(new OnClickListener() {
+        mGoogleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT);
+        mGoogleSignInButton.setSize(SignInButton.SIZE_WIDE);
+        mGoogleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin(false);
+                loginWithGoogle();
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        client = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this , this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(AppIndex.API).build();
     }
 
 
@@ -182,7 +208,7 @@ public class LoginActivity extends AppCompatActivity
                 inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
             }
             inputIntent.putExtra(USERID, user.getUid());
-            startActivityForResult(inputIntent, REQUEST_CODE);
+            startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
         }
     }
 
@@ -210,11 +236,10 @@ public class LoginActivity extends AppCompatActivity
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin(boolean isSignIn) {
-        // already logining
+    private void emailLogin(boolean isSignIn) {
         if (mLoggingIn != 0)
             return;
-        mLoggingIn = 1;
+        mLoggingIn = EMAIL_LOGIN;
 
         // Reset errors.
         mEmailView.setError(null);
@@ -223,7 +248,6 @@ public class LoginActivity extends AppCompatActivity
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        mIsRecruiter = mAccoutnTypeSwitch.isChecked();
 
         View focusView = null;
         if (!TextUtils.isEmpty(password) && password.length() <= 4) {
@@ -250,7 +274,46 @@ public class LoginActivity extends AppCompatActivity
         }
     }
 
+    private void loginWithGoogle() {
+        if (mLoggingIn != 0)
+            return;
+        mLoggingIn = GOOGLE_LOGIN;
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
 
+        showProgress(true);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(client);
+        startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGN_IN);
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult");
+        if (requestCode == REQUEST_GOOGLE_SIGN_IN){
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                GoogleSignInAccount acct = result.getSignInAccount();
+                String idToken = acct.getIdToken();
+                AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+                mAuth.signInWithCredential(credential)
+                        .addOnCompleteListener(this, this);
+            } else {
+                showLoginError("Google sign in failed!");
+            }
+        }else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
+
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        mLoggingIn = 0;
+        showLoginError("Google connection failed");
+    }
 
     // loader interface implementation
     @Override
@@ -349,16 +412,6 @@ public class LoginActivity extends AppCompatActivity
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult");
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-
-        }
-    }
-
 
     /**
      * Shows the progress UI and hides the login form.
