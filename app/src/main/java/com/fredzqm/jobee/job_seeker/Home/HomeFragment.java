@@ -1,10 +1,12 @@
 package com.fredzqm.jobee.job_seeker.Home;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +36,6 @@ public class HomeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String EMAIL_ACCOUNT = "param1";
 
-    private JobSeekerAccount mAccount;
     private Callback mCallback;
 
     private AutoCompleteTextView nameEditText;
@@ -46,27 +47,8 @@ public class HomeFragment extends ContainedFragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param account the account of the game
-     * @return A new instance of fragment JobListFragment.
-     */
-    public static HomeFragment newInstance(JobSeekerAccount account) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(EMAIL_ACCOUNT, account);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mAccount = getArguments().getParcelable(EMAIL_ACCOUNT);
-        }
+    public static ContainedFragment newInstance() {
+        return new HomeFragment();
     }
 
     @Override
@@ -79,62 +61,70 @@ public class HomeFragment extends ContainedFragment {
         addressEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_address);
         mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
 
-        nameEditText.setText(mAccount.getName());
-        emailEditText.setText("" + mAccount.getEmailAccount());
-        addressEditText.setText(addressToString(mAccount.getAddress()));
+        JobSeekerAccount account = mCallback.getAccount();
+        nameEditText.setText(account.getName());
+        emailEditText.setText("" + account.getEmailAccount());
+        addressEditText.setText(account.getDisplayedAddress());
         mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
-                mCallback.saveAccountUpdates(name, email, null);
-                (new VerifyAddressTask()).execute(addressEditText.getText().toString());
+                JobSeekerAccount account = mCallback.getAccount();
+                account.setName(name);
+                account.setEmailAccount(email);
+                (new VerifyAddressTask(addressEditText.getText().toString())).execute();
             }
         });
 
         return view;
     }
 
-    private class VerifyAddressTask extends AsyncTask<String, Integer, Address> {
-        private String errorMessage;
+    private class VerifyAddressTask extends AsyncTask<Void, Integer, Address> {
+        private String addressString;
+        private String message = "Update to verified address";
 
-        protected Address doInBackground(String... addressString) {
+        public VerifyAddressTask(String s) {
+            addressString = s;
+        }
+
+        protected Address doInBackground(Void... x) {
             Geocoder geo = new Geocoder(getContext());
             try {
-                List<Address> addrls = geo.getFromLocationName(addressString[0], 1);
+                List<Address> addrls = geo.getFromLocationName(addressString, 1);
                 if (addrls.size() >= 1)
                     return addrls.get(0);
-                errorMessage = "invalid address";
+                message = "invalid address";
             } catch (IOException e) {
-                errorMessage = "No internet connection, cannot verify address";
+                message = "No internet connection, cannot verify address";
             } catch (IllegalArgumentException e) {
-                errorMessage = "address can't be empty";
+                message = "address can't be empty";
             }
             return null;
         }
 
         protected void onPostExecute(Address result) {
+            final JobSeekerAccount account = mCallback.getAccount();
             if (result != null) {
-                mCallback.saveAccountUpdates(null, null, result);
-                addressEditText.setText(addressToString(result));
-                Log.d(TAG, "" + result);
-                return;
-            } else {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                account.setAddress(result);
+                account.setStringAddress(null);
+                addressEditText.setText(mCallback.getAccount().getDisplayedAddress());
             }
+            if (addressString.equals(account.getDisplayedAddress()))
+                return;
+            Snackbar.make(getView(), message, Snackbar.LENGTH_LONG)
+                    .setAction("Insist", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            account.setStringAddress(addressString);
+                            addressEditText.setText(mCallback.getAccount().getDisplayedAddress());
+                        }
+                    })
+                    .setActionTextColor(Color.RED)
+                    .show();
         }
     }
 
-    private static String addressToString(Address address) {
-        if (address == null || address.getMaxAddressLineIndex() == 0)
-            return "";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-            sb.append(address.getAddressLine(i) + "\n");
-        }
-        sb.delete(sb.length() - 1, sb.length());
-        return sb.toString();
-    }
 
     @Override
     public void onResume() {
@@ -174,6 +164,6 @@ public class HomeFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void saveAccountUpdates(String name, String email, Address address);
+        JobSeekerAccount getAccount();
     }
 }

@@ -13,7 +13,9 @@ public class JobSeekerAccount implements Parcelable {
     private String name;
     private Address address;
 
-    public JobSeekerAccount(){
+    private String stringAddress;
+
+    public JobSeekerAccount() {
         // empty constructor required by Jackson
     }
 
@@ -26,6 +28,20 @@ public class JobSeekerAccount implements Parcelable {
     public static JobSeekerAccount newInstance() {
         return new JobSeekerAccount("fredzqm@gmail.com");
     }
+
+    public String getDisplayedAddress(){
+        if (stringAddress != null)
+            return stringAddress;
+        if (address == null || address.getMaxAddressLineIndex() == 0)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+            sb.append(address.getAddressLine(i) + "\n");
+        }
+        sb.delete(sb.length() - 1, sb.length());
+        return sb.toString();
+    }
+
 
     //  getters and setters
 
@@ -53,6 +69,13 @@ public class JobSeekerAccount implements Parcelable {
         this.emailAccount = emailAccount;
     }
 
+    public String getStringAddress() {
+        return stringAddress;
+    }
+
+    public void setStringAddress(String stringAddress) {
+        this.stringAddress = stringAddress;
+    }
 
     // parcelable implementation
 

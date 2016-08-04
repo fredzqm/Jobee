@@ -44,7 +44,6 @@ public class ResumeFragment extends ContainedFragment {
     private static final String TAG = "ResumeFragment";
     private static final String USER_NAME = "USER_NAME";
 
-    private String mUserName;
     private Callback mCallback;
 
     private RecyclerView mRecyclerView;
@@ -64,14 +63,10 @@ public class ResumeFragment extends ContainedFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param userName Parameter 1.
      * @return A new instance of fragment ResumeFragment.
      */
-    public static ResumeFragment newInstance(String userName) {
+    public static ResumeFragment newInstance() {
         ResumeFragment fragment = new ResumeFragment();
-        Bundle args = new Bundle();
-        args.putString(USER_NAME, userName);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -170,9 +165,6 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mUserName = getArguments().getString(USER_NAME);
-        }
         setHasOptionsMenu(true);
         mResumes = new ArrayList<>();
         mResumes.add(Resume.newInstance("Resume 1"));
@@ -214,7 +206,7 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public void clickFab() {
-        IntentIntegrator integrator = new IntentIntegrator((Activity)mCallback);
+        IntentIntegrator integrator = new IntentIntegrator((Activity) mCallback);
         integrator.setOrientationLocked(false);
         integrator.initiateScan();
     }
@@ -225,9 +217,9 @@ public class ResumeFragment extends ContainedFragment {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Toast.makeText((Context)mCallback, "Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText((Context) mCallback, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText((Context)mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText((Context) mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -240,7 +232,7 @@ public class ResumeFragment extends ContainedFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

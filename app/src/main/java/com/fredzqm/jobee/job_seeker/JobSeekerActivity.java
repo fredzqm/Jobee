@@ -62,10 +62,9 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         String email = getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL);
         mAccount = new JobSeekerAccount(email == null ? "" : email);
         if (savedInstanceState == null) {
-            swapFragment(HomeFragment.newInstance(mAccount), null);
+            swapFragment(HomeFragment.newInstance(), null);
         }
     }
-
 
     private void swapFragment(ContainedFragment fragment, String tag) {
         mFab.hide();
@@ -114,10 +113,10 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         switch (item.getItemId()) {
             case R.id.js_nav_home:
-                swapFragment(HomeFragment.newInstance(mAccount), null);
+                swapFragment(HomeFragment.newInstance(), null);
                 break;
             case R.id.js_nav_resume:
-                swapFragment(ResumeFragment.newInstance(mAccount.getEmailAccount()), null);
+                swapFragment(ResumeFragment.newInstance(), null);
                 break;
             case R.id.js_nav_joblist:
                 swapFragment(JobListFragment.newInstance(), null);
@@ -140,13 +139,8 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void saveAccountUpdates(String name, String email, Address address) {
-        if (name != null)
-            mAccount.setName(name);
-        if (email != null)
-            mAccount.setEmailAccount(email);
-        if (address != null)
-            mAccount.setAddress(address);
+    public JobSeekerAccount getAccount() {
+        return mAccount;
     }
 
     @Override
