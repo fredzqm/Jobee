@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "57817186522",
+    "firebase_url": "https://jobee-e2db6.firebaseio.com",
+    "project_id": "jobee-e2db6",
+    "storage_bucket": "jobee-e2db6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57817186522:android:0b15302f70160af0",
+        "android_client_info": {
+          "package_name": "com.fredzqm.jobee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57817186522-2v172pvbe2gao2sq1f9ekaj6plf0nogv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fredzqm.jobee",
+            "certificate_hash": "98267759AC7FBC9BCD346DC8EF5D91D5E0226FC5"
+          }
+        },
+        {
+          "client_id": "57817186522-9pgkps19guad9egipb2frbsuft48b6h1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0_H4-AKyHXj4EAE2LIeSWNmvr-vY4mkg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57817186522-9pgkps19guad9egipb2frbsuft48b6h1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
