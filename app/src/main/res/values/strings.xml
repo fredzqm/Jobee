@@ -51,4 +51,5 @@
     <string name="decide_later">Decide Later</string>
     <string name="next_round">Next Round</string>
     <string name="schedule_interview">Schedule Interview</string>
+    <string name="login_error">Login error!</string>
 </resources>

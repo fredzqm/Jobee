@@ -7,7 +7,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -38,6 +40,11 @@ import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +54,10 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity
+        implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult> {
+    private static final String TAG = "LoginActivity";
+    public static final String SIGNIN_EMAIL = "SIGNIN_EMAIL";
     /*
         Request code for launch Job seeker and recruiter Activity
      */
@@ -58,32 +68,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    public static final String SIGNIN_EMAIL = "SIGNIN_EMAIL";
-    private static final String TAG = "LoginActivity";
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginSignUpTask mAuthTask = null;
-
     // UI references.
     private AutoCompleteTextView mEmailView;
     private Switch mAccoutnTypeSwitch;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private FirebaseAuth mAuth;
+    private boolean mIsRecruiter;
+
+    private int mLoggingIn = 0;
+    private static final int EMAIL_LOGIN = 1;
+    private static final int GOOGLE_LOGIN = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +126,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
@@ -173,15 +179,60 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "User: " + user);
+        if (user != null) {
+            Intent inputIntent;
+            if (mIsRecruiter) {
+                inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
+            } else {
+                inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
+            }
+            inputIntent.putExtra(SIGNIN_EMAIL, user.getUid());
+            startActivityForResult(inputIntent, REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<AuthResult> task) {
+        if (!task.isSuccessful()) {
+            switch (mLoggingIn) {
+                case EMAIL_LOGIN:
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                    break;
+                case GOOGLE_LOGIN:
+                    showLoginError("Google Login failed!");
+                    break;
+                default:
+                    throw new RuntimeException("not implemented login method " + mLoggingIn);
+            }
+        }
+        showProgress(false);
+        mLoggingIn = 0;
+    }
+
+    private void showLoginError(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.login_error))
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .create()
+                .show();
+    }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin(boolean isSignIn) {
-        if (mAuthTask != null) {
+        // already logining
+        if (mLoggingIn != 0)
             return;
-        }
+        mLoggingIn = 1;
 
         // Reset errors.
         mEmailView.setError(null);
@@ -212,7 +263,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mEmailView;
             cancel = true;
         }
-        // TODO: remove this line to enable input validation, it's here for debugging purpose
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -221,8 +271,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginSignUpTask(email, password, accountType, isSignIn);
-            mAuthTask.execute((Void) null);
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this);
         }
     }
 
@@ -318,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onStart() {
         super.onStart();
-
+        mAuth.addAuthStateListener(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
@@ -338,7 +387,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     public void onStop() {
         super.onStop();
-
+        mAuth.removeAuthStateListener(this);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         Action viewAction = Action.newAction(
@@ -356,6 +405,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -366,80 +416,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginSignUpTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-        private final boolean mIsRecruiter;
-        private final boolean mIsSignIn;
-
-        UserLoginSignUpTask(String email, String password, boolean isRecruiter , boolean isSignIn) {
-            mEmail = email;
-            mPassword = password;
-            mIsRecruiter = isRecruiter;
-            mIsSignIn = isSignIn;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            if (mIsSignIn) {
-
-            } else {
-
-            }
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // RecruiterAccount exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-            if (success) {
-                if (mIsRecruiter){
-                    Intent inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
-                    inputIntent.putExtra(SIGNIN_EMAIL, mEmail);
-                    startActivityForResult(inputIntent, REQUEST_CODE);
-                }else{
-                    Intent inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
-                    inputIntent.putExtra(SIGNIN_EMAIL, mEmail);
-                    startActivityForResult(inputIntent, REQUEST_CODE);
-                }
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult");
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 
         }
     }
