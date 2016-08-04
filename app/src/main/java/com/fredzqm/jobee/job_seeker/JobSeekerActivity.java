@@ -58,7 +58,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.js_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        String email = getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL);
+        String email = getIntent().getStringExtra(LoginActivity.USERID);
         mAccount = new JobSeekerAccount(email == null ? "" : email);
         if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);

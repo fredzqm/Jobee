@@ -61,7 +61,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.re_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAccount = new RecruiterAccount(getIntent().getStringExtra(LoginActivity.SIGNIN_EMAIL));
+        mAccount = new RecruiterAccount(getIntent().getStringExtra(LoginActivity.USERID));
         if (savedInstanceState == null){
             swapFragment(HomeFragment.newInstance(mAccount), null);
         }
