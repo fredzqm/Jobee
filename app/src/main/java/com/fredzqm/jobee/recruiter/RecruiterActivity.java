@@ -24,13 +24,12 @@ import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
-import com.fredzqm.jobee.recruiter.ResumeList.ResumeReviewFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
-import com.fredzqm.jobee.recruiter.ResumeList.resume.ResumeFragment;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
-        InterviewFragment.Callback, ResumeReviewFragment.Callback, JobFragment.Callback
+        InterviewFragment.Callback, JobFragment.Callback
 {
     private static final String TAG = "JobSeekerActivity";
 

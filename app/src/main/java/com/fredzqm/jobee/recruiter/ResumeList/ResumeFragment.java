@@ -1,21 +1,20 @@
-package com.fredzqm.jobee.recruiter.ResumeList.resume;
+package com.fredzqm.jobee.recruiter.ResumeList;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Resume;
-
-import java.util.ArrayList;
-import java.util.MissingResourceException;
+import com.fredzqm.jobee.model.ResumeCategory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,10 +29,7 @@ public class ResumeFragment extends ContainedFragment {
     private static final String RESUME = "RESUME";
 
     private Resume mResume;
-
-    private RecyclerView mRecyclerView;
-    private ResumeAdapter mResumeAdapter;
-    private ArrayAdapter<String> mSwitchAdapter;
+    private LinearLayout mLinearLayout;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -60,24 +56,38 @@ public class ResumeFragment extends ContainedFragment {
         if (getArguments() != null) {
             mResume = getArguments().getParcelable(RESUME);
         }
-        setHasOptionsMenu(true);
-        mResumeAdapter = new ResumeAdapter(getContext(), mResume);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.recyclerview, container, false);
+        mLinearLayout = new LinearLayout(getContext());
+        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        int x = (int) getResources().getDimension(R.dimen.card_view_margin);
+        layoutParams.setMargins(x, x, x, x);
+        mLinearLayout.setLayoutParams(layoutParams);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setAutoMeasureEnabled(true);
-        mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setAdapter(mResumeAdapter);
-        mRecyclerView.setHasFixedSize(false);
-
-        return view;
+        for (ResumeCategory resumeCategory : mResume) {
+            View itemView = LayoutInflater.from(getContext()).inflate(R.layout.js_resume_category, mLinearLayout, false);
+            TextView mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
+            LinearLayout mListView = (LinearLayout) itemView.findViewById(R.id.listviewTasks);
+            mTypeTextView.setText(resumeCategory.getType());
+            mListView.removeAllViews();
+            for (int i = 0; i < resumeCategory.size(); i++) {
+                String s = resumeCategory.get(i);
+                TextView tv = new TextView(getContext());
+                tv.setGravity(Gravity.CENTER_VERTICAL);
+                tv.setId(mListView.getChildCount());
+                tv.setTextSize(20);
+                tv.setText(s);
+                mListView.addView(tv);
+            }
+            mLinearLayout.addView(itemView);
+            Log.d(TAG, "" + resumeCategory);
+        }
+        return mLinearLayout;
     }
 
 }

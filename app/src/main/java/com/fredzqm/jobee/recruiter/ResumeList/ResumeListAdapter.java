@@ -69,8 +69,6 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
 
         public void updateView() {
             mNameTextView.setText(mResume.getName());
-//            mmajorTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mResume.getDate()));
-//            mCityTextView.setText(mResume.get());
         }
 
         @Override
