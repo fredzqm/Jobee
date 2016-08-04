@@ -11,9 +11,8 @@ import android.provider.ContactsContract.CommonDataKinds.Email;
 public class JobSeekerAccount implements Parcelable {
     private String emailAccount;
     private String name;
-    private Address address;
-
-    private String stringAddress;
+    private String address;
+    private String major;
 
     public JobSeekerAccount() {
         // empty constructor required by Jackson
@@ -22,26 +21,12 @@ public class JobSeekerAccount implements Parcelable {
     public JobSeekerAccount(String emailAccount) {
         this.emailAccount = emailAccount;
         this.name = "";
-        this.address = null;
+        this.address = "";
     }
 
     public static JobSeekerAccount newInstance() {
         return new JobSeekerAccount("fredzqm@gmail.com");
     }
-
-    public String getDisplayedAddress(){
-        if (stringAddress != null)
-            return stringAddress;
-        if (address == null || address.getMaxAddressLineIndex() == 0)
-            return "";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-            sb.append(address.getAddressLine(i) + "\n");
-        }
-        sb.delete(sb.length() - 1, sb.length());
-        return sb.toString();
-    }
-
 
     //  getters and setters
 
@@ -53,11 +38,11 @@ public class JobSeekerAccount implements Parcelable {
         this.name = name;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -69,25 +54,28 @@ public class JobSeekerAccount implements Parcelable {
         this.emailAccount = emailAccount;
     }
 
-    public String getStringAddress() {
-        return stringAddress;
+    public void setMajor(String major) {
+        this.major = major;
     }
 
-    public void setStringAddress(String stringAddress) {
-        this.stringAddress = stringAddress;
+    public String getMajor() {
+        return major;
     }
 
     // parcelable implementation
 
-    public JobSeekerAccount(Parcel in) {
+
+    protected JobSeekerAccount(Parcel in) {
+        emailAccount = in.readString();
         name = in.readString();
-        address = in.readParcelable(Address.class.getClassLoader());
+        address = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(emailAccount);
         dest.writeString(name);
-        dest.writeParcelable(address, flags);
+        dest.writeString(address);
     }
 
     @Override

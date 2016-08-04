@@ -84,7 +84,7 @@ public class ResumeFragment extends ContainedFragment {
             }
 
             public String getItem(int position) {
-                return mResumes.get(position).getName();
+                return mResumes.get(position).getResumeName();
             }
         };
         mSwitchAdapter.setDropDownViewResource(R.layout.resume_switch_list_content);

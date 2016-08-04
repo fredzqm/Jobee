@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.JobSeekerAccount;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.VerifyAddressTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,6 +42,7 @@ public class HomeFragment extends ContainedFragment {
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
     private AutoCompleteTextView addressEditText;
+    private AutoCompleteTextView majorEditText;
     private Button mSaveChangesButton;
 
     public HomeFragment() {
@@ -59,70 +61,42 @@ public class HomeFragment extends ContainedFragment {
         nameEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_name);
         emailEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_email);
         addressEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_address);
+        majorEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_major);
         mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
 
         JobSeekerAccount account = mCallback.getAccount();
         nameEditText.setText(account.getName());
         emailEditText.setText("" + account.getEmailAccount());
-        addressEditText.setText(account.getDisplayedAddress());
+        addressEditText.setText(account.getAddress());
+        majorEditText.setText(account.getMajor());
+
         mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = nameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
-                JobSeekerAccount account = mCallback.getAccount();
+                String major = majorEditText.getText().toString();
+                final JobSeekerAccount account = mCallback.getAccount();
                 account.setName(name);
                 account.setEmailAccount(email);
-                (new VerifyAddressTask(addressEditText.getText().toString())).execute();
+                account.setMajor(major);
+                (new VerifyAddressTask(HomeFragment.this, addressEditText.getText().toString(), new VerifyAddressTask.Callback() {
+                    @Override
+                    public void verifiedResult(String verifiedAddress) {
+                        account.setAddress(verifiedAddress);
+                        addressEditText.setText(verifiedAddress);
+                    }
+
+                    @Override
+                    public void insist(String oldAddress) {
+                        account.setAddress(oldAddress);
+                        addressEditText.setText(oldAddress);
+                    }
+                })).execute();
             }
         });
 
         return view;
-    }
-
-    private class VerifyAddressTask extends AsyncTask<Void, Integer, Address> {
-        private String addressString;
-        private String message = "Update to verified address";
-
-        public VerifyAddressTask(String s) {
-            addressString = s;
-        }
-
-        protected Address doInBackground(Void... x) {
-            Geocoder geo = new Geocoder(getContext());
-            try {
-                List<Address> addrls = geo.getFromLocationName(addressString, 1);
-                if (addrls.size() >= 1)
-                    return addrls.get(0);
-                message = "invalid address";
-            } catch (IOException e) {
-                message = "No internet connection, cannot verify address";
-            } catch (IllegalArgumentException e) {
-                message = "address can't be empty";
-            }
-            return null;
-        }
-
-        protected void onPostExecute(Address result) {
-            final JobSeekerAccount account = mCallback.getAccount();
-            if (result != null) {
-                account.setAddress(result);
-                account.setStringAddress(null);
-                addressEditText.setText(mCallback.getAccount().getDisplayedAddress());
-            }
-            if (addressString.equals(account.getDisplayedAddress()))
-                return;
-            Snackbar.make(getView(), message, Snackbar.LENGTH_LONG)
-                    .setAction("Insist", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            account.setStringAddress(addressString);
-                            addressEditText.setText(mCallback.getAccount().getDisplayedAddress());
-                        }
-                    })
-                    .setActionTextColor(Color.RED)
-                    .show();
-        }
     }
 
 

@@ -1,6 +1,5 @@
 package com.fredzqm.jobee.model;
 
-import android.location.Address;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,14 +10,16 @@ import java.util.List;
  * Created by zhang on 7/13/2016.
  */
 public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
-    public static Resume createResumeStub = new Resume("Create Resume");
+    private String resumeName;
     private String name;
     private String major;
-    private Address address;
+    private String address;
 
     public Resume(String resumeName) {
         super();
-        this.name = resumeName;
+        this.resumeName = resumeName;
+        this.major = "";
+        this.address = "";
     }
 
     public static Resume newInstance(String resumeName) {
@@ -29,16 +30,24 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
         return resume;
     }
 
-    public String getCity() {
-        return address.getLocality();
+    public static Resume newInstance(String resumeName, JobSeekerAccount jobSeeker) {
+        Resume resume = new Resume(resumeName);
+        resume.add(ResumeCategory.newInstance("Skills"));
+        resume.add(ResumeCategory.newInstance("Education"));
+        resume.add(ResumeCategory.newInstance("Experience"));
+        resume.major = jobSeeker.getMajor();
+        resume.address = jobSeeker.getAddress();
+        return resume;
     }
-
-    public String toString() {
-        return name;
-    }
-
 
     // getters and setters
+    public String getResumeName() {
+        return resumeName;
+    }
+
+    public void setResumeName(String resumeName) {
+        this.resumeName = resumeName;
+    }
 
     public String getName() {
         return name;
@@ -56,11 +65,11 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
         this.major = major;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -76,7 +85,7 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
     // -------------------
 
     protected Resume(Parcel in) {
-        name = in.readString();
+        resumeName = in.readString();
     }
 
     public static final Creator<Resume> CREATOR = new Creator<Resume>() {
@@ -98,7 +107,7 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
+        parcel.writeString(resumeName);
     }
 
 }

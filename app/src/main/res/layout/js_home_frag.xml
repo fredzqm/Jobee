@@ -40,6 +40,19 @@
         android:layout_height="wrap_content">
 
         <AutoCompleteTextView
+            android:id="@+id/js_home_major"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/major"
+            android:inputType="textMultiLine"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
             android:id="@+id/js_home_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

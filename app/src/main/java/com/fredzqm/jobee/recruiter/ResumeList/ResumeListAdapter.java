@@ -46,7 +46,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mNameTextView;
-        public final TextView mCityTextView;
+//        public final TextView mCityTextView;
         public final TextView mMajorTextView;
 
         public Resume mResume;
@@ -55,7 +55,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
             super(view);
             mNameTextView = (TextView) view.findViewById(R.id.re_resumelist_item_name);
             mMajorTextView = (TextView) view.findViewById(R.id.re_resumelist_item_major);
-            mCityTextView = (TextView) view.findViewById(R.id.re_resumelist_item_city);
+//            mCityTextView = (TextView) view.findViewById(R.id.re_resumelist_item_city);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,7 +70,6 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         public void updateView() {
             mNameTextView.setText(mResume.getName());
             mMajorTextView.setText(mResume.getMajor());
-            mCityTextView.setText(mResume.getCity());
         }
 
         @Override

@@ -46,4 +46,5 @@
     <string name="opening_list">Opening List</string>
     <string name="review_resume">Review Resume</string>
     <string name="scheduled_interview">Scheduled Interview</string>
+    <string name="major">major</string>
 </resources>
