@@ -30,6 +30,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
         AppliedJobFragment.Callback, JobDetailFragment.Callback {
     private static final String TAG = "JobSeekerActivity";
+    public static final String PATH = "job_seeker";
 
     private FloatingActionButton mFab;
     private String userID;

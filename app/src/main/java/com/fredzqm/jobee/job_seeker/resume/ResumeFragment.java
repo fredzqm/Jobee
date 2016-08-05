@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.Resume;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -47,9 +48,8 @@ import java.util.ArrayList;
  */
 public class ResumeFragment extends ContainedFragment implements ChildEventListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String TAG = "ResumeFragment";
-    private static final String PATH1 = "job_seeker/";
-    private static final String PATH2 = "resumes";
+    public static final String TAG = "ResumeFragment";
+    public static final String PATH = "resumes";
 
     private Callback mCallback;
 
@@ -86,7 +86,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
         mResumes = new ArrayList<>();
         mResumeAdapter = new ResumeAdapter(getContext());
         mRef = FirebaseDatabase.getInstance().getReference()
-                .child(PATH1).child(mCallback.getUserID()).child(PATH2);
+                .child(JobSeekerActivity.PATH).child(mCallback.getUserID()).child(PATH);
         mRef.addChildEventListener(this);
         mRef.push().setValue(Resume.newInstance("first resume"));
     }

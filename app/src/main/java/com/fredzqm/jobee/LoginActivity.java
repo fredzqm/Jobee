@@ -70,6 +70,7 @@ public class LoginActivity extends AppCompatActivity
         implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult>, GoogleApiClient.OnConnectionFailedListener {
     public static final String TAG = "LoginActivity";
     public static final String USERID = "USERID";
+    public static final String LOGIN_METHOD = "LoginMethod";
 
     private static final int REQUEST_MAIN_ACTIVITY = 1;
     private static final int REQUEST_READ_CONTACTS_PERMISSION = 2;
@@ -94,13 +95,14 @@ public class LoginActivity extends AppCompatActivity
      * tracking which login task is running right now
      */
     private int mLoggingIn = 0;
-    private static final int EMAIL_LOGIN = 1;
-    private static final int GOOGLE_LOGIN = 2;
-    private static final int ROSEFIRE_LOGIN = 3;
+    public static final int EMAIL_LOGIN = 1;
+    public static final int GOOGLE_LOGIN = 2;
+    public static final int ROSEFIRE_LOGIN = 3;
+    public static final String[] LOGIN_METHOD_LIST = new String[]{"","emai", "google", "rose_fire"};
 
     private int mLoggedIn = 0;
-    private static final int JOB_SEEKER = 1;
-    private static final int RECRUITER = 2;
+    public static final int JOB_SEEKER = 1;
+    public static final int RECRUITER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +225,7 @@ public class LoginActivity extends AppCompatActivity
                 mLoggedIn = JOB_SEEKER;
             }
             inputIntent.putExtra(USERID, user.getUid());
+            inputIntent.putExtra(LOGIN_METHOD, mLoggingIn);
             startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
         }
     }
@@ -245,8 +248,8 @@ public class LoginActivity extends AppCompatActivity
                 default:
                     throw new RuntimeException("not implemented login method " + mLoggingIn);
             }
+            mLoggingIn = 0;
         }
-        mLoggingIn = 0;
     }
 
     /**
@@ -297,13 +300,13 @@ public class LoginActivity extends AppCompatActivity
         if (mLoggingIn != 0)
             return;
         mLoggingIn = GOOGLE_LOGIN;
+
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         showProgress(true);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(client);
         startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGN_IN);
-        hideKeyboard();
     }
 
     private void loginWithRosefire() {
@@ -315,7 +318,6 @@ public class LoginActivity extends AppCompatActivity
         mPasswordView.setError(null);
 
         showProgress(true);
-        hideKeyboard();
         Intent signInIntent = Rosefire.getSignInIntent(this, getString(R.string.rosefire_key));
         startActivityForResult(signInIntent, REQUEST_ROSEFIRE_LOGIN);
     }
@@ -345,6 +347,7 @@ public class LoginActivity extends AppCompatActivity
         }else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
             showProgress(false);
             mAuth.signOut();
+            mLoggingIn = 0;
             mLoggedIn = 0;
         }
     }
@@ -459,6 +462,10 @@ public class LoginActivity extends AppCompatActivity
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
+        // hide the keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -499,12 +506,6 @@ public class LoginActivity extends AppCompatActivity
                 .show();
         showProgress(false);
         mLoggingIn = 0;
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
     }
 
 }

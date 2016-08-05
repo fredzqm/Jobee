@@ -28,7 +28,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     private Context mContext;
     private Resume mResume;
     private boolean mEditing;
-    private DatabaseReference mRef;
 
     public ResumeAdapter(Context context) {
         mContext = context;
@@ -62,7 +61,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     public void setResume(Resume resume, DatabaseReference reference) {
         mResume = resume;
         notifyDataSetChanged();
-        mRef = reference.child(resume.getKey());
     }
 
     public Resume getResume() {

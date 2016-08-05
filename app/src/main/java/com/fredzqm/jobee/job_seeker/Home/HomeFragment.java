@@ -12,6 +12,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.VerifyAddressTask;
@@ -32,8 +33,7 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class HomeFragment extends ContainedFragment implements ValueEventListener {
     private static final String TAG = "job_seeker.HomeFragment";
-    private static final String PATH1 = "job_seeker";
-    private static final String PATH2 = "account";
+    private static final String PATH = "account";
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
@@ -55,7 +55,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRef = FirebaseDatabase.getInstance().getReference().child(PATH1).child(mCallback.getUserID()).child(PATH2);
+        mRef = FirebaseDatabase.getInstance().getReference().child(JobSeekerActivity.PATH).child(mCallback.getUserID()).child(PATH);
         mRef.addValueEventListener(this);
     }
 
