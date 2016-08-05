@@ -47,6 +47,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.data.Freezable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -54,8 +55,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.rosehulman.rosefire.Rosefire;
@@ -91,18 +99,12 @@ public class LoginActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private boolean mIsRecruiter;
 
-    /**
-     * tracking which login task is running right now
-     */
-    private int mLoggingIn = 0;
-    public static final int EMAIL_LOGIN = 1;
-    public static final int GOOGLE_LOGIN = 2;
-    public static final int ROSEFIRE_LOGIN = 3;
-    public static final String[] LOGIN_METHOD_LIST = new String[]{"","emai", "google", "rose_fire"};
+    private String mLoggedIn = null;
+    private String mLoggingMethod = null;
+    public static final String EMAIL_LOGIN = "email";
+    public static final String GOOGLE_LOGIN = "google";
+    public static final String ROSEFIRE_LOGIN = "rose_fire";
 
-    private int mLoggedIn = 0;
-    public static final int JOB_SEEKER = 1;
-    public static final int RECRUITER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,25 +217,45 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null && mLoggedIn == 0) {
-            Intent inputIntent;
+        if (user != null && mLoggedIn == null) {
+            final Intent inputIntent;
             if (mIsRecruiter) {
                 inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
-                mLoggedIn = RECRUITER;
+                mLoggedIn = RecruiterActivity.PATH;
             } else {
                 inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
-                mLoggedIn = JOB_SEEKER;
+                mLoggedIn = JobSeekerActivity.PATH;
             }
-            inputIntent.putExtra(USERID, user.getUid());
-            inputIntent.putExtra(LOGIN_METHOD, mLoggingIn);
-            startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
+            final String loginUserID = user.getUid();
+            final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            final DatabaseReference userRef = rootRef.child(mLoggingMethod).child(loginUserID);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String userID = dataSnapshot.getValue(String.class);
+                    if (userID == null){
+                        userID = rootRef.child(mLoggedIn).push().getKey();
+                        userRef.setValue(userID);
+                        userRef.addListenerForSingleValueEvent(this);
+                    }else {
+                        inputIntent.putExtra(USERID, userID);
+                        startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
+                        showProgress(false);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "ValueEventListener onCancelled", databaseError.toException());
+                }
+            });
         }
     }
 
     @Override
     public void onComplete(@NonNull Task<AuthResult> task) {
         if (!task.isSuccessful()) {
-            switch (mLoggingIn) {
+            switch (mLoggingMethod) {
                 case EMAIL_LOGIN:
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
                     mPasswordView.requestFocus();
@@ -246,9 +268,9 @@ public class LoginActivity extends AppCompatActivity
                     showLoginError("Rosefire Login failed!");
                     break;
                 default:
-                    throw new RuntimeException("not implemented login method " + mLoggingIn);
+                    throw new RuntimeException("not implemented login method " + mLoggingMethod);
             }
-            mLoggingIn = 0;
+            mLoggingMethod = null;
         }
     }
 
@@ -258,9 +280,9 @@ public class LoginActivity extends AppCompatActivity
      * errors are presented and no actual login attempt is made.
      */
     private void emailLogin(boolean isSignIn) {
-        if (mLoggingIn != 0)
+        if (mLoggingMethod != null)
             return;
-        mLoggingIn = EMAIL_LOGIN;
+        mLoggingMethod = EMAIL_LOGIN;
 
         // Reset errors.
         mEmailView.setError(null);
@@ -288,7 +310,7 @@ public class LoginActivity extends AppCompatActivity
         if (focusView != null) {
             // There was an error; don't attempt login and focus the form field with an error.
             focusView.requestFocus();
-            mLoggingIn = 0;
+            mLoggingMethod = null;
         } else {
             // Show a progress spinner, and perform the user login attempt.
             showProgress(true);
@@ -297,9 +319,9 @@ public class LoginActivity extends AppCompatActivity
     }
 
     private void loginWithGoogle() {
-        if (mLoggingIn != 0)
+        if (mLoggingMethod != null)
             return;
-        mLoggingIn = GOOGLE_LOGIN;
+        mLoggingMethod = GOOGLE_LOGIN;
 
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -310,9 +332,9 @@ public class LoginActivity extends AppCompatActivity
     }
 
     private void loginWithRosefire() {
-        if (mLoggingIn != 0)
+        if (mLoggingMethod != null)
             return;
-        mLoggingIn = ROSEFIRE_LOGIN;
+        mLoggingMethod = ROSEFIRE_LOGIN;
         
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -347,14 +369,14 @@ public class LoginActivity extends AppCompatActivity
         }else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
             showProgress(false);
             mAuth.signOut();
-            mLoggingIn = 0;
-            mLoggedIn = 0;
+            mLoggingMethod = null;
+            mLoggedIn = null;
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mLoggingIn = 0;
+        mLoggingMethod = null;
         showLoginError("Google connection failed");
     }
 
@@ -384,7 +406,6 @@ public class LoginActivity extends AppCompatActivity
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
-
         addEmailsToAutoComplete(emails);
     }
 
@@ -505,7 +526,7 @@ public class LoginActivity extends AppCompatActivity
                 .create()
                 .show();
         showProgress(false);
-        mLoggingIn = 0;
+        mLoggingMethod = null;
     }
 
 }
