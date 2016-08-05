@@ -96,10 +96,10 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.re_action_logout) {
+        if (id == R.id.login_action_logout) {
             Intent intent = this.getIntent();
             this.setResult(RESULT_OK, intent);
-            finish();
+            finish();finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

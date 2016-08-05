@@ -68,7 +68,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity
         implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult>, GoogleApiClient.OnConnectionFailedListener {
-    private static final String TAG = "LoginActivity";
+    public static final String TAG = "LoginActivity";
     public static final String USERID = "USERID";
 
     private static final int REQUEST_MAIN_ACTIVITY = 1;
@@ -97,6 +97,10 @@ public class LoginActivity extends AppCompatActivity
     private static final int EMAIL_LOGIN = 1;
     private static final int GOOGLE_LOGIN = 2;
     private static final int ROSEFIRE_LOGIN = 3;
+
+    private int mLoggedIn = 0;
+    private static final int JOB_SEEKER = 1;
+    private static final int RECRUITER = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +155,6 @@ public class LoginActivity extends AppCompatActivity
                 loginWithGoogle();
             }
         });
-
 
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
@@ -212,13 +215,14 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        Log.d(TAG, "User: " + user);
-        if (user != null) {
+        if (user != null && mLoggedIn == 0) {
             Intent inputIntent;
             if (mIsRecruiter) {
                 inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
+                mLoggedIn = RECRUITER;
             } else {
                 inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
+                mLoggedIn = JOB_SEEKER;
             }
             inputIntent.putExtra(USERID, user.getUid());
             startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
@@ -283,6 +287,7 @@ public class LoginActivity extends AppCompatActivity
         if (focusView != null) {
             // There was an error; don't attempt login and focus the form field with an error.
             focusView.requestFocus();
+            mLoggingIn = 0;
         } else {
             // Show a progress spinner, and perform the user login attempt.
             showProgress(true);
@@ -304,9 +309,8 @@ public class LoginActivity extends AppCompatActivity
     }
 
     private void loginWithRosefire() {
-        if (mLoggingIn != 0) {
+        if (mLoggingIn != 0)
             return;
-        }
         mLoggingIn = ROSEFIRE_LOGIN;
         
         mEmailView.setError(null);
@@ -320,7 +324,6 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult");
         if (requestCode == REQUEST_GOOGLE_SIGN_IN){
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
@@ -344,6 +347,7 @@ public class LoginActivity extends AppCompatActivity
         }else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
             showProgress(false);
             mAuth.signOut();
+            mLoggedIn = 0;
         }
     }
 
