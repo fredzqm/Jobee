@@ -73,14 +73,15 @@ public class ResumeFragment extends ContainedFragment {
         layoutParams.setMargins(x, x, x, x);
         mLinearLayout.setLayoutParams(layoutParams);
 
-        for (ResumeCategory resumeCategory : mResume) {
+        for (int i = 0; i < mResume.size(); i++) {
+            ResumeCategory resumeCategory = mResume.get(i);
             View itemView = LayoutInflater.from(getContext()).inflate(R.layout.js_resume_category, mLinearLayout, false);
             TextView mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
             LinearLayout mListView = (LinearLayout) itemView.findViewById(R.id.listviewTasks);
             mTypeTextView.setText(resumeCategory.getType());
             mListView.removeAllViews();
-            for (int i = 0; i < resumeCategory.size(); i++) {
-                String s = resumeCategory.get(i);
+            for (int j = 0; j < resumeCategory.size(); j++) {
+                String s = resumeCategory.get(j);
                 TextView tv = new TextView(getContext());
                 tv.setGravity(Gravity.CENTER_VERTICAL);
                 tv.setId(mListView.getChildCount());

@@ -12,6 +12,9 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -48,7 +51,13 @@ public class ResumeListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new ResumeListAdapter(Resume.ITEMS, mListener));
+
+        // TODO: connect to firebase
+        List<Resume> ITEMS = new ArrayList<>();
+        ITEMS.add(Resume.newInstance("a"));
+        ITEMS.add(Resume.newInstance("b"));
+        ITEMS.add(Resume.newInstance("c"));
+        recyclerView.setAdapter(new ResumeListAdapter(ITEMS, mListener));
         return view;
     }
 

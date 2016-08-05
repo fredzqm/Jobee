@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.ResumeCategory;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Random;
 
@@ -23,14 +25,15 @@ import java.util.Random;
  * Created by zhang on 5/29/2016.
  */
 public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder> {
-
     private Context mContext;
     private Resume mResume;
     private boolean mEditing;
+    private DatabaseReference mRef;
 
     public ResumeAdapter(Context context) {
         mContext = context;
         mEditing = false;
+        mResume = new Resume();
     }
 
     public void addCategory(String category) {
@@ -56,9 +59,10 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         return mResume.size();
     }
 
-    public void setResume(Resume resume) {
+    public void setResume(Resume resume, DatabaseReference reference) {
         mResume = resume;
         notifyDataSetChanged();
+        mRef = reference.child(resume.getKey());
     }
 
     public Resume getResume() {
