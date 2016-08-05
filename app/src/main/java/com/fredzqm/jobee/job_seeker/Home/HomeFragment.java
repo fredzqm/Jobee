@@ -1,12 +1,8 @@
 package com.fredzqm.jobee.job_seeker.Home;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.model.JobSeekerAccount;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.VerifyAddressTask;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,12 +30,9 @@ import java.util.List;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends ContainedFragment {
+public class HomeFragment extends ContainedFragment implements ValueEventListener {
     private static final String TAG = "HomeFragment";
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String EMAIL_ACCOUNT = "param1";
-
-    private Callback mCallback;
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
@@ -45,12 +40,23 @@ public class HomeFragment extends ContainedFragment {
     private AutoCompleteTextView majorEditText;
     private Button mSaveChangesButton;
 
+    private Callback mCallback;
+    private JobSeeker mAccount;
+    private DatabaseReference ref;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
     public static ContainedFragment newInstance() {
         return new HomeFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ref = FirebaseDatabase.getInstance().getReference().child("mAccount");
+        ref.addValueEventListener(this);
     }
 
     @Override
@@ -64,11 +70,11 @@ public class HomeFragment extends ContainedFragment {
         majorEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_major);
         mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
 
-        JobSeekerAccount account = mCallback.getAccount();
-        nameEditText.setText(account.getName());
-        emailEditText.setText("" + account.getEmailAccount());
-        addressEditText.setText(account.getAddress());
-        majorEditText.setText(account.getMajor());
+        mAccount = new JobSeeker(mCallback.getUserID());
+        nameEditText.setText(mAccount.getName());
+        emailEditText.setText("" + mAccount.getEmailAccount());
+        addressEditText.setText(mAccount.getAddress());
+        majorEditText.setText(mAccount.getMajor());
 
         mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,20 +82,19 @@ public class HomeFragment extends ContainedFragment {
                 String name = nameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
                 String major = majorEditText.getText().toString();
-                final JobSeekerAccount account = mCallback.getAccount();
-                account.setName(name);
-                account.setEmailAccount(email);
-                account.setMajor(major);
+                mAccount.setName(name);
+                mAccount.setEmailAccount(email);
+                mAccount.setMajor(major);
                 (new VerifyAddressTask(HomeFragment.this, addressEditText.getText().toString(), new VerifyAddressTask.Callback() {
                     @Override
                     public void verifiedResult(String verifiedAddress) {
-                        account.setAddress(verifiedAddress);
+                        mAccount.setAddress(verifiedAddress);
                         addressEditText.setText(verifiedAddress);
                     }
 
                     @Override
                     public void insist(String oldAddress) {
-                        account.setAddress(oldAddress);
+                        mAccount.setAddress(oldAddress);
                         addressEditText.setText(oldAddress);
                     }
                 })).execute();
@@ -97,12 +102,6 @@ public class HomeFragment extends ContainedFragment {
         });
 
         return view;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -123,8 +122,14 @@ public class HomeFragment extends ContainedFragment {
     }
 
     @Override
-    public void clickFab() {
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        mAccount = dataSnapshot.getValue(JobSeeker.class);
 
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled " + databaseError);
     }
 
     /**
@@ -138,6 +143,6 @@ public class HomeFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        JobSeekerAccount getAccount();
+        String getUserID();
     }
 }

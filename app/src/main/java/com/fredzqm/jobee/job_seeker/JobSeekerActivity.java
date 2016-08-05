@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,15 +24,15 @@ import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
-import com.fredzqm.jobee.model.JobSeekerAccount;
+import com.fredzqm.jobee.model.JobSeeker;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
         AppliedJobFragment.Callback, JobDetailFragment.Callback {
     private static final String TAG = "JobSeekerActivity";
 
-    private JobSeekerAccount mAccount;
     private FloatingActionButton mFab;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +58,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.js_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        String email = getIntent().getStringExtra(LoginActivity.USERID);
-        mAccount = new JobSeekerAccount(email == null ? "" : email);
+        userID = getIntent().getStringExtra(LoginActivity.USERID);
         if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
@@ -141,11 +139,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public JobSeekerAccount getAccount() {
-        return mAccount;
-    }
-
-    @Override
     public void showJobDetail(Job job) {
         swapFragment(JobDetailFragment.newInstance(job), "Job Detail");
     }
@@ -155,4 +148,8 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         return mFab;
     }
 
+    @Override
+    public String getUserID() {
+        return userID;
+    }
 }

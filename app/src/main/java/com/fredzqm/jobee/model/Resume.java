@@ -30,7 +30,7 @@ public class Resume extends ArrayList<ResumeCategory> implements Parcelable {
         return resume;
     }
 
-    public static Resume newInstance(String resumeName, JobSeekerAccount jobSeeker) {
+    public static Resume newInstance(String resumeName, JobSeeker jobSeeker) {
         Resume resume = new Resume(resumeName);
         resume.add(ResumeCategory.newInstance("Skills"));
         resume.add(ResumeCategory.newInstance("Education"));

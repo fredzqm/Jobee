@@ -19,7 +19,7 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.model.RecruiterAccount;
+import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
@@ -34,8 +34,8 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 {
     private static final String TAG = "JobSeekerActivity";
 
-    private RecruiterAccount mAccount;
     private FloatingActionButton mFab;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +62,9 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.re_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAccount = new RecruiterAccount(getIntent().getStringExtra(LoginActivity.USERID));
+        userID = getIntent().getStringExtra(LoginActivity.USERID);
         if (savedInstanceState == null){
-            swapFragment(HomeFragment.newInstance(mAccount), null);
+            swapFragment(HomeFragment.newInstance(), null);
         }
     }
 
@@ -115,7 +115,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
         switch (item.getItemId()){
             case R.id.re_nav_home:
-                swapFragment(HomeFragment.newInstance(mAccount), null);
+                swapFragment(HomeFragment.newInstance(), null);
                 break;
             case R.id.re_nav_resume:
                 swapFragment(ResumeListFragment.newInstance(), null);
@@ -136,13 +136,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void saveAccountUpdates(String name, String email, String address) {
-        mAccount.setName(name);
-        mAccount.setEmailAccount(email);
-        mAccount.setCompany(address);
-    }
-
-    @Override
     public void showJobDetail(Job job) {
         swapFragment(JobFragment.newInstance(job), "edit job");
     }
@@ -154,5 +147,10 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     public FloatingActionButton getFab(){
         return mFab;
+    }
+
+    @Override
+    public String getUserID() {
+        return userID;
     }
 }

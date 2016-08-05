@@ -10,7 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.model.RecruiterAccount;
+import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.ContainedFragment;
 
 /**
@@ -25,7 +25,7 @@ public class HomeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String EMAIL_ACCOUNT = "param1";
 
-    private RecruiterAccount mAccount;
+    private Recruiter mAccount;
     private Callback mCallback;
 
     private AutoCompleteTextView nameEditText;
@@ -41,23 +41,11 @@ public class HomeFragment extends ContainedFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param account the account of the game
      * @return A new instance of fragment JobListFragment.
      */
-    public static HomeFragment newInstance(RecruiterAccount account) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(EMAIL_ACCOUNT, account);
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mAccount = getArguments().getParcelable(EMAIL_ACCOUNT);
-        }
     }
 
     @Override
@@ -69,6 +57,7 @@ public class HomeFragment extends ContainedFragment {
         companyEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_company);
         mSaveChangesButton = (Button) view.findViewById(R.id.re_home_save_changes);
 
+        mAccount = new Recruiter(mCallback.getUserID());
         nameEditText.setText(mAccount.getName());
         emailEditText.setText(mAccount.getEmailAccount());
         companyEditText.setText(mAccount.getCompany());
@@ -78,16 +67,14 @@ public class HomeFragment extends ContainedFragment {
                 String name = nameEditText.getText().toString();
                 String email = emailEditText.getText().toString();
                 String company = companyEditText.getText().toString();
-                mCallback.saveAccountUpdates(name, email, company);
+                mAccount.setName(name);
+                mAccount.setEmailAccount(email);
+                mAccount.setCompany(company);
             }
         });
 
+        mAccount = new Recruiter(mCallback.getUserID());
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -107,22 +94,17 @@ public class HomeFragment extends ContainedFragment {
         mCallback = null;
     }
 
-    @Override
-    public void clickFab() {
-
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void saveAccountUpdates(String name, String email, String company);
+        String getUserID();
     }
 }

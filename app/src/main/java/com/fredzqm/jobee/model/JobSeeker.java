@@ -1,31 +1,29 @@
 package com.fredzqm.jobee.model;
 
-import android.location.Address;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 
 /**
  * Created by zhang on 7/12/2016.
  */
-public class JobSeekerAccount implements Parcelable {
+public class JobSeeker implements Parcelable {
     private String emailAccount;
     private String name;
     private String address;
     private String major;
 
-    public JobSeekerAccount() {
+    public JobSeeker() {
         // empty constructor required by Jackson
     }
 
-    public JobSeekerAccount(String emailAccount) {
+    public JobSeeker(String emailAccount) {
         this.emailAccount = emailAccount;
         this.name = "";
         this.address = "";
     }
 
-    public static JobSeekerAccount newInstance() {
-        return new JobSeekerAccount("fredzqm@gmail.com");
+    public static JobSeeker newInstance() {
+        return new JobSeeker("fredzqm@gmail.com");
     }
 
     //  getters and setters
@@ -65,7 +63,7 @@ public class JobSeekerAccount implements Parcelable {
     // parcelable implementation
 
 
-    protected JobSeekerAccount(Parcel in) {
+    protected JobSeeker(Parcel in) {
         emailAccount = in.readString();
         name = in.readString();
         address = in.readString();
@@ -83,15 +81,15 @@ public class JobSeekerAccount implements Parcelable {
         return 0;
     }
 
-    public static final Creator<JobSeekerAccount> CREATOR = new Creator<JobSeekerAccount>() {
+    public static final Creator<JobSeeker> CREATOR = new Creator<JobSeeker>() {
         @Override
-        public JobSeekerAccount createFromParcel(Parcel in) {
-            return new JobSeekerAccount(in);
+        public JobSeeker createFromParcel(Parcel in) {
+            return new JobSeeker(in);
         }
 
         @Override
-        public JobSeekerAccount[] newArray(int size) {
-            return new JobSeekerAccount[size];
+        public JobSeeker[] newArray(int size) {
+            return new JobSeeker[size];
         }
     };
 
