@@ -35,6 +35,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
@@ -101,7 +102,8 @@ public class LoginActivity extends AppCompatActivity
 
     private String mLoggedIn = null;
     private String mLoggingMethod = null;
-    public static final String EMAIL_LOGIN = "email";
+    public static final String EMAIL_LOGIN = "email_login";
+    public static final String EMAIL_SIGNUP = "email_signup";
     public static final String GOOGLE_LOGIN = "google";
     public static final String ROSEFIRE_LOGIN = "rose_fire";
 
@@ -117,8 +119,9 @@ public class LoginActivity extends AppCompatActivity
         mPasswordView = (EditText) findViewById(R.id.password);
         Switch mAccoutnTypeSwitch = (Switch) findViewById(R.id.login_account_type_switch);
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignUpButton = (Button) findViewById(R.id.email_sign_up_button);
         SignInButton mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-        View rosefireLoginButton =  findViewById(R.id.rosefire_sign_in_button);
+        View rosefireLoginButton = findViewById(R.id.rosefire_sign_in_button);
         rosefireLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +140,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    emailLogin(true);
+                    emailLogin();
                     return true;
                 }
                 return false;
@@ -146,10 +149,15 @@ public class LoginActivity extends AppCompatActivity
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                emailLogin(true);
+                emailLogin();
             }
         });
-
+        mEmailSignUpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                emailSignUp();
+            }
+        });
         mGoogleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT);
         mGoogleSignInButton.setSize(SignInButton.SIZE_WIDE);
         mGoogleSignInButton.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +177,7 @@ public class LoginActivity extends AppCompatActivity
                 .requestEmail()
                 .build();
         client = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this , this)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(AppIndex.API).build();
     }
@@ -233,11 +241,11 @@ public class LoginActivity extends AppCompatActivity
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String userID = dataSnapshot.getValue(String.class);
-                    if (userID == null){
+                    if (userID == null) {
                         userID = rootRef.child(mLoggedIn).push().getKey();
                         userRef.setValue(userID);
                         userRef.addListenerForSingleValueEvent(this);
-                    }else {
+                    } else {
                         inputIntent.putExtra(USERID, userID);
                         startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
                         showProgress(false);
@@ -261,6 +269,9 @@ public class LoginActivity extends AppCompatActivity
                     mPasswordView.requestFocus();
                     showProgress(false);
                     break;
+                case EMAIL_SIGNUP:
+                    showLoginError("Sign up failed, account already exist");
+                    break;
                 case GOOGLE_LOGIN:
                     showLoginError("Google Login failed!");
                     break;
@@ -271,6 +282,12 @@ public class LoginActivity extends AppCompatActivity
                     throw new RuntimeException("not implemented login method " + mLoggingMethod);
             }
             mLoggingMethod = null;
+        }else {
+            switch (mLoggingMethod) {
+                case EMAIL_SIGNUP:
+                    showLoginMessage("Successfully create an account");
+                    break;
+            }
         }
     }
 
@@ -279,10 +296,50 @@ public class LoginActivity extends AppCompatActivity
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void emailLogin(boolean isSignIn) {
+    private void emailLogin() {
         if (mLoggingMethod != null)
             return;
         mLoggingMethod = EMAIL_LOGIN;
+
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+        View focusView = null;
+        if (!TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
+        } else if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+        } else if (!email.contains("@")) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+        }
+        if (focusView != null) {
+            // There was an error; don't attempt login and focus the form field with an error.
+            focusView.requestFocus();
+            mLoggingMethod = null;
+        } else {
+            // Show a progress spinner, and perform the user login attempt.
+            showProgress(true);
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this);
+        }
+    }
+
+    /**
+     * Attempts to sign in or register the account specified by the login form.
+     * If there are form errors (invalid email, missing fields, etc.), the
+     * errors are presented and no actual login attempt is made.
+     */
+    private void emailSignUp() {
+        if (mLoggingMethod != null)
+            return;
+        mLoggingMethod = EMAIL_SIGNUP;
 
         // Reset errors.
         mEmailView.setError(null);
@@ -313,8 +370,8 @@ public class LoginActivity extends AppCompatActivity
             mLoggingMethod = null;
         } else {
             // Show a progress spinner, and perform the user login attempt.
-            showProgress(true);
-            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, this);
         }
     }
 
@@ -335,7 +392,7 @@ public class LoginActivity extends AppCompatActivity
         if (mLoggingMethod != null)
             return;
         mLoggingMethod = ROSEFIRE_LOGIN;
-        
+
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
@@ -346,7 +403,7 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_GOOGLE_SIGN_IN){
+        if (requestCode == REQUEST_GOOGLE_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
@@ -357,7 +414,7 @@ public class LoginActivity extends AppCompatActivity
             } else {
                 showLoginError("Google sign in failed!");
             }
-        }else if (requestCode == REQUEST_ROSEFIRE_LOGIN) {
+        } else if (requestCode == REQUEST_ROSEFIRE_LOGIN) {
             RosefireResult result = Rosefire.getSignInResultFromIntent(data);
             if (result.isSuccessful()) {
                 // The user cancelled the login
@@ -366,7 +423,7 @@ public class LoginActivity extends AppCompatActivity
             } else {
                 showLoginError("Rosefire sign in failed!");
             }
-        }else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
             showProgress(false);
             mAuth.signOut();
             mLoggingMethod = null;
@@ -441,13 +498,13 @@ public class LoginActivity extends AppCompatActivity
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                .setAction(android.R.string.ok, new OnClickListener() {
-                    @Override
-                    @TargetApi(Build.VERSION_CODES.M)
-                    public void onClick(View v) {
-                        requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS_PERMISSION);
-                    }
-                });
+                    .setAction(android.R.string.ok, new OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS_PERMISSION);
+                        }
+                    });
         } else {
             requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS_PERMISSION);
         }
@@ -529,5 +586,8 @@ public class LoginActivity extends AppCompatActivity
         mLoggingMethod = null;
     }
 
+    private void showLoginMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
 }
 
