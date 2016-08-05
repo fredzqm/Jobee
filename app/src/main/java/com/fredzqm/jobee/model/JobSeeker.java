@@ -7,6 +7,7 @@ import android.os.Parcelable;
  * Created by zhang on 7/12/2016.
  */
 public class JobSeeker implements Parcelable {
+    private String userID;
     private String emailAccount;
     private String name;
     private String address;
@@ -16,8 +17,9 @@ public class JobSeeker implements Parcelable {
         // empty constructor required by Jackson
     }
 
-    public JobSeeker(String emailAccount) {
-        this.emailAccount = emailAccount;
+    public JobSeeker(String userID) {
+        this.userID = userID;
+        this.emailAccount = userID;
         this.name = "";
         this.address = "";
     }
@@ -27,6 +29,13 @@ public class JobSeeker implements Parcelable {
     }
 
     //  getters and setters
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
     public String getName() {
         return name;
@@ -93,4 +102,7 @@ public class JobSeeker implements Parcelable {
         }
     };
 
+    public static JobSeeker createNewAccount(String userID) {
+        return new JobSeeker(userID);
+    }
 }

@@ -72,4 +72,8 @@ public class Recruiter implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(company);
     }
+
+    public static Recruiter createNewAccount(String userID) {
+        return new Recruiter(userID);
+    }
 }

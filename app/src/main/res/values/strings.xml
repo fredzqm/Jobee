@@ -54,4 +54,8 @@
     <string name="login_error">Login error!</string>
     <string name="action_sign_up">Sign Up</string>
     <string name="login_with_rosefire">Login with rosefire</string>
+    <string name="get_verified_address">Update to verified address</string>
+    <string name="invalid_address">invalid address</string>
+    <string name="no_internet">No internet connection, cannot verify address</string>
+    <string name="empty_address">address can\'t be empty</string>
 </resources>

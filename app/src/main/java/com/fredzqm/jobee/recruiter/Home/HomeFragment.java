@@ -2,7 +2,9 @@ package com.fredzqm.jobee.recruiter.Home;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.ContainedFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,17 +29,19 @@ import com.fredzqm.jobee.ContainedFragment;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends ContainedFragment {
+public class HomeFragment extends ContainedFragment implements ValueEventListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String EMAIL_ACCOUNT = "param1";
-
-    private Recruiter mAccount;
-    private Callback mCallback;
+    private static final String TAG = "recruiter.HomeFragment";
+    private static final String PATH = "recruiter/account/";
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
     private AutoCompleteTextView companyEditText;
     private Button mSaveChangesButton;
+
+    private Callback mCallback;
+    private Recruiter mAccount;
+    private DatabaseReference mRef;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -46,6 +56,13 @@ public class HomeFragment extends ContainedFragment {
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mRef = FirebaseDatabase.getInstance().getReference().child(PATH).child(mCallback.getUserID());
+        mRef.addValueEventListener(this);
     }
 
     @Override
@@ -70,10 +87,10 @@ public class HomeFragment extends ContainedFragment {
                 mAccount.setName(name);
                 mAccount.setEmailAccount(email);
                 mAccount.setCompany(company);
+                mRef.setValue(mAccount);
             }
         });
 
-        mAccount = new Recruiter(mCallback.getUserID());
         return view;
     }
 
@@ -92,6 +109,24 @@ public class HomeFragment extends ContainedFragment {
     public void onDetach() {
         super.onDetach();
         mCallback = null;
+    }
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        mAccount = dataSnapshot.getValue(Recruiter.class);
+        if (mAccount == null) {
+            mAccount = Recruiter.createNewAccount(mCallback.getUserID());
+            mRef.setValue(mAccount);
+        } else {
+            nameEditText.setText(mAccount.getName());
+            emailEditText.setText(mAccount.getEmailAccount());
+            companyEditText.setText(mAccount.getCompany());
+        }
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled " + databaseError);
     }
 
     /**

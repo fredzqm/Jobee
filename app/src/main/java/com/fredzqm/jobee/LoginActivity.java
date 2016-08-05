@@ -122,7 +122,6 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
-
         mAccoutnTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -170,7 +169,6 @@ public class LoginActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(AppIndex.API).build();
     }
-
 
     @Override
     public void onStart() {

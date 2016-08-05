@@ -31,8 +31,8 @@ import com.google.firebase.database.ValueEventListener;
  * create an instance of this fragment.
  */
 public class HomeFragment extends ContainedFragment implements ValueEventListener {
-    private static final String TAG = "HomeFragment";
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = "job_seeker.HomeFragment";
+    private static final String PATH = "job_seeker/account/";
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
@@ -42,10 +42,9 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
 
     private Callback mCallback;
     private JobSeeker mAccount;
-    private DatabaseReference ref;
+    private DatabaseReference mRef;
 
     public HomeFragment() {
-        // Required empty public constructor
     }
 
     public static ContainedFragment newInstance() {
@@ -55,27 +54,19 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ref = FirebaseDatabase.getInstance().getReference().child("mAccount");
-        ref.addValueEventListener(this);
+        mRef = FirebaseDatabase.getInstance().getReference().child(PATH).child(mCallback.getUserID());
+        mRef.addValueEventListener(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.js_home_frag, container, false);
         nameEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_name);
         emailEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_email);
         addressEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_address);
         majorEditText = (AutoCompleteTextView) view.findViewById(R.id.js_home_major);
         mSaveChangesButton = (Button) view.findViewById(R.id.js_home_save_changes);
-
-        mAccount = new JobSeeker(mCallback.getUserID());
-        nameEditText.setText(mAccount.getName());
-        emailEditText.setText("" + mAccount.getEmailAccount());
-        addressEditText.setText(mAccount.getAddress());
-        majorEditText.setText(mAccount.getMajor());
-
         mSaveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,17 +76,18 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
                 mAccount.setName(name);
                 mAccount.setEmailAccount(email);
                 mAccount.setMajor(major);
+                mRef.setValue(mAccount);
                 (new VerifyAddressTask(HomeFragment.this, addressEditText.getText().toString(), new VerifyAddressTask.Callback() {
                     @Override
                     public void verifiedResult(String verifiedAddress) {
                         mAccount.setAddress(verifiedAddress);
-                        addressEditText.setText(verifiedAddress);
+                        mRef.setValue(mAccount);
                     }
 
                     @Override
                     public void insist(String oldAddress) {
                         mAccount.setAddress(oldAddress);
-                        addressEditText.setText(oldAddress);
+                        mRef.setValue(mAccount);
                     }
                 })).execute();
             }
@@ -124,7 +116,15 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         mAccount = dataSnapshot.getValue(JobSeeker.class);
-
+        if (mAccount == null) {
+            mAccount = JobSeeker.createNewAccount(mCallback.getUserID());
+            mRef.setValue(mAccount);
+        } else {
+            nameEditText.setText(mAccount.getName());
+            emailEditText.setText(mAccount.getEmailAccount());
+            addressEditText.setText(mAccount.getAddress());
+            majorEditText.setText(mAccount.getMajor());
+        }
     }
 
     @Override
@@ -132,12 +132,13 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
         Log.d(TAG, "onCancelled " + databaseError);
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
