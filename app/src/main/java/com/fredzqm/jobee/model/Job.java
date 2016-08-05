@@ -3,7 +3,9 @@ package com.fredzqm.jobee.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +19,8 @@ import java.util.Map;
  * <p/>
  */
 public class Job implements Parcelable {
+    public static final String PATH = "job";
+
     @Exclude
     private String key;
 
@@ -29,6 +33,10 @@ public class Job implements Parcelable {
 
     public Job() {
         // required constructor for Jackson
+    }
+
+    public static DatabaseReference getRefernce() {
+        return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
     // ---------------------- static methods to load data

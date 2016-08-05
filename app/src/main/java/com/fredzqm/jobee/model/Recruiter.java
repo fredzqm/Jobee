@@ -3,21 +3,34 @@ package com.fredzqm.jobee.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 /**
  * Created by zhang on 7/12/2016.
  */
 public class Recruiter {
+    public static final String PATH = "Recruiter";
+
     @Exclude
     private String key;
 
     private String emailAccount;
     private String name;
+
     private String company;
+    private ArrayList<String> jobKeys;
 
     public Recruiter(){
         // empty constructor required by Jackson
+    }
+
+    public static DatabaseReference getRefernce() {
+        return FirebaseDatabase.getInstance().getReference();
     }
 
     public static Recruiter newInstance(String userID) {
@@ -58,5 +71,13 @@ public class Recruiter {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public ArrayList<String> getJobKeys() {
+        return jobKeys;
+    }
+
+    public void setJobKeys(ArrayList<String> jobKeys) {
+        this.jobKeys = jobKeys;
     }
 }

@@ -33,7 +33,6 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class HomeFragment extends ContainedFragment implements ValueEventListener {
     private static final String TAG = "job_seeker.HomeFragment";
-    private static final String PATH = "account";
 
     private AutoCompleteTextView nameEditText;
     private AutoCompleteTextView emailEditText;
@@ -55,7 +54,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRef = FirebaseDatabase.getInstance().getReference().child(JobSeekerActivity.PATH).child(mCallback.getUserID()).child(PATH);
+        mRef = JobSeeker.getRefernce().child(mCallback.getUserID());
         mRef.addValueEventListener(this);
     }
 

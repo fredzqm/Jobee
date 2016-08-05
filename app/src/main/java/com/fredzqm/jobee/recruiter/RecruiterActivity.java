@@ -33,7 +33,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         InterviewFragment.Callback, JobFragment.Callback
 {
     public static final String TAG = "JobSeekerActivity";
-    public static final String PATH = "recruiter";
 
     private FloatingActionButton mFab;
     private String userID;

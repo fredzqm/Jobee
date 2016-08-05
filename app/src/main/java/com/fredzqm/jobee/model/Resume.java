@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,9 +18,12 @@ import java.util.ListIterator;
  * Created by zhang on 7/13/2016.
  */
 public class Resume implements Parcelable {
+    public static final String PATH = "resume";
+
     @Exclude
     private String key;
 
+    private String jobSeekerKey;
     private String resumeName;
     private String name;
     private String major;
@@ -29,12 +34,28 @@ public class Resume implements Parcelable {
         resumeCategories = new ArrayList<>();
     }
 
+    public static DatabaseReference getReference() {
+        return FirebaseDatabase.getInstance().getReference().child(PATH);
+    }
+
     protected Resume(Parcel in) {
         key = in.readString();
         resumeName = in.readString();
         name = in.readString();
         major = in.readString();
         address = in.readString();
+    }
+
+    public static Resume newInstance(String resumeName, String jobSeekerKey) {
+        Resume resume = new Resume();
+        resume.jobSeekerKey = jobSeekerKey;
+        resume.resumeName = resumeName;
+        resume.major = "";
+        resume.address = "";
+        resume.add(ResumeCategory.newInstance("Skills"));
+        resume.add(ResumeCategory.newInstance("Education"));
+        resume.add(ResumeCategory.newInstance("Experience"));
+        return resume;
     }
 
     public static final Creator<Resume> CREATOR = new Creator<Resume>() {
@@ -48,28 +69,6 @@ public class Resume implements Parcelable {
             return new Resume[size];
         }
     };
-
-    public static Resume newInstance(String resumeName) {
-        Resume resume = new Resume();
-        resume.resumeName = resumeName;
-        resume.major = "";
-        resume.address = "";
-        resume.add(ResumeCategory.newInstance("Skills"));
-        resume.add(ResumeCategory.newInstance("Education"));
-        resume.add(ResumeCategory.newInstance("Experience"));
-        return resume;
-    }
-
-    public static Resume newInstance(String resumeName, JobSeeker jobSeeker) {
-        Resume resume = new Resume();
-        resume.add(ResumeCategory.newInstance("Skills"));
-        resume.add(ResumeCategory.newInstance("Education"));
-        resume.add(ResumeCategory.newInstance("Experience"));
-        resume.name = resumeName;
-        resume.major = jobSeeker.getMajor();
-        resume.address = jobSeeker.getAddress();
-        return resume;
-    }
 
     public String getKey() {
         return key;
@@ -159,5 +158,13 @@ public class Resume implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(major);
         parcel.writeString(address);
+    }
+
+    public String getJobSeekerKey() {
+        return jobSeekerKey;
+    }
+
+    public void setJobSeekerKey(String jobSeekerKey) {
+        this.jobSeekerKey = jobSeekerKey;
     }
 }

@@ -38,6 +38,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
+import com.fredzqm.jobee.model.Job;
+import com.fredzqm.jobee.model.JobSeeker;
+import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -229,10 +232,10 @@ public class LoginActivity extends AppCompatActivity
             final Intent inputIntent;
             if (mIsRecruiter) {
                 inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
-                mLoggedIn = RecruiterActivity.PATH;
+                mLoggedIn = Recruiter.PATH;
             } else {
                 inputIntent = new Intent(LoginActivity.this, JobSeekerActivity.class);
-                mLoggedIn = JobSeekerActivity.PATH;
+                mLoggedIn = JobSeeker.PATH;
             }
             final String loginUserID = user.getUid();
             final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();

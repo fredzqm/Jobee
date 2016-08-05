@@ -54,9 +54,10 @@ public class ResumeListFragment extends ContainedFragment {
 
         // TODO: connect to firebase
         List<Resume> ITEMS = new ArrayList<>();
-        ITEMS.add(Resume.newInstance("a"));
-        ITEMS.add(Resume.newInstance("b"));
-        ITEMS.add(Resume.newInstance("c"));
+        String tempUserID = "tempUserID";
+        ITEMS.add(Resume.newInstance("a", tempUserID));
+        ITEMS.add(Resume.newInstance("b", tempUserID));
+        ITEMS.add(Resume.newInstance("c", tempUserID));
         recyclerView.setAdapter(new ResumeListAdapter(ITEMS, mListener));
         return view;
     }

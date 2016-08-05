@@ -4,14 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.ArrayAdapter;
 
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 /**
  * Created by zhang on 7/12/2016.
  */
-public class JobSeeker{
+public class JobSeeker {
+    public static final String PATH = "JobSeeker";
+
     @Exclude
     private String key;
 
@@ -24,6 +29,10 @@ public class JobSeeker{
 
     public JobSeeker() {
         // empty constructor required by Jackson
+    }
+
+    public static DatabaseReference getRefernce() {
+        return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
     public static JobSeeker newInstance(String key) {

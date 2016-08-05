@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.Resume;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -49,7 +48,6 @@ import java.util.ArrayList;
 public class ResumeFragment extends ContainedFragment implements ChildEventListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String TAG = "ResumeFragment";
-    public static final String PATH = "resumes";
 
     private Callback mCallback;
 
@@ -85,10 +83,10 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
         setHasOptionsMenu(true);
         mResumes = new ArrayList<>();
         mResumeAdapter = new ResumeAdapter(getContext());
-        mRef = FirebaseDatabase.getInstance().getReference()
-                .child(JobSeekerActivity.PATH).child(mCallback.getUserID()).child(PATH);
-        mRef.addChildEventListener(this);
-        mRef.push().setValue(Resume.newInstance("first resume"));
+        mRef = Resume.getReference();
+        mRef.orderByChild("jobSeekerKey").equalTo(mCallback.getUserID())
+                .addChildEventListener(this);
+        mRef.push().setValue(Resume.newInstance("first resume", mCallback.getUserID()));
     }
 
     @Override
@@ -196,7 +194,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Resume created = Resume.newInstance(editText.getText().toString());
+                                Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getUserID());
                                 mRef.push().setValue(created);
 //                                mResumes.add(created);
 //                                switchTo(mResumes.size() - 1);
