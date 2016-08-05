@@ -3,6 +3,8 @@ package com.fredzqm.jobee.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,32 +14,55 @@ import java.util.Map;
 /**
  * Helper class for providing sample title for user interfaces created by
  * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
+ * <p/>
  */
 public class Job implements Parcelable {
+    @Exclude
+    private String key;
 
-    public String id;
-    public String title;
-    public String company;
-    public String city;
-    public String details;
+    private String id;
+    private String title;
+    private String company;
+    private String city;
+    private String details;
+    private Date date;
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Date date;
-
-    public Job(){
+    public Job() {
         // required constructor for Jackson
     }
 
+    // ---------------------- static methods to load data
+
+    public Job(String id, String title, String city, String company, String details) {
+        this.id = id;
+        this.title = title;
+        this.city = city;
+        this.details = details;
+        this.company = company;
+        this.date = new Date();
+    }
+
+    /**
+     * An array of sample (dummy) items.
+     */
+    public static final List<Job> ITEMS = new ArrayList<Job>();
+
+    /**
+     * A map of sample (dummy) items, by ID.
+     */
+    public static final Map<String, Job> ITEM_MAP = new HashMap<String, Job>();
+
+    private static final int COUNT = 25;
+
+    static {
+        // Add some sample items.
+        for (int i = 1; i <= COUNT; i++) {
+            addItem(createDummyItem(i));
+        }
+    }
+
     protected Job(Parcel in) {
+        key = in.readString();
         id = in.readString();
         title = in.readString();
         company = in.readString();
@@ -57,22 +82,27 @@ public class Job implements Parcelable {
         }
     };
 
-    @Override
-    public int describeContents() {
-        return 0;
+    private static void addItem(Job item) {
+        ITEMS.add(item);
+        ITEM_MAP.put(item.id, item);
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(title);
-        parcel.writeString(company);
-        parcel.writeString(city);
-        parcel.writeString(details);
+    private static Job createDummyItem(int position) {
+        return new Job(String.valueOf(position),
+                "Item " + position, "city " + position, "company " + position, makeDetails(position));
     }
+
+    private static String makeDetails(int position) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Details about Item: ").append(position);
+        for (int i = 0; i < position; i++) {
+            builder.append("\nMore details information here.");
+        }
+        return builder.toString();
+    }
+
 
     // ---------- getters and setters
-
     public String getCity() {
         return city;
     }
@@ -113,54 +143,28 @@ public class Job implements Parcelable {
         this.details = details;
     }
 
-
-    // ---------------------- static methods to load data
-
-    public Job(String id, String title, String city, String company, String details) {
-        this.id = id;
-        this.title = title;
-        this.city = city;
-        this.details = details;
-        this.company = company;
-        this.date = new Date();
+    public Date getDate() {
+        return date;
     }
 
-    /**
-     * An array of sample (dummy) items.
-     */
-    public static final List<Job> ITEMS = new ArrayList<Job>();
-
-    /**
-     * A map of sample (dummy) items, by ID.
-     */
-    public static final Map<String, Job> ITEM_MAP = new HashMap<String, Job>();
-
-    private static final int COUNT = 25;
-
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
-        }
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    private static void addItem(Job item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    private static Job createDummyItem(int position) {
-        return new Job(String.valueOf(position),
-                "Item " + position, "city " + position, "company " + position , makeDetails(position));
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(key);
+        parcel.writeString(id);
+        parcel.writeString(title);
+        parcel.writeString(company);
+        parcel.writeString(city);
+        parcel.writeString(details);
     }
-
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
-    }
-
 }

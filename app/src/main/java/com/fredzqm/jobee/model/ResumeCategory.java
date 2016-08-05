@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by zhang on 7/13/2016.
  */
-public class ResumeCategory implements Parcelable{
+public class ResumeCategory {
     private String type;
     private ArrayList<String> details;
 
@@ -65,32 +65,4 @@ public class ResumeCategory implements Parcelable{
         details.remove(position);
     }
 
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(type);
-        parcel.writeStringList(details);
-    }
-
-    protected ResumeCategory(Parcel in) {
-        type = in.readString();
-        details = in.createStringArrayList();
-    }
-
-    public static final Creator<ResumeCategory> CREATOR = new Creator<ResumeCategory>() {
-        @Override
-        public ResumeCategory createFromParcel(Parcel in) {
-            return new ResumeCategory(in);
-        }
-
-        @Override
-        public ResumeCategory[] newArray(int size) {
-            return new ResumeCategory[size];
-        }
-    };
 }

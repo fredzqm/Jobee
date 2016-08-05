@@ -3,10 +3,15 @@ package com.fredzqm.jobee.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 /**
  * Created by zhang on 7/12/2016.
  */
-public class Recruiter implements Parcelable {
+public class Recruiter {
+    @Exclude
+    private String key;
+
     private String emailAccount;
     private String name;
     private String company;
@@ -15,27 +20,13 @@ public class Recruiter implements Parcelable {
         // empty constructor required by Jackson
     }
 
-    public Recruiter(String emailAccount) {
-        this.emailAccount = emailAccount;
+    public static Recruiter newInstance(String userID) {
+        Recruiter recruiter = new Recruiter();
+        recruiter.emailAccount = userID;
+        return recruiter;
     }
 
-    protected Recruiter(Parcel in) {
-        emailAccount = in.readString();
-        name = in.readString();
-        company = in.readString();
-    }
-
-    public static final Creator<Recruiter> CREATOR = new Creator<Recruiter>() {
-        @Override
-        public Recruiter createFromParcel(Parcel in) {
-            return new Recruiter(in);
-        }
-
-        @Override
-        public Recruiter[] newArray(int size) {
-            return new Recruiter[size];
-        }
-    };
+    // --------- getters and setters
 
     public String getName() {
         return name;
@@ -43,14 +34,6 @@ public class Recruiter implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
     }
 
     public String getEmailAccount() {
@@ -61,19 +44,19 @@ public class Recruiter implements Parcelable {
         this.emailAccount = emailAccount;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public String getCompany() {
+        return company;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(emailAccount);
-        parcel.writeString(name);
-        parcel.writeString(company);
+    public void setCompany(String company) {
+        this.company = company;
     }
 
-    public static Recruiter createNewAccount(String userID) {
-        return new Recruiter(userID);
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

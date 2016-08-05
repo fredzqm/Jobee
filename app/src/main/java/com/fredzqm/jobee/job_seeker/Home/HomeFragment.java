@@ -118,7 +118,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     public void onDataChange(DataSnapshot dataSnapshot) {
         mAccount = dataSnapshot.getValue(JobSeeker.class);
         if (mAccount == null) {
-            mAccount = JobSeeker.createNewAccount(mCallback.getUserID());
+            mAccount = JobSeeker.newInstance(mCallback.getUserID());
             mRef.setValue(mAccount);
         } else {
             nameEditText.setText(mAccount.getName());

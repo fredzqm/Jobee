@@ -74,7 +74,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
         companyEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_company);
         mSaveChangesButton = (Button) view.findViewById(R.id.re_home_save_changes);
 
-        mAccount = new Recruiter(mCallback.getUserID());
+        mAccount = Recruiter.newInstance(mCallback.getUserID());
         nameEditText.setText(mAccount.getName());
         emailEditText.setText(mAccount.getEmailAccount());
         companyEditText.setText(mAccount.getCompany());
@@ -115,7 +115,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     public void onDataChange(DataSnapshot dataSnapshot) {
         mAccount = dataSnapshot.getValue(Recruiter.class);
         if (mAccount == null) {
-            mAccount = Recruiter.createNewAccount(mCallback.getUserID());
+            mAccount = Recruiter.newInstance(mCallback.getUserID());
             mRef.setValue(mAccount);
         } else {
             nameEditText.setText(mAccount.getName());

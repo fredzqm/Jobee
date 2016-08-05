@@ -29,6 +29,26 @@ public class Resume implements Parcelable {
         resumeCategories = new ArrayList<>();
     }
 
+    protected Resume(Parcel in) {
+        key = in.readString();
+        resumeName = in.readString();
+        name = in.readString();
+        major = in.readString();
+        address = in.readString();
+    }
+
+    public static final Creator<Resume> CREATOR = new Creator<Resume>() {
+        @Override
+        public Resume createFromParcel(Parcel in) {
+            return new Resume(in);
+        }
+
+        @Override
+        public Resume[] newArray(int size) {
+            return new Resume[size];
+        }
+    };
+
     public static Resume newInstance(String resumeName) {
         Resume resume = new Resume();
         resume.resumeName = resumeName;
@@ -99,41 +119,6 @@ public class Resume implements Parcelable {
         this.resumeCategories = resumeCategories;
     }
 
-    protected Resume(Parcel in) {
-        key = in.readString();
-        resumeName = in.readString();
-        name = in.readString();
-        major = in.readString();
-        address = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(key);
-        dest.writeString(resumeName);
-        dest.writeString(name);
-        dest.writeString(major);
-        dest.writeString(address);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<Resume> CREATOR = new Creator<Resume>() {
-        @Override
-        public Resume createFromParcel(Parcel in) {
-            return new Resume(in);
-        }
-
-        @Override
-        public Resume[] newArray(int size) {
-            return new Resume[size];
-        }
-    };
-
-
     public int size() {
         return resumeCategories.size();
     }
@@ -162,4 +147,17 @@ public class Resume implements Parcelable {
         return resumeCategories.remove(i);
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(key);
+        parcel.writeString(resumeName);
+        parcel.writeString(name);
+        parcel.writeString(major);
+        parcel.writeString(address);
+    }
 }
