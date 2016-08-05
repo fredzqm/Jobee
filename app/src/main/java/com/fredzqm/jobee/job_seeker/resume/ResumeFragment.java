@@ -101,6 +101,7 @@ public class ResumeFragment extends ContainedFragment {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mResumeAdapter);
         mRecyclerView.setHasFixedSize(false);
+        mCallback.getFab().show();
         return view;
     }
 
@@ -241,6 +242,5 @@ public class ResumeFragment extends ContainedFragment {
      */
     public interface Callback {
         FloatingActionButton getFab();
-
     }
 }
