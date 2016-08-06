@@ -151,28 +151,25 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                                 String str = editText.getText().toString();
                                 if (view == mTypeTextView) {
                                     mResumeCategory.setType(str);
-                                    notifyDataSetChanged();
                                 } else if (view == mAddButton) {
                                     mResumeCategory.add(str);
-                                    appendDetailToListView(str);
                                 } else { // detail in the list
                                     mResumeCategory.set(position, str);
-                                    TextView textView = (TextView) mListView.getChildAt(position);
-                                    textView.setText(str);
                                 }
+                                mRef.setValue(mResume);
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)
                         .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if (view == mTypeTextView) {
-                                    mResume.remove(mResumeCategory);
-                                    notifyDataSetChanged();
-                                } else if (view == mAddButton) {
-                                } else { // detail in the list
-                                    mResumeCategory.remove(position);
-                                    updateUI();
+                                if (view != mAddButton) {
+                                    if (view == mTypeTextView) {
+                                        mResume.remove(mResumeCategory);
+                                    } else { // detail in the list
+                                        mResumeCategory.remove(position);
+                                    }
+                                    mRef.setValue(mResume);
                                 }
                             }
                         })
