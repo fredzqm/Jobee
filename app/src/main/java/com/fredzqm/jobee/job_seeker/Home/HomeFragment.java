@@ -59,6 +59,12 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRef.removeEventListener(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.js_home_frag, container, false);

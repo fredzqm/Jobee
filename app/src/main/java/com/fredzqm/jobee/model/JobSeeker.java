@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public class JobSeeker {
     public static final String PATH = "JobSeeker";
+    public static final String JOB_SEEKER_KEY = "jobSeekerKey";
 
     @Exclude
     private String key;
@@ -23,7 +24,6 @@ public class JobSeeker {
     private String emailAccount;
     private String name;
 
-    private ArrayList<String> resumeKeys;
     private String address;
     private String major;
 
@@ -83,14 +83,6 @@ public class JobSeeker {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    public ArrayList<String> getResumeKeys() {
-        return resumeKeys;
-    }
-
-    public void setResumeKeys(ArrayList<String> resumeKeys) {
-        this.resumeKeys = resumeKeys;
     }
 
 }

@@ -26,12 +26,13 @@ import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Resume;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -59,7 +60,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
 
     private ArrayList<Resume> mResumes;
     private int curIndex;
-    private DatabaseReference mRef;
+    private DatabaseReference mResumeRef;
 
 
     public ResumeFragment() {
@@ -83,10 +84,16 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
         setHasOptionsMenu(true);
         mResumes = new ArrayList<>();
         mResumeAdapter = new ResumeAdapter(getContext());
-        mRef = Resume.getReference();
-        mRef.orderByChild("jobSeekerKey").equalTo(mCallback.getUserID())
+        mResumeRef = Resume.getReference();
+        mResumeRef.orderByChild(JobSeeker.JOB_SEEKER_KEY).equalTo(mCallback.getUserID())
                 .addChildEventListener(this);
-        mRef.push().setValue(Resume.newInstance("first resume", mCallback.getUserID()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mResumeRef.orderByChild(JobSeeker.JOB_SEEKER_KEY).equalTo(mCallback.getUserID())
+                .removeEventListener(this);
     }
 
     @Override
@@ -155,9 +162,6 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         final EditText editText = new EditText(getContext());
         switch (item.getItemId()) {
             case R.id.js_action_logout:
@@ -177,12 +181,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
                         .show();
                 break;
             case R.id.js_action_delete:
-                mRef.child(mResumes.get(curIndex).getKey()).removeValue();
-//                mResumes.remove(mResumeAdapter.getResume());
-//                if (mResumes.isEmpty()) {
-//                    mResumes.add(Resume.newInstance("Resume 1"));
-//                }
-//                switchTo(0);
+                mResumeRef.child(mResumes.get(curIndex).getKey()).removeValue();
                 break;
             case R.id.js_action_add_resume:
                 editText.setHint("Resume name");
@@ -195,9 +194,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getUserID());
-                                mRef.push().setValue(created);
-//                                mResumes.add(created);
-//                                switchTo(mResumes.size() - 1);
+                                mResumeRef.push().setValue(created);
                             }
                         })
                         .show();
@@ -210,7 +207,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
 
     private void switchTo(int index) {
         curIndex = index;
-        mResumeAdapter.setResume(mResumes.get(index), mRef);
+        mResumeAdapter.setResume(mResumes.get(index), mResumeRef);
         mResumeAdapter.notifyDataSetChanged();
         mSwitchAdapter.notifyDataSetChanged();
         mSpinner.setSelection(index);
@@ -247,7 +244,6 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
         String key = dataSnapshot.getKey();
-        Resume changedTo = dataSnapshot.getValue(Resume.class);
         for (int i = 0; i < mResumes.size(); i++) {
             Resume r = mResumes.get(i);
             if (key.equals(r.getKey())) {
@@ -311,7 +307,6 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
      */
     public interface Callback {
         FloatingActionButton getFab();
-
         String getUserID();
     }
 }

@@ -23,7 +23,6 @@ public class Recruiter {
     private String name;
 
     private String company;
-    private ArrayList<String> jobKeys;
 
     public Recruiter(){
         // empty constructor required by Jackson
@@ -73,11 +72,4 @@ public class Recruiter {
         this.key = key;
     }
 
-    public ArrayList<String> getJobKeys() {
-        return jobKeys;
-    }
-
-    public void setJobKeys(ArrayList<String> jobKeys) {
-        this.jobKeys = jobKeys;
-    }
 }
