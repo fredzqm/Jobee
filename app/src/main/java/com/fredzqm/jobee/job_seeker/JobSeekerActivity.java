@@ -24,9 +24,10 @@ import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
+import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
+        ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
         AppliedJobListFragment.Callback , JobDetailFragment.Callback {
     private static final String TAG = "JobSeekerActivity";
 

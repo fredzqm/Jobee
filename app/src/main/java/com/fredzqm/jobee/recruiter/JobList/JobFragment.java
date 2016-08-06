@@ -1,10 +1,13 @@
 package com.fredzqm.jobee.recruiter.JobList;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
@@ -25,6 +29,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.w3c.dom.Text;
 
@@ -96,6 +102,9 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         mDateTextView.setOnClickListener(this);
         mCityTextView.setOnClickListener(this);
         mDetailsTextView.setOnClickListener(this);
+
+        mCallback.getFab().show();
+        
         return view;
     }
 
@@ -202,6 +211,29 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         Log.d(TAG, "onCancelled " + databaseError.getMessage());
     }
 
+    @Override
+    public void clickFab() {
+        IntentIntegrator integrator = new IntentIntegrator((Activity) mCallback);
+        integrator.setOrientationLocked(false);
+        integrator.initiateScan();
+    }
+
+
+    // Get the results:
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText((Context) mCallback, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText((Context) mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -213,5 +245,6 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
+        FloatingActionButton getFab();
     }
 }

@@ -136,6 +136,12 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getSupportFragmentManager().findFragmentById(R.id.re_fragment_container).onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
     public void showJobDetail(String jobKey) {
         swapFragment(JobFragment.newInstance(jobKey), "edit job");
     }
