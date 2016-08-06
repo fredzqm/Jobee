@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -82,7 +83,8 @@ public class LoginActivity extends AppCompatActivity
         implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult>, GoogleApiClient.OnConnectionFailedListener {
     public static final String TAG = "LoginActivity";
     public static final String USERID = "USERID";
-    public static final String LOGIN_METHOD = "LoginMethod";
+    public static final String PREFS = "SHARED_PREFERENCE";
+    private static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
 
     private static final int REQUEST_MAIN_ACTIVITY = 1;
     private static final int REQUEST_READ_CONTACTS_PERMISSION = 2;
@@ -101,7 +103,6 @@ public class LoginActivity extends AppCompatActivity
      */
     private GoogleApiClient client;
     private FirebaseAuth mAuth;
-    private boolean mIsRecruiter;
 
     private String mLoggedIn = null;
     private String mLoggingMethod = null;
@@ -132,10 +133,15 @@ public class LoginActivity extends AppCompatActivity
             }
         });
 
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        mAccoutnTypeSwitch.setChecked(prefs.getBoolean(ACCOUNT_TYPE, false));
         mAccoutnTypeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mIsRecruiter = b;
+                SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(ACCOUNT_TYPE, b);
+                editor.commit();
             }
         });
         populateAutoComplete();
@@ -230,7 +236,8 @@ public class LoginActivity extends AppCompatActivity
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null && mLoggedIn == null) {
             final Intent inputIntent;
-            if (mIsRecruiter) {
+            SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+            if (prefs.getBoolean(ACCOUNT_TYPE, false)) {
                 inputIntent = new Intent(LoginActivity.this, RecruiterActivity.class);
                 mLoggedIn = Recruiter.PATH;
             } else {
