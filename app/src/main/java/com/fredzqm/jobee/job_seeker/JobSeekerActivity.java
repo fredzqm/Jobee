@@ -16,19 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
 import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
-import com.fredzqm.jobee.model.JobSeeker;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback,
-        AppliedJobFragment.Callback, JobDetailFragment.Callback {
+        AppliedJobListFragment.Callback , JobDetailFragment.Callback {
     private static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
@@ -122,7 +121,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(JobListFragment.newInstance(), null);
                 break;
             case R.id.js_nav_applied:
-                swapFragment(AppliedJobFragment.newInstance(2), null);
+                swapFragment(AppliedJobListFragment.newInstance(), null);
                 break;
             default:
                 throw new RuntimeException("Not implemented navigation bar yet");

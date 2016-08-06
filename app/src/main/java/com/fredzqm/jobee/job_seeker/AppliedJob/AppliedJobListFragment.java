@@ -1,4 +1,4 @@
-package com.fredzqm.jobee.job_seeker.JobList;
+package com.fredzqm.jobee.job_seeker.AppliedJob;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,9 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.Job;
 
 /**
  * A fragment representing a list of Items.
@@ -22,12 +22,12 @@ import com.fredzqm.jobee.ContainedFragment;
  * Activities containing this fragment MUST implement the {@link Callback}
  * interface.
  */
-public class JobListFragment extends ContainedFragment {
+public class AppliedJobListFragment extends ContainedFragment {
 
     private Callback mListener;
 
-    public static JobListFragment newInstance() {
-        JobListFragment fragment = new JobListFragment();
+    public static AppliedJobListFragment newInstance() {
+        AppliedJobListFragment fragment = new AppliedJobListFragment();
         return fragment;
     }
 
@@ -35,36 +35,7 @@ public class JobListFragment extends ContainedFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public JobListFragment() {
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.js_joblist, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
-                .getActionView();
-//        searchView.setSearchableInfo(searchManager
-//                .getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public AppliedJobListFragment() {
     }
 
     @Override
@@ -75,7 +46,7 @@ public class JobListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
+        recyclerView.setAdapter(new AppliedJobListAdapter(Job.ITEMS, mListener));
         return view;
     }
 

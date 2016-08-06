@@ -101,10 +101,6 @@ public class JobDetailFragment extends ContainedFragment {
         mCallback = null;
     }
 
-    @Override
-    public void clickFab() {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this

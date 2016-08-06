@@ -6,26 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment.Callback;
+import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment.Callback;
+import com.fredzqm.jobee.model.Job;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Job} and makes a call to the
- * specified {@link AppliedJobFragment.Callback}.
- * TODO: Replace the implementation with code for your data type.
+ * specified {@link Callback}.
  */
-public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapter.ViewHolder> {
-    public final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd");
-    private final List<Job> mValues;
-    private final AppliedJobFragment.Callback mListener;
+public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAdapter.ViewHolder> {
+    private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    public MyAppliedJobAdapter(List<Job> items, Callback listener) {
+    private final List<Job> mValues;
+    private final Callback mCallback;
+
+    public AppliedJobListAdapter(List<Job> items, Callback callback) {
         mValues = items;
-        mListener = listener;
+        mCallback = callback;
     }
 
     @Override
@@ -60,12 +60,21 @@ public class MyAppliedJobAdapter extends RecyclerView.Adapter<MyAppliedJobAdapte
             mCompanyTextView = (TextView) view.findViewById(R.id.js_list_item_company);
             mDateTextView = (TextView) view.findViewById(R.id.js_list_item_date);
             mCityTextView = (TextView) view.findViewById(R.id.js_list_item_city);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mCallback) {
+                        mCallback.showJobDetail(mJob);
+                    }
+                }
+            });
         }
 
         public void updateView() {
             mTitleTextView.setText(mJob.getTitle());
             mCompanyTextView.setText(mJob.getCompany());
-            mDateTextView.setText(DATEFORMAT.format(mJob.getDate()));
+            mDateTextView.setText(DATAFORMAT.format(mJob.getDate()));
             mCityTextView.setText(mJob.getCity());
         }
 
