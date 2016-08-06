@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,10 @@ import android.widget.TextView;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,8 +38,9 @@ import java.util.Date;
  * Use the {@link JobFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class JobFragment extends ContainedFragment implements View.OnClickListener {
-    private static final String JOB_ARGUMENT = "param1";
+public class JobFragment extends ContainedFragment implements View.OnClickListener, ValueEventListener {
+    private static final String TAG = "JobFragment";
+    private static final String JOB_ARGUMENT = "jobKey";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
     private Job mJob;
@@ -45,6 +51,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     private TextView mCityTextView;
     private EditText mDetailsTextView;
     private boolean mEditing = false;
+    private DatabaseReference mRef;
 
     public JobFragment() {
         // Required empty public constructor
@@ -57,10 +64,10 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
      * @param job Parameter 1.
      * @return A new instance of fragment JobFragment.
      */
-    public static JobFragment newInstance(Job job) {
+    public static JobFragment newInstance(String job) {
         JobFragment fragment = new JobFragment();
         Bundle args = new Bundle();
-        args.putParcelable(JOB_ARGUMENT, job);
+        args.putString(JOB_ARGUMENT, job);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,9 +75,9 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mJob = getArguments().getParcelable(JOB_ARGUMENT);
-        }
+        String jobKey = getArguments().getString(JOB_ARGUMENT);
+        mRef = Job.getRefernce().child(jobKey);
+        mRef.addValueEventListener(this);
     }
 
     @Override
@@ -83,13 +90,9 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         mCityTextView = (TextView) view.findViewById(R.id.re_job_detail_city);
         mDetailsTextView = (EditText) view.findViewById(R.id.re_job_detail_detail);
 
-        mTitleTextView.setText(mJob.getTitle());
         mTitleTextView.setOnClickListener(this);
-        mDateTextView.setText(DATE_FORMAT.format(mJob.getDate()));
         mDateTextView.setOnClickListener(this);
-        mCityTextView.setText(mJob.getCity());
         mCityTextView.setOnClickListener(this);
-        mDetailsTextView.setText(mJob.getDetails());
         mDetailsTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -104,9 +107,9 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
             @Override
             public void afterTextChanged(Editable editable) {
                 mJob.setDetails(mDetailsTextView.getText().toString());
+                mRef.setValue(mJob);
             }
         });
-        mTitleTextView.setText(mJob.getTitle());
         return view;
     }
 
@@ -131,7 +134,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                             Date newDate = new Date(year - 1900, month, day);
                             mJob.setDate(newDate);
-                            mDateTextView.setText(DATE_FORMAT.format(newDate));
+                            mRef.setValue(mJob);
                         }
                     }, year, month, day);
                 }
@@ -158,11 +161,10 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                             String str = editText.getText().toString();
                             if (view == mTitleTextView) {
                                 mJob.setTitle(str);
-                                mTitleTextView.setText(str);
                             } else if (view == mCityTextView) {
                                 mJob.setCity(str);
-                                mCityTextView.setText(str);
                             }
+                            mRef.setValue(mJob);
                         }
                     })
                     .setNegativeButton(android.R.string.no, null)
@@ -196,8 +198,17 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     }
 
     @Override
-    public void clickFab() {
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        mJob = dataSnapshot.getValue(Job.class);
+        mTitleTextView.setText(mJob.getTitle());
+        mDateTextView.setText(DATE_FORMAT.format(mJob.getDate()));
+        mCityTextView.setText(mJob.getCity());
+        mDetailsTextView.setText(mJob.getDetails());
+    }
 
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled " + databaseError.getMessage());
     }
 
     /**

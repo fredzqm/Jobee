@@ -136,8 +136,8 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void showJobDetail(Job job) {
-        swapFragment(JobFragment.newInstance(job), "edit job");
+    public void showJobDetail(String jobKey) {
+        swapFragment(JobFragment.newInstance(jobKey), "edit job");
     }
 
     @Override

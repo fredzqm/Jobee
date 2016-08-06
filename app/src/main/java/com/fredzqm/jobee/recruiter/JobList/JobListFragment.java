@@ -95,7 +95,7 @@ public class JobListFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void showJobDetail(Job mItem);
+        void showJobDetail(String jobKey);
         String getUserID();
     }
 }

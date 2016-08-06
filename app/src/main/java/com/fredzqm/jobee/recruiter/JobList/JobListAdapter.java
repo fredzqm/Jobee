@@ -106,7 +106,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         public final TextView mCityTextView;
         public final TextView mDateTextView;
 
-        public com.fredzqm.jobee.model.Job mJob;
+        public Job mJob;
 
         public ViewHolder(View view) {
             super(view);
@@ -118,7 +118,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
                 @Override
                 public void onClick(View v) {
                     if (null != mCallback) {
-                        mCallback.showJobDetail(mJob);
+                        mCallback.showJobDetail(mJob.getKey());
                     }
                 }
             });
