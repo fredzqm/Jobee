@@ -75,7 +75,7 @@ public class JobListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
+        recyclerView.setAdapter(new JobListAdapter(mListener));
         return view;
     }
 

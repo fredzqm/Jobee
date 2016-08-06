@@ -1,6 +1,7 @@
 package com.fredzqm.jobee.recruiter.ResumeList;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +10,30 @@ import android.widget.TextView;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment.Callback;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Resume} and makes a call to the
  * specified {@link Callback}.
  */
-public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.ViewHolder> {
+public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.ViewHolder> implements ChildEventListener {
 
-    private final List<Resume> mValues;
+    private final List<Resume> mResumes;
     private final Callback mCallback;
 
-    public ResumeListAdapter(List<Resume> items, Callback callback) {
-        mValues = items;
+    private DatabaseReference mRef;
+
+    public ResumeListAdapter(Callback callback) {
+        mResumes = new ArrayList<>();
         mCallback = callback;
+        mRef = Resume.getReference();
+        mRef.addChildEventListener(this);
     }
 
     @Override
@@ -35,13 +45,57 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mResume = mValues.get(position);
+        holder.mResume = mResumes.get(position);
         holder.updateView();
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mResumes.size();
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Resume added = dataSnapshot.getValue(Resume.class);
+        String key = dataSnapshot.getKey();
+        added.setKey(key);
+        mResumes.add(0, added);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        Resume changedTo = dataSnapshot.getValue(Resume.class);
+        String key = dataSnapshot.getKey();
+        for (int i = 0; i < mResumes.size(); i++) {
+            if (key.equals( mResumes.get(i).getKey())) {
+                mResumes.set(i, changedTo);
+                notifyDataSetChanged();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+        String key = dataSnapshot.getKey();
+        for (int i = 0; i < mResumes.size(); i++) {
+            if (key.equals(mResumes.get(i).getKey())) {
+                mResumes.remove(i);
+                notifyDataSetChanged();
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d("Error", "onCancelled: " + databaseError.getMessage());
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

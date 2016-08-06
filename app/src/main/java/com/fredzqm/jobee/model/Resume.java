@@ -34,18 +34,6 @@ public class Resume implements Parcelable {
         resumeCategories = new ArrayList<>();
     }
 
-    public static DatabaseReference getReference() {
-        return FirebaseDatabase.getInstance().getReference().child(PATH);
-    }
-
-    protected Resume(Parcel in) {
-        key = in.readString();
-        resumeName = in.readString();
-        name = in.readString();
-        major = in.readString();
-        address = in.readString();
-    }
-
     public static Resume newInstance(String resumeName, String jobSeekerKey) {
         Resume resume = new Resume();
         resume.jobSeekerKey = jobSeekerKey;
@@ -56,6 +44,18 @@ public class Resume implements Parcelable {
         resume.add(ResumeCategory.newInstance("Education"));
         resume.add(ResumeCategory.newInstance("Experience"));
         return resume;
+    }
+
+    public static DatabaseReference getReference() {
+        return FirebaseDatabase.getInstance().getReference().child(PATH);
+    }
+
+    protected Resume(Parcel in) {
+        key = in.readString();
+        resumeName = in.readString();
+        name = in.readString();
+        major = in.readString();
+        address = in.readString();
     }
 
     public static final Creator<Resume> CREATOR = new Creator<Resume>() {

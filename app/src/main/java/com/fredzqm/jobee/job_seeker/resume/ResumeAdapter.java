@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +17,23 @@ import android.widget.TextView;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.ResumeCategory;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Random;
 
 /**
  * Created by zhang on 5/29/2016.
  */
-public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder> {
+public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder> implements ValueEventListener {
+    private static final String TAG = "ResumeAdapter";
     private Context mContext;
     private Resume mResume;
     private boolean mEditing;
+    private DatabaseReference mRef;
 
     public ResumeAdapter(Context context) {
         mContext = context;
@@ -35,10 +41,28 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
         mResume = new Resume();
     }
 
+    public void setResume(Resume resume) {
+        mResume = resume;
+        mRef = Resume.getReference().child(mResume.getKey());
+        mRef.addValueEventListener(this);
+    }
+
     public void addCategory(String category) {
         category = category.replace("\n", " ");
         mResume.add(ResumeCategory.newInstance(category));
+        if (mRef != null)
+            mRef.setValue(mResume);
+    }
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        mResume = dataSnapshot.getValue(Resume.class);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d(TAG, "onCancelled " + databaseError.getMessage());
     }
 
     @Override
@@ -56,15 +80,6 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mResume.size();
-    }
-
-    public void setResume(Resume resume, DatabaseReference reference) {
-        mResume = resume;
-        notifyDataSetChanged();
-    }
-
-    public Resume getResume() {
-        return mResume;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -128,46 +143,46 @@ public class ResumeAdapter extends RecyclerView.Adapter<ResumeAdapter.ViewHolder
                     title = "Edit";
                 }
                 new AlertDialog.Builder(mContext)
-                    .setView(editText)
-                    .setTitle(title)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            String str = editText.getText().toString();
-                            if (view == mTypeTextView) {
-                                mResumeCategory.setType(str);
-                                notifyDataSetChanged();
-                            } else if (view == mAddButton) {
-                                mResumeCategory.add(str);
-                                appendDetailToListView(str);
-                            } else { // detail in the list
-                                mResumeCategory.set(position, str);
-                                TextView textView = (TextView) mListView.getChildAt(position);
-                                textView.setText(str);
+                        .setView(editText)
+                        .setTitle(title)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String str = editText.getText().toString();
+                                if (view == mTypeTextView) {
+                                    mResumeCategory.setType(str);
+                                    notifyDataSetChanged();
+                                } else if (view == mAddButton) {
+                                    mResumeCategory.add(str);
+                                    appendDetailToListView(str);
+                                } else { // detail in the list
+                                    mResumeCategory.set(position, str);
+                                    TextView textView = (TextView) mListView.getChildAt(position);
+                                    textView.setText(str);
+                                }
                             }
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, null)
-                    .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (view == mTypeTextView) {
-                                mResume.remove(mResumeCategory);
-                                notifyDataSetChanged();
-                            } else if (view == mAddButton) {
-                            } else { // detail in the list
-                                mResumeCategory.remove(position);
-                                updateUI();
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                if (view == mTypeTextView) {
+                                    mResume.remove(mResumeCategory);
+                                    notifyDataSetChanged();
+                                } else if (view == mAddButton) {
+                                } else { // detail in the list
+                                    mResumeCategory.remove(position);
+                                    updateUI();
+                                }
                             }
-                        }
-                    })
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            mEditing = false;
-                        }
-                    })
-                    .show();
+                        })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                mEditing = false;
+                            }
+                        })
+                        .show();
             }
         }
 

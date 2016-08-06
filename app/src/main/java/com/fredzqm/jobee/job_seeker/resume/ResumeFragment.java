@@ -164,8 +164,6 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
     public boolean onOptionsItemSelected(MenuItem item) {
         final EditText editText = new EditText(getContext());
         switch (item.getItemId()) {
-            case R.id.js_action_logout:
-                break;
             case R.id.js_action_add_category:
                 editText.setHint("Category");
                 editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
@@ -207,7 +205,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
 
     private void switchTo(int index) {
         curIndex = index;
-        mResumeAdapter.setResume(mResumes.get(index), mResumeRef);
+        mResumeAdapter.setResume(mResumes.get(index));
         mResumeAdapter.notifyDataSetChanged();
         mSwitchAdapter.notifyDataSetChanged();
         mSpinner.setSelection(index);
@@ -227,6 +225,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         String key = dataSnapshot.getKey();
         Resume changedTo = dataSnapshot.getValue(Resume.class);
+        changedTo.setKey(key);
         for (int i = 0; i < mResumes.size(); i++) {
             Resume r = mResumes.get(i);
             if (key.equals(r.getKey())) {

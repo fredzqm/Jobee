@@ -104,9 +104,6 @@ public class ResumeFragment extends ContainedFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         final EditText editText = new EditText(getContext());
         switch (item.getItemId()) {
             case R.id.re_action_decide_later:

@@ -12,9 +12,6 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -23,7 +20,7 @@ import java.util.List;
  */
 public class ResumeListFragment extends ContainedFragment {
 
-    private Callback mListener;
+    private Callback mCallback;
 
     public static ResumeListFragment newInstance() {
         ResumeListFragment fragment = new ResumeListFragment();
@@ -52,13 +49,7 @@ public class ResumeListFragment extends ContainedFragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // TODO: connect to firebase
-        List<Resume> ITEMS = new ArrayList<>();
-        String tempUserID = "tempUserID";
-        ITEMS.add(Resume.newInstance("a", tempUserID));
-        ITEMS.add(Resume.newInstance("b", tempUserID));
-        ITEMS.add(Resume.newInstance("c", tempUserID));
-        recyclerView.setAdapter(new ResumeListAdapter(ITEMS, mListener));
+        recyclerView.setAdapter(new ResumeListAdapter(mCallback));
         return view;
     }
 
@@ -67,7 +58,7 @@ public class ResumeListFragment extends ContainedFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Callback) {
-            mListener = (Callback) context;
+            mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement Callback");
@@ -77,7 +68,7 @@ public class ResumeListFragment extends ContainedFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mCallback = null;
     }
 
     @Override
