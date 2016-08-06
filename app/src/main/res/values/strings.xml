@@ -58,4 +58,5 @@
     <string name="invalid_address">invalid address</string>
     <string name="no_internet">No internet connection, cannot verify address</string>
     <string name="empty_address">address can\'t be empty</string>
+    <string name="add_new_opening">Add new opening</string>
 </resources>

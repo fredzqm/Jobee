@@ -16,15 +16,16 @@ import java.util.Map;
 /**
  * Helper class for providing sample title for user interfaces created by
  * Android template wizards.
- * <p/>
+ * <p>
  */
 public class Job implements Parcelable {
     public static final String PATH = "job";
+    public static final String RECRUITER_KEY = "recruiterKey";
 
     @Exclude
     private String key;
 
-    private String id;
+    private String recruiterKey;
     private String title;
     private String company;
     private String city;
@@ -39,10 +40,20 @@ public class Job implements Parcelable {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
+    public static Job newInstance(String userID) {
+        Job job = new Job();
+        job.recruiterKey = userID;
+        job.title = "title";
+        job.company ="company";
+        job.city = "city";
+        job.details = "details";
+        job.date = new Date();
+        return job;
+    }
+
     // ---------------------- static methods to load data
 
     public Job(String id, String title, String city, String company, String details) {
-        this.id = id;
         this.title = title;
         this.city = city;
         this.details = details;
@@ -71,7 +82,6 @@ public class Job implements Parcelable {
 
     protected Job(Parcel in) {
         key = in.readString();
-        id = in.readString();
         title = in.readString();
         company = in.readString();
         city = in.readString();
@@ -92,7 +102,6 @@ public class Job implements Parcelable {
 
     private static void addItem(Job item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
     }
 
     private static Job createDummyItem(int position) {
@@ -117,14 +126,6 @@ public class Job implements Parcelable {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -159,7 +160,21 @@ public class Job implements Parcelable {
         this.date = date;
     }
 
+    public String getRecruiterKey() {
+        return recruiterKey;
+    }
 
+    public void setRecruiterKey(String recruiterKey) {
+        this.recruiterKey = recruiterKey;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     @Override
     public int describeContents() {
@@ -169,10 +184,10 @@ public class Job implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(key);
-        parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(company);
         parcel.writeString(city);
         parcel.writeString(details);
     }
+
 }

@@ -426,11 +426,15 @@ public class LoginActivity extends AppCompatActivity
             } else {
                 showLoginError("Rosefire sign in failed!");
             }
-        } else if (requestCode == REQUEST_MAIN_ACTIVITY && resultCode == Activity.RESULT_OK) {
-            showProgress(false);
-            mAuth.signOut();
-            mLoggingMethod = null;
-            mLoggedIn = null;
+        } else if (requestCode == REQUEST_MAIN_ACTIVITY ) {
+            if (resultCode == Activity.RESULT_OK) {
+                showProgress(false);
+                mAuth.signOut();
+                mLoggingMethod = null;
+                mLoggedIn = null;
+            }else{
+                finish();
+            }
         }
     }
 

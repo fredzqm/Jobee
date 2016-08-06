@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * A fragment representing a list of Items.
@@ -20,7 +24,7 @@ import com.fredzqm.jobee.model.Job;
  */
 public class JobListFragment extends ContainedFragment {
 
-    private Callback mListener;
+    private Callback mCallback;
 
     public static JobListFragment newInstance() {
         JobListFragment fragment = new JobListFragment();
@@ -35,28 +39,39 @@ public class JobListFragment extends ContainedFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.recyclerview, container, false);
 
-        Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new JobListAdapter(Job.ITEMS, mListener));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new JobListAdapter(mCallback));
+        setHasOptionsMenu(true);
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.re_job, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.re_action_add_job:
+                Job.getRefernce().push().setValue(Job.newInstance(mCallback.getUserID()));
+                break;
+            default:
+                throw new RuntimeException("Not implemented");
+        }
+        return true;
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Callback) {
-            mListener = (Callback) context;
+            mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement Callback");
@@ -66,12 +81,7 @@ public class JobListFragment extends ContainedFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void clickFab() {
-
+        mCallback = null;
     }
 
     /**
@@ -86,5 +96,6 @@ public class JobListFragment extends ContainedFragment {
      */
     public interface Callback {
         void showJobDetail(Job mItem);
+        String getUserID();
     }
 }
