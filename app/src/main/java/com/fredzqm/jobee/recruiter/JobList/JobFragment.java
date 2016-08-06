@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,7 +51,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     private TextView mTitleTextView;
     private TextView mDateTextView;
     private TextView mCityTextView;
-    private EditText mDetailsTextView;
+    private TextView mDetailsTextView;
     private boolean mEditing = false;
     private DatabaseReference mRef;
 
@@ -88,28 +90,12 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         mTitleTextView = (TextView) view.findViewById(R.id.re_job_detail_title);
         mDateTextView = (TextView) view.findViewById(R.id.re_job_detail_date);
         mCityTextView = (TextView) view.findViewById(R.id.re_job_detail_city);
-        mDetailsTextView = (EditText) view.findViewById(R.id.re_job_detail_detail);
+        mDetailsTextView = (TextView) view.findViewById(R.id.re_job_detail_detail);
 
         mTitleTextView.setOnClickListener(this);
         mDateTextView.setOnClickListener(this);
         mCityTextView.setOnClickListener(this);
-        mDetailsTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mJob.setDetails(mDetailsTextView.getText().toString());
-                mRef.setValue(mJob);
-            }
-        });
+        mDetailsTextView.setOnClickListener(this);
         return view;
     }
 
@@ -149,6 +135,9 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
             } else if (view == mCityTextView) {
                 editText.setHint(mJob.getCity());
                 title = "Edit city";
+            } else if (view == mDetailsTextView) {
+                editText.setHint(mJob.getDetails());
+                title = "Edit detail";
             } else {
                 throw new RuntimeException("not implemented!");
             }
@@ -163,6 +152,8 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                                 mJob.setTitle(str);
                             } else if (view == mCityTextView) {
                                 mJob.setCity(str);
+                            } else if (view == mDetailsTextView){
+                                mJob.setDetails(str);
                             }
                             mRef.setValue(mJob);
                         }
@@ -216,7 +207,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
