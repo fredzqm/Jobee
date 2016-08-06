@@ -273,24 +273,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
 
     @Override
     public void clickFab() {
-        IntentIntegrator integrator = new IntentIntegrator((Activity) mCallback);
-        integrator.setOrientationLocked(false);
-        integrator.initiateScan();
-    }
-
-    // Get the results:
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                Toast.makeText((Context) mCallback, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText((Context) mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+        mCallback.showQRCode(mResumes.get(curIndex).getKey());
     }
 
 
@@ -307,5 +290,6 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
     public interface Callback {
         FloatingActionButton getFab();
         String getUserID();
+        void showQRCode(String resumeKey);
     }
 }

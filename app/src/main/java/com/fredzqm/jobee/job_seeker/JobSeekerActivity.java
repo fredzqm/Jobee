@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment;
+import com.fredzqm.jobee.job_seeker.resume.QRCodeFragment;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
@@ -28,7 +29,7 @@ import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
-        AppliedJobListFragment.Callback , JobDetailFragment.Callback {
+        AppliedJobListFragment.Callback , JobDetailFragment.Callback , QRCodeFragment.Callback{
     private static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
@@ -144,6 +145,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
+    public void showQRCode(String resumeKey) {
+        swapFragment(QRCodeFragment.newInstance(resumeKey), "QR code");
+    }
+
+    @Override
     public FloatingActionButton getFab() {
         return mFab;
     }
@@ -152,4 +158,5 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     public String getUserID() {
         return userID;
     }
+
 }
