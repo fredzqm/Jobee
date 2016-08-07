@@ -61,4 +61,5 @@
     <string name="add_new_opening">Add new opening</string>
     <string name="scan_resume_toast">Scanned resume, added to review section</string>
     <string name="resume_scan_cancelled">Resume scan cancelled</string>
+    <string name="resume_scanned">Resume scanned</string>
 </resources>

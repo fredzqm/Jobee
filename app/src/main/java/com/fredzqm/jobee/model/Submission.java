@@ -18,6 +18,7 @@ import java.util.Date;
 public class Submission implements ValueEventListener {
     public static final String PATH = "submission";
     public static final String RECRUITER_KEY = "recruiterKey";
+    public static final String JOBSEEKER_KEY = "jobSeekerKey";
 
     @Exclude
     private String key;
@@ -29,6 +30,7 @@ public class Submission implements ValueEventListener {
     private String resumeKey;
     private String jobKey;
     private String recruiterKey;
+    private String jobSeekerKey;
 
     private Date date;
 
@@ -36,11 +38,13 @@ public class Submission implements ValueEventListener {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
-    public static Submission newInstance(Job mJob, String resumeKey) {
+    public static Submission newInstance(Job mJob, String content) {
         Submission submission = new Submission();
+        String[] contents = content.split("\n");
         submission.recruiterKey = mJob.getRecruiterKey();
         submission.jobKey = mJob.getKey();
-        submission.resumeKey = resumeKey;
+        submission.resumeKey = contents[1];
+        submission.jobSeekerKey = contents[0];
         submission.date = new Date();
         return submission;
     }
@@ -90,7 +94,13 @@ public class Submission implements ValueEventListener {
         this.recruiterKey = recruiterKey;
     }
 
+    public String getJobSeekerKey() {
+        return jobSeekerKey;
+    }
 
+    public void setJobSeekerKey(String jobSeekerKey) {
+        this.jobSeekerKey = jobSeekerKey;
+    }
 
 
     @Override
