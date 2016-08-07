@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by zhang on 8/6/2016.
  */
 public class Submission {
-    public static final String PATH = "Recruiter";
+    public static final String PATH = "submission";
 
     @Exclude
     private String key;
@@ -22,6 +22,15 @@ public class Submission {
     public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
+
+    public static Submission newInstance(String jobKey, String resumeKey) {
+        Submission submission = new Submission();
+        submission.resumeKey = resumeKey;
+        submission.jobKey = jobKey;
+        submission.date = new Date();
+        return submission;
+    }
+
 
     public String getKey() {
         return key;
@@ -58,4 +67,5 @@ public class Submission {
     public static String getPATH() {
         return PATH;
     }
+
 }

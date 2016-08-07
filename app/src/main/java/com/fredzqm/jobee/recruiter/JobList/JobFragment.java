@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
+import com.fredzqm.jobee.model.Submission;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,13 +70,13 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param job Parameter 1.
+     * @param jobID Parameter 1.
      * @return A new instance of fragment JobFragment.
      */
-    public static JobFragment newInstance(String job) {
+    public static JobFragment newInstance(String jobID) {
         JobFragment fragment = new JobFragment();
         Bundle args = new Bundle();
-        args.putString(JOB_ARGUMENT, job);
+        args.putString(JOB_ARGUMENT, jobID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -200,6 +201,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         mJob = dataSnapshot.getValue(Job.class);
+        mJob.setKey(dataSnapshot.getKey());
         mTitleTextView.setText(mJob.getTitle());
         mDateTextView.setText(DATE_FORMAT.format(mJob.getDate()));
         mCityTextView.setText(mJob.getCity());
@@ -228,6 +230,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                 Toast.makeText((Context) mCallback, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText((Context) mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Submission.getReference().push().setValue(Submission.newInstance(mJob.getKey(), result.getContents()));
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
