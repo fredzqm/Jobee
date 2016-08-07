@@ -59,4 +59,6 @@
     <string name="no_internet">No internet connection, cannot verify address</string>
     <string name="empty_address">address can\'t be empty</string>
     <string name="add_new_opening">Add new opening</string>
+    <string name="scan_resume_toast">Scanned resume, added to review section</string>
+    <string name="resume_scan_cancelled">Resume scan cancelled</string>
 </resources>

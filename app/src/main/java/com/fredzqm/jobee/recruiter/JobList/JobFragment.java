@@ -227,9 +227,9 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Toast.makeText((Context) mCallback, "Cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText((Context) mCallback, R.string.resume_scan_cancelled, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText((Context) mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                Toast.makeText((Context) mCallback, R.string.scan_resume_toast, Toast.LENGTH_LONG).show();
                 Submission.getReference().push().setValue(Submission.newInstance(mJob, result.getContents()));
             }
         } else {

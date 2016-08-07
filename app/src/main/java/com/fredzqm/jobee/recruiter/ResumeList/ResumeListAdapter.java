@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
+import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment.Callback;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -24,16 +25,16 @@ import java.util.List;
  */
 public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.ViewHolder> implements ChildEventListener {
 
-    private final List<Resume> mResumes;
+    private final List<Submission> mSubmissions;
     private final Callback mCallback;
 
     private DatabaseReference mRef;
 
     public ResumeListAdapter(Callback callback) {
-        mResumes = new ArrayList<>();
+        mSubmissions = new ArrayList<>();
         mCallback = callback;
-        mRef = Resume.getReference();
-        mRef.orderByChild(Resume.RECRUITER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
+        mRef = Submission.getReference();
+        mRef.orderByChild(Submission.RECRUITER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
 
     @Override
@@ -45,32 +46,38 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mResume = mResumes.get(position);
-        holder.updateView();
+        Resume resume = mSubmissions.get(position).getResume();
+        if (resume != null) {
+            holder.mResume = mSubmissions.get(position).getResume();
+            holder.updateView();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mResumes.size();
+        return mSubmissions.size();
     }
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Resume added = dataSnapshot.getValue(Resume.class);
+        final Submission added = dataSnapshot.getValue(Submission.class);
         String key = dataSnapshot.getKey();
         added.setKey(key);
-        mResumes.add(0, added);
-        notifyDataSetChanged();
+        mSubmissions.add(0, added);
+        added.setmAdapter(this);
+        Resume.getReference().child(added.getResumeKey()).addListenerForSingleValueEvent(added);
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        Resume changedTo = dataSnapshot.getValue(Resume.class);
+        Submission changedTo = dataSnapshot.getValue(Submission.class);
         String key = dataSnapshot.getKey();
-        for (int i = 0; i < mResumes.size(); i++) {
-            if (key.equals( mResumes.get(i).getKey())) {
-                mResumes.set(i, changedTo);
-                notifyDataSetChanged();
+        changedTo.setKey(key);
+        for (int i = 0; i < mSubmissions.size(); i++) {
+            if (key.equals(mSubmissions.get(i).getKey())) {
+                mSubmissions.set(i, changedTo);
+                changedTo.setmAdapter(this);
+                Resume.getReference().child(changedTo.getResumeKey()).addListenerForSingleValueEvent(changedTo);
                 return;
             }
         }
@@ -79,10 +86,9 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
         String key = dataSnapshot.getKey();
-        for (int i = 0; i < mResumes.size(); i++) {
-            if (key.equals(mResumes.get(i).getKey())) {
-                mResumes.remove(i);
-                notifyDataSetChanged();
+        for (int i = 0; i < mSubmissions.size(); i++) {
+            if (key.equals(mSubmissions.get(i).getKey())) {
+                mSubmissions.remove(i);
                 return;
             }
         }
@@ -100,7 +106,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mNameTextView;
-//        public final TextView mCityTextView;
+        //        public final TextView mCityTextView;
         public final TextView mMajorTextView;
 
         public Resume mResume;

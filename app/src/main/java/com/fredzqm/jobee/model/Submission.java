@@ -1,19 +1,30 @@
 package com.fredzqm.jobee.model;
 
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Date;
 
 /**
  * Created by zhang on 8/6/2016.
  */
-public class Submission {
+public class Submission implements ValueEventListener {
     public static final String PATH = "submission";
+    public static final String RECRUITER_KEY = "recruiterKey";
 
     @Exclude
     private String key;
+    @Exclude
+    private Resume resume;
+    @Exclude
+    private RecyclerView.Adapter mAdapter;
 
     private String resumeKey;
     private String jobKey;
@@ -24,6 +35,7 @@ public class Submission {
     public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
+
     public static Submission newInstance(Job mJob, String resumeKey) {
         Submission submission = new Submission();
         submission.recruiterKey = mJob.getRecruiterKey();
@@ -78,4 +90,30 @@ public class Submission {
         this.recruiterKey = recruiterKey;
     }
 
+
+
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        resume = dataSnapshot.getValue(Resume.class);
+        resume.setKey(resumeKey);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d("Error", "onCancelled: " + databaseError.getMessage());
+    }
+
+    public Resume getResume() {
+        return resume;
+    }
+
+    public void setResume(Resume resume) {
+        this.resume = resume;
+    }
+
+    public void setmAdapter(RecyclerView.Adapter mAdapter) {
+        this.mAdapter = mAdapter;
+    }
 }
