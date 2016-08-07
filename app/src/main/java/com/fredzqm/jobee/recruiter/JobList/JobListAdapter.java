@@ -71,11 +71,11 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
         Job changedTo = dataSnapshot.getValue(Job.class);
         String key = dataSnapshot.getKey();
         for (int i = 0; i < mJobs.size(); i++) {
-                if (key.equals( mJobs.get(i).getKey())) {
-                    mJobs.set(i, changedTo);
-                    notifyDataSetChanged();
-                    return;
-                }
+            if (key.equals( mJobs.get(i).getKey())) {
+                mJobs.set(i, changedTo);
+                notifyDataSetChanged();
+                return;
+            }
         }
     }
 

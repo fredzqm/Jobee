@@ -19,7 +19,6 @@ import java.util.ListIterator;
  */
 public class Resume implements Parcelable {
     public static final String PATH = "resume";
-    public static final String RECRUITER_KEY = "jobSeekerKey";
 
     @Exclude
     private String key;
