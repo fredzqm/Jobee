@@ -17,16 +17,18 @@ public class Submission {
 
     private String resumeKey;
     private String jobKey;
+    private String recruiterKey;
+
     private Date date;
 
     public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
-
-    public static Submission newInstance(String jobKey, String resumeKey) {
+    public static Submission newInstance(Job mJob, String resumeKey) {
         Submission submission = new Submission();
+        submission.recruiterKey = mJob.getRecruiterKey();
+        submission.jobKey = mJob.getKey();
         submission.resumeKey = resumeKey;
-        submission.jobKey = jobKey;
         submission.date = new Date();
         return submission;
     }
@@ -66,6 +68,14 @@ public class Submission {
 
     public static String getPATH() {
         return PATH;
+    }
+
+    public String getRecruiterKey() {
+        return recruiterKey;
+    }
+
+    public void setRecruiterKey(String recruiterKey) {
+        this.recruiterKey = recruiterKey;
     }
 
 }

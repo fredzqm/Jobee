@@ -230,7 +230,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                 Toast.makeText((Context) mCallback, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText((Context) mCallback, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                Submission.getReference().push().setValue(Submission.newInstance(mJob.getKey(), result.getContents()));
+                Submission.getReference().push().setValue(Submission.newInstance(mJob, result.getContents()));
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

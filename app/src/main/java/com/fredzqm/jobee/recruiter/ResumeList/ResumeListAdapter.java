@@ -33,7 +33,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         mResumes = new ArrayList<>();
         mCallback = callback;
         mRef = Resume.getReference();
-        mRef.addChildEventListener(this);
+        mRef.orderByChild(Resume.RECRUITER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
 
     @Override

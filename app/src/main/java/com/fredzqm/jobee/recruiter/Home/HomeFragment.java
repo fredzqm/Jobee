@@ -14,11 +14,9 @@ import android.widget.Button;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 /**
