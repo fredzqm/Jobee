@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Created by zhang on 7/12/2016.
  */
 public class JobSeeker {
-    public static final String PATH = "JobSeeker";
+    public static final String PATH = "jobSeeker";
     public static final String JOB_SEEKER_KEY = "jobSeekerKey";
 
     @Exclude

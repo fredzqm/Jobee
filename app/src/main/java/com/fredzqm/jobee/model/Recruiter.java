@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by zhang on 7/12/2016.
  */
 public class Recruiter {
-    public static final String PATH = "Recruiter";
+    public static final String PATH = "recruiter";
 
     @Exclude
     private String key;
@@ -29,7 +29,7 @@ public class Recruiter {
     }
 
     public static DatabaseReference getRefernce() {
-        return FirebaseDatabase.getInstance().getReference();
+        return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
     public static Recruiter newInstance(String userID) {
