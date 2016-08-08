@@ -26,9 +26,9 @@
     </item>
 
     <item
-        android:id="@+id/re_action_next_round"
+        android:id="@+id/re_action_offer"
         android:orderInCategory="100"
-        android:title="@string/next_round"
+        android:title="@string/accepted"
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="never">
     </item>

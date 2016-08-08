@@ -57,9 +57,7 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mSubmission = getArguments().getParcelable(SUBMISSION);
-        }
+        mSubmission = getArguments().getParcelable(SUBMISSION);
         setHasOptionsMenu(true);
     }
 
@@ -109,12 +107,23 @@ public class ResumeFragment extends ContainedFragment {
         final EditText editText = new EditText(getContext());
         switch (item.getItemId()) {
             case R.id.re_action_decide_later:
+                if (Submission.SUBMITTED.equals(mSubmission.getStatus())) {
+                    mSubmission.setStatus(Submission.REVIEWED);
+                    mSubmission.setNotify(true);
+                    Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
+                }
                 break;
-            case R.id.re_action_next_round:
-                break;
-            case R.id.re_action_schedule_interview:
+            case R.id.re_action_offer:
+                mSubmission.setStatus(Submission.OFFERED);
+                mSubmission.setNotify(true);
+                Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
                 break;
             case R.id.re_action_weed_out:
+                mSubmission.setStatus(Submission.REJECTED);
+                mSubmission.setNotify(true);
+                Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
+                break;
+            case R.id.re_action_schedule_interview:
                 break;
             default:
                 throw new RuntimeException("Not implemented");
