@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Resume;
+import com.fredzqm.jobee.model.Submission;
 
 /**
  * A fragment representing a list of Items.
@@ -87,7 +88,7 @@ public class ResumeListFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void showResumeDetail(Resume mItem);
         String getUserID();
+        void showResumeDetail(Submission submission);
     }
 }

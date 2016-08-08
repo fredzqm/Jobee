@@ -48,7 +48,8 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Resume resume = mSubmissions.get(position).getResume();
         if (resume != null) {
-            holder.mResume = mSubmissions.get(position).getResume();
+            holder.mSubmission = mSubmissions.get(position);
+            holder.mStatus = mSubmissions.get(position).getStatus();
             holder.updateView();
         }
     }
@@ -107,7 +108,8 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         //        public final TextView mCityTextView;
         public final TextView mMajorTextView;
 
-        public Resume mResume;
+        public Submission mSubmission;
+        public String mStatus;
 
         public ViewHolder(View view) {
             super(view);
@@ -119,15 +121,15 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     if (null != mCallback) {
-                        mCallback.showResumeDetail(mResume);
+                        mCallback.showResumeDetail(mSubmission);
                     }
                 }
             });
         }
 
         public void updateView() {
-            mNameTextView.setText(mResume.getName());
-            mMajorTextView.setText(mResume.getMajor());
+            mNameTextView.setText(mSubmission.getResume().getName());
+            mMajorTextView.setText(mSubmission.getResume().getMajor());
         }
 
         @Override

@@ -18,6 +18,7 @@ import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.ResumeCategory;
+import com.fredzqm.jobee.model.Submission;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,9 +30,9 @@ import com.fredzqm.jobee.model.ResumeCategory;
 public class ResumeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = "ResumeFragment";
-    private static final String RESUME = "RESUME";
+    private static final String SUBMISSION = "SUBMISSION";
 
-    private Resume mResume;
+    private Submission mSubmission;
     private LinearLayout mLinearLayout;
 
     public ResumeFragment() {
@@ -42,13 +43,13 @@ public class ResumeFragment extends ContainedFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param userName Parameter 1.
+     * @param submission Parameter 1.
      * @return A new instance of fragment ResumeFragment.
      */
-    public static ResumeFragment newInstance(Resume userName) {
+    public static ResumeFragment newInstance(Submission submission) {
         ResumeFragment fragment = new ResumeFragment();
         Bundle args = new Bundle();
-        args.putParcelable(RESUME, userName);
+        args.putParcelable(SUBMISSION, submission);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,7 +58,7 @@ public class ResumeFragment extends ContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mResume = getArguments().getParcelable(RESUME);
+            mSubmission = getArguments().getParcelable(SUBMISSION);
         }
         setHasOptionsMenu(true);
     }
@@ -73,6 +74,7 @@ public class ResumeFragment extends ContainedFragment {
         layoutParams.setMargins(x, x, x, x);
         mLinearLayout.setLayoutParams(layoutParams);
 
+        Resume mResume = mSubmission.getResume();
         for (int i = 0; i < mResume.size(); i++) {
             ResumeCategory resumeCategory = mResume.get(i);
             View itemView = LayoutInflater.from(getContext()).inflate(R.layout.js_resume_category, mLinearLayout, false);

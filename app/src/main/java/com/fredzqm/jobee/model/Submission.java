@@ -1,5 +1,7 @@
 package com.fredzqm.jobee.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
@@ -15,7 +17,7 @@ import java.util.Date;
 /**
  * Created by zhang on 8/6/2016.
  */
-public class Submission implements ValueEventListener {
+public class Submission implements ValueEventListener, Parcelable {
     public static final String PATH = "submission";
     public static final String RECRUITER_KEY = "recruiterKey";
     public static final String JOBSEEKER_KEY = "jobSeekerKey";
@@ -31,6 +33,14 @@ public class Submission implements ValueEventListener {
     private String recruiterKey;
     private String jobSeekerKey;
     private Date date;
+    private String status;
+    public static final String SUBMITTED = "Submitted";
+    public static final String REJECTED = "Rejected";
+    public static final String ACCEPTED = "Accepted";
+
+    public Submission() {
+
+    }
 
     public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
@@ -101,6 +111,14 @@ public class Submission implements ValueEventListener {
         return job;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public void setJob(Job job) {
         this.job = job;
     }
@@ -112,6 +130,7 @@ public class Submission implements ValueEventListener {
         subs.recruiterKey = mJob.getRecruiterKey();
         subs.job = mJob;
         subs.date = new Date();
+        subs.status = SUBMITTED;
         Resume.getReference().child(resumeKey).addValueEventListener(subs);
     }
 
@@ -128,4 +147,44 @@ public class Submission implements ValueEventListener {
         Log.d("Error", "onCancelled: " + databaseError.getMessage());
     }
 
+
+    protected Submission(Parcel in) {
+        key = in.readString();
+        resume = in.readParcelable(Resume.class.getClassLoader());
+        job = in.readParcelable(Job.class.getClassLoader());
+        jobKey = in.readString();
+        resumeKey = in.readString();
+        recruiterKey = in.readString();
+        jobSeekerKey = in.readString();
+        status = in.readString();
+    }
+
+    public static final Creator<Submission> CREATOR = new Creator<Submission>() {
+        @Override
+        public Submission createFromParcel(Parcel in) {
+            return new Submission(in);
+        }
+
+        @Override
+        public Submission[] newArray(int size) {
+            return new Submission[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(key);
+        parcel.writeParcelable(resume, i);
+        parcel.writeParcelable(job, i);
+        parcel.writeString(jobKey);
+        parcel.writeString(resumeKey);
+        parcel.writeString(recruiterKey);
+        parcel.writeString(jobSeekerKey);
+        parcel.writeString(status);
+    }
 }

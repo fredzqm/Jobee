@@ -21,6 +21,7 @@ import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Resume;
+import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
@@ -147,7 +148,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void showResumeDetail(Resume resume) {
+    public void showResumeDetail(Submission resume) {
         swapFragment(ResumeFragment.newInstance(resume), "edit job");
     }
 

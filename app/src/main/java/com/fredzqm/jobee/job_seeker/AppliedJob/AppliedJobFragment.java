@@ -8,9 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
+import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.Submission;
 
 import java.text.SimpleDateFormat;
 
@@ -26,7 +27,7 @@ public class AppliedJobFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String JOB_ARGUMENT = "param1";
 
-    private Job mJob;
+    private Submission mSubmission;
     private Callback mCallback;
 
     private TextView mTitleTextView;
@@ -43,13 +44,13 @@ public class AppliedJobFragment extends ContainedFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param job Parameter 1.
+     * @param submission Parameter 1.
      * @return A new instance of fragment JobFragment.
      */
-    public static AppliedJobFragment newInstance(Job job) {
+    public static AppliedJobFragment newInstance(Submission submission) {
         AppliedJobFragment fragment = new AppliedJobFragment();
         Bundle args = new Bundle();
-        args.putParcelable(JOB_ARGUMENT, job);
+        args.putParcelable(JOB_ARGUMENT, submission);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,7 +59,7 @@ public class AppliedJobFragment extends ContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mJob = getArguments().getParcelable(JOB_ARGUMENT);
+            mSubmission = getArguments().getParcelable(JOB_ARGUMENT);
         }
     }
 
@@ -73,11 +74,13 @@ public class AppliedJobFragment extends ContainedFragment {
         mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
         mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
 
+        Job mJob = mSubmission.getJob();
         mTitleTextView.setText(mJob.getTitle());
         mCompanyTextView.setText(mJob.getCompany());
         mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
         mCityTextView.setText(mJob.getCity());
         mDetailsTextView.setText(mJob.getDetails());
+
         mTitleTextView.setText(mJob.getTitle());
         return view;
     }
@@ -100,10 +103,6 @@ public class AppliedJobFragment extends ContainedFragment {
         mCallback = null;
     }
 
-    @Override
-    public void clickFab() {
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -116,6 +115,5 @@ public class AppliedJobFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-
     }
 }

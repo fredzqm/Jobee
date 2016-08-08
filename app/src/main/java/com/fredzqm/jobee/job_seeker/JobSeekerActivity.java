@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.QRCodeFragment;
 import com.fredzqm.jobee.model.Job;
@@ -25,11 +26,12 @@ import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
+import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
-        AppliedJobListFragment.Callback , JobDetailFragment.Callback , QRCodeFragment.Callback{
+        AppliedJobListFragment.Callback , JobDetailFragment.Callback , QRCodeFragment.Callback, AppliedJobFragment.Callback{
     private static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
@@ -140,8 +142,13 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void showJobDetail(Job job) {
-        swapFragment(JobDetailFragment.newInstance(job), "Job Detail");
+    public void showJobDetail(Submission submission) {
+        swapFragment(AppliedJobFragment.newInstance(submission), "Job Detail");
+    }
+
+    @Override
+    public void showJobDetail(Job mItem) {
+        swapFragment(JobDetailFragment.newInstance(mItem), "Job Detail");
     }
 
     @Override
@@ -158,5 +165,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     public String getUserID() {
         return userID;
     }
+
 
 }

@@ -41,13 +41,13 @@ public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.js_joblist_item, parent, false);
+                .inflate(R.layout.js_appliedjoblist_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mJob = mSubmissions.get(position).getJob();
+        holder.mSubmission = mSubmissions.get(position);
         holder.updateView();
     }
 
@@ -104,32 +104,33 @@ public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mTitleTextView;
         public final TextView mCityTextView;
-        public final TextView mDateTextView;
+        public final TextView mStatusTextView;
         public final TextView mCompanyTextView;
 
-        public Job mJob;
+        public Submission mSubmission;
 
         public ViewHolder(View view) {
             super(view);
-            mTitleTextView = (TextView) view.findViewById(R.id.js_list_item_title);
-            mCompanyTextView = (TextView) view.findViewById(R.id.js_list_item_company);
-            mDateTextView = (TextView) view.findViewById(R.id.js_list_item_date);
-            mCityTextView = (TextView) view.findViewById(R.id.js_list_item_city);
+            mTitleTextView = (TextView) view.findViewById(R.id.js_appliedjoblist_item_title);
+            mCompanyTextView = (TextView) view.findViewById(R.id.js_appliedjoblist_item_company);
+            mStatusTextView = (TextView) view.findViewById(R.id.js_appliedjoblist_item_status);
+            mCityTextView = (TextView) view.findViewById(R.id.js_appliedjoblist_item_city);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (null != mCallback) {
-                        mCallback.showJobDetail(mJob);
+                        mCallback.showJobDetail(mSubmission);
                     }
                 }
             });
         }
 
         public void updateView() {
+            Job mJob = mSubmission.getJob();
             mTitleTextView.setText(mJob.getTitle());
             mCompanyTextView.setText(mJob.getCompany());
-            mDateTextView.setText(DATAFORMAT.format(mJob.getDate()));
+            mStatusTextView.setText(mSubmission.getStatus());
             mCityTextView.setText(mJob.getCity());
         }
 
