@@ -87,7 +87,7 @@ public class ResumeListFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
-        void showResumeDetail(String mItem);
+        void showResumeDetail(Resume mItem);
         String getUserID();
     }
 }
