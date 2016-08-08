@@ -81,7 +81,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String jobKey = getArguments().getString(JOB_ARGUMENT);
-        mRef = Job.getRefernce().child(jobKey);
+        mRef = Job.getReference().child(jobKey);
         mRef.addValueEventListener(this);
     }
 

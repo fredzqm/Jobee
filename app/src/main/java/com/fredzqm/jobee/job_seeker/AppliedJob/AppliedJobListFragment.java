@@ -80,5 +80,6 @@ public class AppliedJobListFragment extends ContainedFragment {
      */
     public interface Callback {
         void showJobDetail(Job mItem);
+        String getUserID();
     }
 }

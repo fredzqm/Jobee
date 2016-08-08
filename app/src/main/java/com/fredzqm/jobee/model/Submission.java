@@ -24,6 +24,8 @@ public class Submission implements ValueEventListener {
     private String key;
 
     private Resume resume;
+
+    private Job job;
     private String jobKey;
     private String resumeKey;
     private String recruiterKey;
@@ -33,6 +35,7 @@ public class Submission implements ValueEventListener {
     public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
+
 
     public String getKey() {
         return key;
@@ -94,13 +97,20 @@ public class Submission implements ValueEventListener {
         this.resume = resume;
     }
 
+    public Job getJob() {
+        return job;
+    }
 
+    public void setJob(Job job) {
+        this.job = job;
+    }
 
     public static void handleNewSubmission(Job mJob, String resumeKey) {
         Submission subs = new Submission();
         subs.jobKey = mJob.getKey();
         subs.resumeKey = resumeKey;
         subs.recruiterKey = mJob.getRecruiterKey();
+        subs.job = mJob;
         subs.date = new Date();
         Resume.getReference().child(resumeKey).addValueEventListener(subs);
     }

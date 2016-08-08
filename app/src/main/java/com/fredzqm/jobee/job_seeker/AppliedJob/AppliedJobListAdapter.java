@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment.Callback;
 import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
+import com.fredzqm.jobee.model.Submission;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,52 +27,52 @@ import java.util.List;
 public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAdapter.ViewHolder> implements ChildEventListener {
     private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    private final List<Job> mJobs;
+    private final List<Submission> mSubmissions;
     private final Callback mCallback;
     private DatabaseReference mRef;
 
     public AppliedJobListAdapter(Callback callback) {
-        mJobs = new ArrayList<>();
+        mSubmissions = new ArrayList<>();
         mCallback = callback;
-        mRef = Job.getRefernce();
-        mRef.addChildEventListener(this);
+        mRef = Submission.getReference();
+        mRef.orderByChild(Submission.JOBSEEKER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.re_joblist_item, parent, false);
+                .inflate(R.layout.js_joblist_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mJob = mJobs.get(position);
+        holder.mJob = mSubmissions.get(position).getJob();
         holder.updateView();
     }
 
     @Override
     public int getItemCount() {
-        return mJobs.size();
+        return mSubmissions.size();
     }
 
 
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Job added = dataSnapshot.getValue(Job.class);
+        Submission added = dataSnapshot.getValue(Submission.class);
         String key = dataSnapshot.getKey();
         added.setKey(key);
-        mJobs.add(0, added);
+        mSubmissions.add(0, added);
         notifyDataSetChanged();
     }
 
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        Job changedTo = dataSnapshot.getValue(Job.class);
+        Submission changedTo = dataSnapshot.getValue(Submission.class);
         String key = dataSnapshot.getKey();
-        for (int i = 0; i < mJobs.size(); i++) {
-            if (key.equals( mJobs.get(i).getKey())) {
-                mJobs.set(i, changedTo);
+        for (int i = 0; i < mSubmissions.size(); i++) {
+            if (key.equals( mSubmissions.get(i).getKey())) {
+                mSubmissions.set(i, changedTo);
                 notifyDataSetChanged();
                 return;
             }
@@ -82,9 +82,9 @@ public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAd
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
         String key = dataSnapshot.getKey();
-        for (int i = 0; i < mJobs.size(); i++) {
-            if (key.equals(mJobs.get(i).getKey())) {
-                mJobs.remove(i);
+        for (int i = 0; i < mSubmissions.size(); i++) {
+            if (key.equals(mSubmissions.get(i).getKey())) {
+                mSubmissions.remove(i);
                 notifyDataSetChanged();
                 return;
             }

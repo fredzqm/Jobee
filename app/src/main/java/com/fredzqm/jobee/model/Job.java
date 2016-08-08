@@ -36,7 +36,7 @@ public class Job implements Parcelable {
         // required constructor for Jackson
     }
 
-    public static DatabaseReference getRefernce() {
+    public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 

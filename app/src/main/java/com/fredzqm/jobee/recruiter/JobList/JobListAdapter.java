@@ -33,7 +33,7 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     public JobListAdapter(Callback callback) {
         mJobs = new ArrayList<>();
         mCallback = callback;
-        mRef = Job.getRefernce();
+        mRef = Job.getReference();
         mRef.orderByChild(Job.RECRUITER_KEY).equalTo(mCallback.getUserID())
                 .addChildEventListener(this);
     }
