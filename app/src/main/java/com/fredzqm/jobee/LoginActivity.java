@@ -66,6 +66,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -189,6 +190,9 @@ public class LoginActivity extends AppCompatActivity
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(AppIndex.API).build();
+
+        String x = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, x);
     }
 
     @Override
