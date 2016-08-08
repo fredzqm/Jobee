@@ -64,8 +64,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         String key = dataSnapshot.getKey();
         added.setKey(key);
         mSubmissions.add(0, added);
-        added.setmAdapter(this);
-        Resume.getReference().child(added.getResumeKey()).addListenerForSingleValueEvent(added);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -76,8 +75,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         for (int i = 0; i < mSubmissions.size(); i++) {
             if (key.equals(mSubmissions.get(i).getKey())) {
                 mSubmissions.set(i, changedTo);
-                changedTo.setmAdapter(this);
-                Resume.getReference().child(changedTo.getResumeKey()).addListenerForSingleValueEvent(changedTo);
+                notifyDataSetChanged();
                 return;
             }
         }

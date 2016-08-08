@@ -98,7 +98,7 @@ public class QRCodeFragment extends ContainedFragment implements ChildEventListe
     }
 
     private String generateContent() {
-        return mCallback.getUserID() + "\n" + mResumeKey;
+        return mResumeKey;
     }
 
     @Override

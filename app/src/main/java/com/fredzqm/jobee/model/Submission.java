@@ -22,33 +22,17 @@ public class Submission implements ValueEventListener {
 
     @Exclude
     private String key;
-    @Exclude
-    private Resume resume;
-    @Exclude
-    private RecyclerView.Adapter mAdapter;
 
-    private String resumeKey;
+    private Resume resume;
     private String jobKey;
+    private String resumeKey;
     private String recruiterKey;
     private String jobSeekerKey;
-
     private Date date;
 
     public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
-
-    public static Submission newInstance(Job mJob, String content) {
-        Submission submission = new Submission();
-        String[] contents = content.split("\n");
-        submission.recruiterKey = mJob.getRecruiterKey();
-        submission.jobKey = mJob.getKey();
-        submission.resumeKey = contents[1];
-        submission.jobSeekerKey = contents[0];
-        submission.date = new Date();
-        return submission;
-    }
-
 
     public String getKey() {
         return key;
@@ -102,19 +86,6 @@ public class Submission implements ValueEventListener {
         this.jobSeekerKey = jobSeekerKey;
     }
 
-
-    @Override
-    public void onDataChange(DataSnapshot dataSnapshot) {
-        resume = dataSnapshot.getValue(Resume.class);
-        resume.setKey(resumeKey);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-        Log.d("Error", "onCancelled: " + databaseError.getMessage());
-    }
-
     public Resume getResume() {
         return resume;
     }
@@ -123,7 +94,28 @@ public class Submission implements ValueEventListener {
         this.resume = resume;
     }
 
-    public void setmAdapter(RecyclerView.Adapter mAdapter) {
-        this.mAdapter = mAdapter;
+
+
+    public static void handleNewSubmission(Job mJob, String resumeKey) {
+        Submission subs = new Submission();
+        subs.jobKey = mJob.getKey();
+        subs.resumeKey = resumeKey;
+        subs.recruiterKey = mJob.getRecruiterKey();
+        subs.date = new Date();
+        Resume.getReference().child(resumeKey).addValueEventListener(subs);
     }
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        resume = dataSnapshot.getValue(Resume.class);
+        resume.setKey(resumeKey);
+        jobSeekerKey = resume.getJobSeekerKey();
+        Submission.getReference().push().setValue(this);
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+        Log.d("Error", "onCancelled: " + databaseError.getMessage());
+    }
+
 }

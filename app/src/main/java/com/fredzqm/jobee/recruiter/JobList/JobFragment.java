@@ -11,8 +11,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -220,7 +216,6 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         integrator.initiateScan();
     }
 
-
     // Get the results:
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -230,7 +225,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                 Toast.makeText((Context) mCallback, R.string.resume_scan_cancelled, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText((Context) mCallback, R.string.scan_resume_toast, Toast.LENGTH_LONG).show();
-                Submission.getReference().push().setValue(Submission.newInstance(mJob, result.getContents()));
+              Submission.handleNewSubmission(mJob, result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
