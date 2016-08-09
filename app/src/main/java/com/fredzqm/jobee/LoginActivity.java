@@ -166,11 +166,7 @@ public class LoginActivity extends AppCompatActivity
         mEmailSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-//                emailSignUp();
-                String token = FirebaseInstanceId.getInstance().getToken();
-                Log.d(TAG, token);
-                RequestSender requestSender = new RequestSender(LoginActivity.this);
-                requestSender.notifyApp(token, "Portugal vs. Denmark", "5 to 1");
+                emailSignUp();
             }
         });
         mGoogleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT);

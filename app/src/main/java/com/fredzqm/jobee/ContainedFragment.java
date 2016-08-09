@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
  */
 public abstract class ContainedFragment extends Fragment {
 
-    public void clickFab(){
-
-    }
+    public void clickFab(){}
 
 }
