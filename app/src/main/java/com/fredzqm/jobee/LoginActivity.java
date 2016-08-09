@@ -75,6 +75,7 @@ import java.util.List;
 import edu.rosehulman.rosefire.Rosefire;
 import edu.rosehulman.rosefire.RosefireResult;
 
+import static android.Manifest.permission.LOCATION_HARDWARE;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -83,8 +84,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 public class LoginActivity extends AppCompatActivity
         implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult>, GoogleApiClient.OnConnectionFailedListener {
     public static final String TAG = "LoginActivity";
-    public static final String USERID = "USERID";
     public static final String PREFS = "SHARED_PREFERENCE";
+    public static final String USERID = "USERID";
     private static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
 
     private static final int REQUEST_MAIN_ACTIVITY = 1;
@@ -165,7 +166,11 @@ public class LoginActivity extends AppCompatActivity
         mEmailSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                emailSignUp();
+//                emailSignUp();
+                String token = FirebaseInstanceId.getInstance().getToken();
+                Log.d(TAG, token);
+                RequestSender requestSender = new RequestSender(LoginActivity.this);
+                requestSender.notifyApp(token, "Portugal vs. Denmark", "5 to 1");
             }
         });
         mGoogleSignInButton.setColorScheme(SignInButton.COLOR_LIGHT);
@@ -191,8 +196,6 @@ public class LoginActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(AppIndex.API).build();
 
-        String x = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, x);
     }
 
     @Override
