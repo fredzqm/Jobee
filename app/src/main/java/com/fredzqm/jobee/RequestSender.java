@@ -1,6 +1,7 @@
 package com.fredzqm.jobee;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.loopj.android.http.*;
 
@@ -20,25 +21,21 @@ import javax.net.ssl.SSLSocketFactory;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.message.BasicHeader;
 
-public class RequestSender extends JsonHttpResponseHandler {
+public class RequestSender extends TextHttpResponseHandler {
+    private static final String TAG = "RequestSender";
     private static final String URL = "https://fcm.googleapis.com/fcm/send";
 
-    private static AsyncHttpClient client;
+    private AsyncHttpClient client;
 
-    static {
-        client = new AsyncHttpClient();
-//        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-//        client.setSSLSocketFactory(sslsocketfactory);
-    }
     private final Context mContext;
 
     public RequestSender(Context context){
         mContext = context;
+        client = new AsyncHttpClient();
+        client.addHeader("Authorization", " key="+ mContext.getString(R.string.server_key));
     }
 
     public void notifyApp(String toToken , String title, String text) {
-        Header[] headers = new Header[1];
-        headers[0] = new BasicHeader("Authorization", "key="+ mContext.getString(R.string.server_key));
         RequestParams params = new RequestParams();
         params.add("to", toToken);
         Map<String, String> map = new HashMap<String, String>();
@@ -47,38 +44,17 @@ public class RequestSender extends JsonHttpResponseHandler {
         params.put("notification", map);
 
         client.post(URL, params, this);
-//        client.post(mContext, URL, headers, params, "application/json", this);
+    }
+
+
+    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+        Log.d(TAG, "statusCode: " + statusCode + "\n" + responseString);
+        throw new RuntimeException(throwable);
     }
 
     @Override
-    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-        // If the response is JSONObject instead of expected JSONArray
+    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+        Log.d(TAG, "statusCode: " + statusCode + "\n" + responseString);
     }
 
-    @Override
-    public void onSuccess(int statusCode, Header[] headers, JSONArray timeline) {
-        // Pull out the first event on the public timeline
-        JSONObject firstEvent = null;
-        String tweetText = null;
-        try {
-            firstEvent = (JSONObject) timeline.get(0);
-            tweetText = firstEvent.getString("text");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        // Do something with the response
-        System.out.println(tweetText);
-    }
-
-
-    @Override
-    public void onStart() {
-        // called before request is started
-    }
-
-
-    @Override
-    public void onRetry(int retryNo) {
-        // called when request is retried
-    }
 }
