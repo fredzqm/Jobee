@@ -1,8 +1,9 @@
-package com.fredzqm.jobee;
+package com.fredzqm.jobee.notification;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.fredzqm.jobee.R;
 import com.loopj.android.http.*;
 
 import java.util.HashMap;
@@ -14,14 +15,13 @@ public class RequestSender extends TextHttpResponseHandler {
     private static final String TAG = "RequestSender";
     private static final String URL = "https://fcm.googleapis.com/fcm/send";
 
-    private AsyncHttpClient client;
+    private static AsyncHttpClient client;
+    private static ResponseHandlerInterface requestSender;
 
-    private final Context mContext;
-
-    public RequestSender(Context context) {
-        mContext = context;
+    static {
         client = new AsyncHttpClient();
-        client.addHeader("Authorization", " key=" + mContext.getString(R.string.server_key));
+        client.addHeader("Authorization", " key=AIzaSyC6lpoN9ekbvLjY5AtAOOHZmvLcSscYdes");
+        requestSender = new RequestSender();
     }
 
     /** Example here
@@ -34,7 +34,7 @@ public class RequestSender extends TextHttpResponseHandler {
      * @param title
      * @param text
      */
-    public void notifyApp(String toToken, String title, String text) {
+    public static void notifyApp(String toToken, String title, String text) {
         RequestParams params = new RequestParams();
         params.add("to", toToken);
         Map<String, String> map = new HashMap<String, String>();
@@ -42,7 +42,7 @@ public class RequestSender extends TextHttpResponseHandler {
         map.put("text", text);
         params.put("notification", map);
 
-        client.post(URL, params, this);
+        client.post(URL, params, requestSender);
     }
 
 

@@ -40,13 +40,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation" />
+
+
+
 
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".notification.MessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -54,13 +53,18 @@
             </intent-filter>
         </service>
         <service
-            android:name=".MyFirebaseInstanceIDService"
+            android:name=".notification.IDService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
 
         <meta-data
             android:name="com.google.android.gms.version"
