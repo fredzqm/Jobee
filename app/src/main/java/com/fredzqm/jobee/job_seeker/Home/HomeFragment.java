@@ -12,15 +12,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.VerifyAddressTask;
-import com.fredzqm.jobee.notification.RequestSender;
+import com.fredzqm.jobee.notification.Notifier;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -132,7 +130,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
             addressEditText.setText(mAccount.getAddress());
             majorEditText.setText(mAccount.getMajor());
         }
-        RequestSender.notifyApp(mAccount.getToken(), "changed", "notify");
+        Notifier.notify(mAccount.getKey(), "changed", "notify");
     }
 
     @Override

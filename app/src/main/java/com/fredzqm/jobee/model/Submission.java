@@ -33,7 +33,6 @@ public class Submission implements ValueEventListener, Parcelable {
     private String jobSeekerKey;
     private Date date;
 
-    private boolean notify;
     private String status;
     public static final String SUBMITTED = "Submitted";
     public static final String REVIEWED = "REVIEWED";
@@ -126,15 +125,6 @@ public class Submission implements ValueEventListener, Parcelable {
         this.job = job;
     }
 
-    public boolean getNotify() {
-        return notify;
-    }
-
-    public void setNotify(boolean notified) {
-        this.notify = notified;
-    }
-
-
     public static void handleNewSubmission(Job mJob, String resumeKey) {
         Submission subs = new Submission();
         subs.jobKey = mJob.getKey();
@@ -143,7 +133,6 @@ public class Submission implements ValueEventListener, Parcelable {
         subs.job = mJob;
         subs.date = new Date();
         subs.status = SUBMITTED;
-        subs.notify = false;
         Resume.getReference().child(resumeKey).addValueEventListener(subs);
     }
 

@@ -19,7 +19,6 @@ public class Recruiter {
 
     @Exclude
     private String key;
-    private String token;
 
     private String emailAccount;
     private String name;
@@ -37,8 +36,6 @@ public class Recruiter {
 
     public static Recruiter newInstance(String userID) {
         Recruiter recruiter = new Recruiter();
-        recruiter.emailAccount = userID;
-        recruiter.token = FirebaseInstanceId.getInstance().getToken();
         return recruiter;
     }
 
@@ -76,11 +73,4 @@ public class Recruiter {
         this.key = key;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

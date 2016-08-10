@@ -21,7 +21,6 @@ import java.util.Map;
 
 public class IDService extends FirebaseInstanceIdService {
     private static final String TAG = "InstIDService";
-    private static final String PATH = "token";
 
     public IDService() {
     }
@@ -32,26 +31,9 @@ public class IDService extends FirebaseInstanceIdService {
     }
 
     public static void updateToken() {
-        final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
-
-        FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        ValueEventListener listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> map = new HashMap<>();
-                map.put(PATH, refreshedToken);
-                dataSnapshot.getRef().updateChildren(map);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d("Error", "onCancelled: " + databaseError.getMessage());
-            }
-        };
-        mRef.child(JobSeeker.PATH).child(LoginActivity.getUserID()).addListenerForSingleValueEvent(listener);
-        mRef.child(Recruiter.PATH).child(LoginActivity.getUserID()).addListenerForSingleValueEvent(listener);
+        Notifier.getReference().child(LoginActivity.getUserID()).setValue(refreshedToken);
     }
 
 }

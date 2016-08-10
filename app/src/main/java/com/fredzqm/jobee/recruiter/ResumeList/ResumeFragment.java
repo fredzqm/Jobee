@@ -19,6 +19,8 @@ import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.ResumeCategory;
 import com.fredzqm.jobee.model.Submission;
+import com.fredzqm.jobee.notification.Notifier;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,23 +107,21 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final EditText editText = new EditText(getContext());
+        DatabaseReference ref = Submission.getReference().child(mSubmission.getKey());
+        String jobSeekerKey = mSubmission.getJobSeekerKey();
         switch (item.getItemId()) {
             case R.id.re_action_decide_later:
-                if (Submission.SUBMITTED.equals(mSubmission.getStatus())) {
-                    mSubmission.setStatus(Submission.REVIEWED);
-                    mSubmission.setNotify(true);
-                    Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
-                }
+                showNext();
                 break;
             case R.id.re_action_offer:
                 mSubmission.setStatus(Submission.OFFERED);
-                mSubmission.setNotify(true);
-                Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
+                Notifier.notify(jobSeekerKey, "Offer", "offer");
+                ref.setValue(mSubmission);
                 break;
             case R.id.re_action_weed_out:
                 mSubmission.setStatus(Submission.REJECTED);
-                mSubmission.setNotify(true);
-                Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
+                Notifier.notify(jobSeekerKey, "Reject", "Sorry, ... rejected you");
+                ref.setValue(mSubmission);
                 break;
             case R.id.re_action_schedule_interview:
                 break;
@@ -129,5 +129,9 @@ public class ResumeFragment extends ContainedFragment {
                 throw new RuntimeException("Not implemented");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showNext() {
+        getFragmentManager().popBackStack();
     }
 }

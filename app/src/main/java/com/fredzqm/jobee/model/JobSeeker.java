@@ -21,7 +21,6 @@ public class JobSeeker {
 
     @Exclude
     private String key;
-    private String token;
 
     private String emailAccount;
     private String name;
@@ -40,8 +39,6 @@ public class JobSeeker {
     public static JobSeeker newInstance(String key) {
         JobSeeker jobSeeker = new JobSeeker();
         jobSeeker.key = key;
-        jobSeeker.emailAccount = "userID";
-        jobSeeker.token = FirebaseInstanceId.getInstance().getToken();
         return jobSeeker;
     }
 
@@ -84,14 +81,6 @@ public class JobSeeker {
 
     public void setKey(String key) {
         this.key = key;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
 }

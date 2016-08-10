@@ -39,11 +39,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
-import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.notification.IDService;
-import com.fredzqm.jobee.notification.RequestSender;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -54,7 +52,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.data.Freezable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -62,23 +59,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import edu.rosehulman.rosefire.Rosefire;
 import edu.rosehulman.rosefire.RosefireResult;
 
-import static android.Manifest.permission.LOCATION_HARDWARE;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
