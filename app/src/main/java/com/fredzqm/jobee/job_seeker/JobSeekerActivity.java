@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +36,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     private static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
-    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.js_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        userID = getIntent().getStringExtra(LoginActivity.USERID);
         if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
@@ -163,7 +162,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public String getUserID() {
-        return userID;
+        return LoginActivity.getUserID();
     }
 
 

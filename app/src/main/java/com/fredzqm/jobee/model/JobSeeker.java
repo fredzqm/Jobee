@@ -8,6 +8,7 @@ import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class JobSeeker {
 
     @Exclude
     private String key;
+    private String token;
 
     private String emailAccount;
     private String name;
@@ -39,8 +41,7 @@ public class JobSeeker {
         JobSeeker jobSeeker = new JobSeeker();
         jobSeeker.key = key;
         jobSeeker.emailAccount = "userID";
-        jobSeeker.name = "";
-        jobSeeker.address = "";
+        jobSeeker.token = FirebaseInstanceId.getInstance().getToken();
         return jobSeeker;
     }
 
@@ -83,6 +84,14 @@ public class JobSeeker {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

@@ -7,6 +7,7 @@ import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
@@ -18,11 +19,13 @@ public class Recruiter {
 
     @Exclude
     private String key;
+    private String token;
 
     private String emailAccount;
     private String name;
 
     private String company;
+
 
     public Recruiter(){
         // empty constructor required by Jackson
@@ -35,6 +38,7 @@ public class Recruiter {
     public static Recruiter newInstance(String userID) {
         Recruiter recruiter = new Recruiter();
         recruiter.emailAccount = userID;
+        recruiter.token = FirebaseInstanceId.getInstance().getToken();
         return recruiter;
     }
 
@@ -72,4 +76,11 @@ public class Recruiter {
         this.key = key;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

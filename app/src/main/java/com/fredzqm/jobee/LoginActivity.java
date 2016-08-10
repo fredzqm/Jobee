@@ -42,6 +42,7 @@ import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
+import com.fredzqm.jobee.notification.IDService;
 import com.fredzqm.jobee.notification.RequestSender;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
@@ -68,6 +69,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,13 +88,17 @@ public class LoginActivity extends AppCompatActivity
         implements LoaderCallbacks<Cursor>, FirebaseAuth.AuthStateListener, OnCompleteListener<AuthResult>, GoogleApiClient.OnConnectionFailedListener {
     public static final String TAG = "LoginActivity";
     public static final String PREFS = "SHARED_PREFERENCE";
-    public static final String USERID = "USERID";
     private static final String ACCOUNT_TYPE = "ACCOUNT_TYPE";
 
     private static final int REQUEST_MAIN_ACTIVITY = 1;
     private static final int REQUEST_READ_CONTACTS_PERMISSION = 2;
     private static final int REQUEST_GOOGLE_SIGN_IN = 3;
     private static final int REQUEST_ROSEFIRE_LOGIN = 4;
+
+    private static String userID;
+    public static String getUserID() {
+        return userID;
+    }
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -113,6 +119,8 @@ public class LoginActivity extends AppCompatActivity
     public static final String EMAIL_SIGNUP = "email_signup";
     public static final String GOOGLE_LOGIN = "google";
     public static final String ROSEFIRE_LOGIN = "rose_fire";
+
+
 
 
     @Override
@@ -192,7 +200,6 @@ public class LoginActivity extends AppCompatActivity
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(AppIndex.API).build();
-
     }
 
     @Override
@@ -254,13 +261,13 @@ public class LoginActivity extends AppCompatActivity
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String userID = dataSnapshot.getValue(String.class);
+                    userID = dataSnapshot.getValue(String.class);
                     if (userID == null) {
                         userID = rootRef.child(mLoggedIn).push().getKey();
                         userRef.setValue(userID);
                         userRef.addListenerForSingleValueEvent(this);
                     } else {
-                        inputIntent.putExtra(USERID, userID);
+                        IDService.updateToken();
                         startActivityForResult(inputIntent, REQUEST_MAIN_ACTIVITY);
                         showProgress(false);
                     }

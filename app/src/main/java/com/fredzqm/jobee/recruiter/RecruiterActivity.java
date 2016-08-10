@@ -36,7 +36,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     public static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
-    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.re_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        userID = getIntent().getStringExtra(LoginActivity.USERID);
         if (savedInstanceState == null){
             swapFragment(HomeFragment.newInstance(), null);
         }
@@ -158,6 +156,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public String getUserID() {
-        return userID;
+        return LoginActivity.getUserID();
     }
 }
