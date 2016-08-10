@@ -36,11 +36,13 @@ public class RequestSender extends TextHttpResponseHandler {
      */
     public static void notifyApp(String toToken, String title, String text) {
         RequestParams params = new RequestParams();
-        params.add("to", toToken);
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("title", title);
-        map.put("text", text);
-        params.put("notification", map);
+
+        Map<String, String> notification = new HashMap<String, String>();
+
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("dtitle", title);
+        data.put("dtext", text);
+        data.put("dclick_action", "NOTIFICATION_ACTION");
 
         client.post(URL, params, requestSender);
     }

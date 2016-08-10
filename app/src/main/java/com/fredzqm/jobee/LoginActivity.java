@@ -42,6 +42,7 @@ import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
+import com.fredzqm.jobee.notification.RequestSender;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
