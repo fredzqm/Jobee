@@ -12,8 +12,11 @@ import java.util.Map;
 import cz.msebera.android.httpclient.Header;
 
 public class RequestSender extends TextHttpResponseHandler {
-    private static final String TAG = "RequestSender";
-    private static final String URL = "https://fcm.googleapis.com/fcm/send";
+    public static final String TAG = "RequestSender";
+    public static final String URL = "https://fcm.googleapis.com/fcm/send";
+    public static final String TITLE = "TITLE";
+    public static final String BODY = "BODY";
+
 
     private static AsyncHttpClient client;
     private static ResponseHandlerInterface requestSender;
@@ -32,18 +35,15 @@ public class RequestSender extends TextHttpResponseHandler {
      *
      * @param toToken
      * @param title
-     * @param text
+     * @param body
      */
-    public static void notifyApp(String toToken, String title, String text) {
+    public static void notifyApp(String toToken, String title, String body) {
         RequestParams params = new RequestParams();
-
-        Map<String, String> notification = new HashMap<String, String>();
-
         Map<String, String> data = new HashMap<String, String>();
-        data.put("dtitle", title);
-        data.put("dtext", text);
-        data.put("dclick_action", "NOTIFICATION_ACTION");
-
+        data.put(TITLE, title);
+        data.put(BODY, body);
+        params.put("to", toToken);
+        params.put("data", data);
         client.post(URL, params, requestSender);
     }
 

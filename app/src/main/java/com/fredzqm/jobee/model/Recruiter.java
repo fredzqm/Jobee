@@ -31,7 +31,7 @@ public class Recruiter {
         // empty constructor required by Jackson
     }
 
-    public static DatabaseReference getRefernce() {
+    public static DatabaseReference getReference() {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 

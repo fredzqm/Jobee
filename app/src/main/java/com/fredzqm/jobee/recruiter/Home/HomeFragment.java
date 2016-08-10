@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.notification.RequestSender;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +59,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRef = Recruiter.getRefernce().child(mCallback.getUserID());
+        mRef = Recruiter.getReference().child(mCallback.getUserID());
         mRef.addValueEventListener(this);
     }
 

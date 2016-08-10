@@ -16,6 +16,7 @@ import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.VerifyAddressTask;
+import com.fredzqm.jobee.notification.RequestSender;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -131,6 +132,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
             addressEditText.setText(mAccount.getAddress());
             majorEditText.setText(mAccount.getMajor());
         }
+        RequestSender.notifyApp(mAccount.getToken(), "changed", "notify");
     }
 
     @Override
