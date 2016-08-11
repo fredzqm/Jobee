@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -88,7 +89,11 @@ public class LoginActivity extends AppCompatActivity
     private static final int REQUEST_GOOGLE_SIGN_IN = 3;
     private static final int REQUEST_ROSEFIRE_LOGIN = 4;
 
+    private static final String LOGGING = "LOGGING";
+    private static final String LOGGING_METHOD = "LOGGING_METHOD";
+
     private static String userID;
+
     public static String getUserID() {
         return userID;
     }
@@ -112,8 +117,6 @@ public class LoginActivity extends AppCompatActivity
     public static final String EMAIL_SIGNUP = "email_signup";
     public static final String GOOGLE_LOGIN = "google";
     public static final String ROSEFIRE_LOGIN = "rose_fire";
-
-
 
 
     @Override
@@ -181,10 +184,14 @@ public class LoginActivity extends AppCompatActivity
         });
 
         mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
+        if (savedInstanceState == null){
+            mAuth.signOut();
+        }else{
+            mLoggedIn = savedInstanceState.getString(LOGGING);
+            mLoggingMethod = savedInstanceState.getString(LOGGING_METHOD);
+        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -193,6 +200,13 @@ public class LoginActivity extends AppCompatActivity
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .addApi(AppIndex.API).build();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outPersistentState.putString(LOGGING, mLoggedIn);
+        outPersistentState.putString(LOGGING_METHOD, mLoggingMethod);
     }
 
     @Override
@@ -235,10 +249,11 @@ public class LoginActivity extends AppCompatActivity
         client.disconnect();
     }
 
+
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null && mLoggedIn == null) {
+        if (user != null && mLoggedIn == null && mLoggingMethod != null) {
             final Intent inputIntent;
             SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
             if (prefs.getBoolean(ACCOUNT_TYPE, false)) {
@@ -295,8 +310,7 @@ public class LoginActivity extends AppCompatActivity
                 default:
                     throw new RuntimeException("not implemented login method " + mLoggingMethod);
             }
-            mLoggingMethod = null;
-        }else {
+        } else {
             switch (mLoggingMethod) {
                 case EMAIL_SIGNUP:
                     showLoginMessage("Successfully create an account");
@@ -437,13 +451,13 @@ public class LoginActivity extends AppCompatActivity
             } else {
                 showLoginError("Rosefire sign in failed!");
             }
-        } else if (requestCode == REQUEST_MAIN_ACTIVITY ) {
+        } else if (requestCode == REQUEST_MAIN_ACTIVITY) {
             if (resultCode == Activity.RESULT_OK) {
                 showProgress(false);
                 mAuth.signOut();
                 mLoggingMethod = null;
                 mLoggedIn = null;
-            }else{
+            } else {
                 finish();
             }
         }
