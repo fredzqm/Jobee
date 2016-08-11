@@ -11,17 +11,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.QRCodeFragment;
 import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.LoginActivity;
+import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
@@ -36,6 +36,8 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     private static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
+    private TextView mNavTitleTextView;
+    private TextView mNavSmallTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.js_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headView = navigationView.getHeaderView(0);
+        mNavTitleTextView = (TextView) headView.findViewById(R.id.js_nav_text_title);
+        mNavSmallTextView = (TextView) headView.findViewById(R.id.js_nav_text_small);
+
         if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
@@ -165,5 +172,9 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         return LoginActivity.getUserID();
     }
 
+    @Override
+    public void setNavTitle(String str) {
+        mNavTitleTextView.setText(str);
+    }
 
 }

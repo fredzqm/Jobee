@@ -116,6 +116,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
             mRef.setValue(mAccount);
         } else {
             nameEditText.setText(mAccount.getName());
+            mCallback.setNavTitle(getContext().getString(R.string.hello)+mAccount.getName());
             emailEditText.setText(mAccount.getEmailAccount());
             companyEditText.setText(mAccount.getCompany());
         }
@@ -138,5 +139,6 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
      */
     public interface Callback {
         String getUserID();
+        void setNavTitle(String str);
     }
 }

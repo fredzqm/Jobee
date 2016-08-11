@@ -14,13 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.LoginActivity;
+import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.model.Recruiter;
-import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
@@ -31,11 +29,12 @@ import com.fredzqm.jobee.recruiter.ResumeList.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
-        InterviewFragment.Callback, JobFragment.Callback
-{
+        InterviewFragment.Callback, JobFragment.Callback {
     public static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
+    private TextView mNavTitleTextView;
+    private TextView mNavSmallTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +61,16 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.re_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState == null){
+        View headView = navigationView.getHeaderView(0);
+        mNavTitleTextView = (TextView) headView.findViewById(R.id.re_nav_text_title);
+        mNavSmallTextView = (TextView) headView.findViewById(R.id.re_nav_text_small);
+
+        if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
     }
 
-    private void swapFragment(ContainedFragment fragment, String tag){
+    private void swapFragment(ContainedFragment fragment, String tag) {
         mFab.hide();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.re_fragment_container, fragment);
@@ -108,11 +111,11 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); i ++){
+        for (int i = 0; i < fm.getBackStackEntryCount(); i++) {
             fm.popBackStackImmediate();
         }
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.re_nav_home:
                 swapFragment(HomeFragment.newInstance(), null);
                 break;
@@ -150,12 +153,18 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         swapFragment(ResumeFragment.newInstance(resume), "edit job");
     }
 
-    public FloatingActionButton getFab(){
+    @Override
+    public FloatingActionButton getFab() {
         return mFab;
     }
 
     @Override
     public String getUserID() {
         return LoginActivity.getUserID();
+    }
+
+    @Override
+    public void setNavTitle(String str) {
+        mNavTitleTextView.setText(str);
     }
 }

@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.fredzqm.jobee.LoginActivity;
+import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
