@@ -1,0 +1,145 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".login.LoginActivity">
+
+    <TextView
+        android:id="@+id/login_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="@dimen/login_signup_title_margin_land"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="60sp" />
+
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/login_title">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/login_account_type_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/login_signup_title_margin_land"
+                android:height="20dp"
+                android:checked="false"
+                android:showText="true"
+                android:textColorHint="#bf1e1e"
+                android:textColorLink="#1539ed"
+                android:textOff="@string/job_seeker"
+                android:textOn="@string/recruiter" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/login_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/prompt_password"
+                        android:imeActionId="@+id/login"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/action_sign_in"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/email_sign_up_button"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/action_sign_up"
+                    android:textStyle="bold" />
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/google_sign_in_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/rosefire_sign_in_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/rose_red"
+                    android:text="@string/login_with_rosefire"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

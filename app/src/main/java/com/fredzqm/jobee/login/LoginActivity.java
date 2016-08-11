@@ -338,7 +338,7 @@ public class LoginActivity extends AppCompatActivity
         String password = mPasswordView.getText().toString();
 
         View focusView = null;
-        if (!TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
         } else if (TextUtils.isEmpty(email)) {
