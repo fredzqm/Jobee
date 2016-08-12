@@ -14,39 +14,43 @@
 
         <TextView
             android:id="@+id/js_list_item_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_column="0"
             android:layout_margin="@dimen/detail_view_margin"
-            android:text="Title"
             android:layout_row="0"
-            android:layout_column="0"/>
+            android:text="Title" />
 
         <TextView
             android:id="@+id/js_list_item_date"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
             android:layout_margin="@dimen/detail_view_margin"
-            android:text="Date"
             android:layout_row="0"
-            android:layout_column="1"/>
+            android:text="Date" />
 
         <TextView
             android:id="@+id/js_list_item_company"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
             android:layout_margin="@dimen/detail_view_margin"
-            android:text="Company"
             android:layout_row="1"
-            android:layout_column="0" />
+            android:text="Company" />
 
         <TextView
             android:id="@+id/js_list_item_city"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
             android:layout_margin="@dimen/detail_view_margin"
-            android:text="City"
             android:layout_row="1"
-            android:layout_column="1" />
+            android:text="City" />
 
     </GridLayout>
 
