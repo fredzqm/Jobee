@@ -27,17 +27,20 @@ import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
-        AppliedJobListFragment.Callback , JobDetailFragment.Callback , QRCodeFragment.Callback, AppliedJobFragment.Callback{
+        AppliedJobListFragment.Callback, JobDetailFragment.Callback, QRCodeFragment.Callback, AppliedJobFragment.Callback {
     private static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
     private TextView mNavTitleTextView;
     private TextView mNavSmallTextView;
+
+    private JobSeeker mJobseeker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,8 +176,13 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void setNavTitle(String str) {
-        mNavTitleTextView.setText(str);
+    public void updateAccount(JobSeeker jobSeeker) {
+        mJobseeker = jobSeeker;
+        mNavTitleTextView.setText(getString(R.string.hello) + jobSeeker.getName());
+    }
+
+    public JobSeeker getJobSeeker() {
+        return mJobseeker;
     }
 
 }

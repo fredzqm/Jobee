@@ -188,7 +188,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getUserID());
+                                Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getJobSeeker());
                                 mResumeRef.child(editedResume.getKey()).setValue(created);
                             }
                         })
@@ -204,7 +204,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getUserID());
+                                Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getJobSeeker());
                                 mResumeRef.push().setValue(created);
                             }
                         })
@@ -303,5 +303,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
         String getUserID();
 
         void showQRCode(String resumeKey);
+
+        JobSeeker getJobSeeker();
     }
 }

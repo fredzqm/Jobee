@@ -34,12 +34,15 @@ public class Resume implements Parcelable {
         resumeCategories = new ArrayList<>();
     }
 
-    public static Resume newInstance(String resumeName, String jobSeekerKey) {
+    public static Resume newInstance(String resumeName, JobSeeker jobSeeker) {
         Resume resume = new Resume();
-        resume.jobSeekerKey = jobSeekerKey;
+        if (jobSeeker != null){
+            resume.name = jobSeeker.getName();
+            resume.major = jobSeeker.getMajor();
+            resume.address = jobSeeker.getAddress();
+        }
+        resume.jobSeekerKey = jobSeeker.getKey();
         resume.resumeName = resumeName;
-        resume.major = "";
-        resume.address = "";
         resume.add(ResumeCategory.newInstance("Skills"));
         resume.add(ResumeCategory.newInstance("Education"));
         resume.add(ResumeCategory.newInstance("Experience"));
