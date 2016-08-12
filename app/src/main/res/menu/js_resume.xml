@@ -9,6 +9,14 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/js_action_add_category"
+        android:orderInCategory="100"
+        android:title="@string/add_new_category"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="never">
+    </item>
+
+    <item
         android:id="@+id/js_action_add_resume"
         android:orderInCategory="100"
         android:title="@string/add_new_resume"
@@ -17,10 +25,10 @@
     </item>
 
     <item
-        android:id="@+id/js_action_add_category"
+        android:id="@+id/js_action_edit_name"
         android:orderInCategory="100"
-        android:title="@string/add_new_category"
-        android:icon="@drawable/ic_add"
+        android:title="@string/edit_resume_name"
+        android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="never">
     </item>
 

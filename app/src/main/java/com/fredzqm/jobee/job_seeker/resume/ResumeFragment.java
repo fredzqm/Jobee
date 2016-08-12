@@ -1,9 +1,7 @@
 package com.fredzqm.jobee.job_seeker.resume;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -22,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
@@ -32,9 +29,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -141,6 +135,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
             public int getCount() {
                 return mResumes.size();
             }
+
             public String getItem(int position) {
                 return mResumes.get(position).getResumeName();
             }
@@ -180,6 +175,24 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
                 break;
             case R.id.js_action_delete:
                 mResumeRef.child(mResumes.get(curIndex).getKey()).removeValue();
+                break;
+            case R.id.js_action_edit_name:
+                final Resume editedResume = mResumes.get(curIndex);
+                editText.setHint("Resume name");
+                editText.setTransformationMethod(SingleLineTransformationMethod.getInstance());
+                editText.setText(editedResume.getResumeName());
+                new AlertDialog.Builder(getContext())
+                        .setView(editText)
+                        .setTitle("Edit the resume name")
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Resume created = Resume.newInstance(editText.getText().toString(), mCallback.getUserID());
+                                mResumeRef.child(editedResume.getKey()).setValue(created);
+                            }
+                        })
+                        .show();
                 break;
             case R.id.js_action_add_resume:
                 editText.setHint("Resume name");
@@ -268,9 +281,6 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
     }
 
 
-
-
-
     @Override
     public void clickFab() {
         mCallback.showQRCode(mResumes.get(curIndex).getKey());
@@ -289,7 +299,9 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
      */
     public interface Callback {
         FloatingActionButton getFab();
+
         String getUserID();
+
         void showQRCode(String resumeKey);
     }
 }

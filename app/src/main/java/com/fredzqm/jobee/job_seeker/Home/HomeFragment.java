@@ -131,7 +131,6 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
             addressEditText.setText(mAccount.getAddress());
             majorEditText.setText(mAccount.getMajor());
         }
-        Notifier.notify(mAccount.getKey(), "changed", "notify");
     }
 
     @Override
