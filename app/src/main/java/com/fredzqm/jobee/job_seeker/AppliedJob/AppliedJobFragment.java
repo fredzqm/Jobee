@@ -3,15 +3,24 @@ package com.fredzqm.jobee.job_seeker.AppliedJob;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.Submission;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 
@@ -25,6 +34,7 @@ import java.text.SimpleDateFormat;
  */
 public class AppliedJobFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = "AppliedJobFragment";
     private static final String JOB_ARGUMENT = "param1";
 
     private Submission mSubmission;
@@ -61,6 +71,36 @@ public class AppliedJobFragment extends ContainedFragment {
         if (getArguments() != null) {
             mSubmission = getArguments().getParcelable(JOB_ARGUMENT);
         }
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.js_appliedjob, menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.js_action_update_submission:
+                Resume.getReference().child(mSubmission.getResumeKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Resume resume = dataSnapshot.getValue(Resume.class);
+                        mSubmission.setResume(resume);
+                        Submission.getReference().child(mSubmission.getKey()).setValue(mSubmission);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, "onCancelled " + databaseError.getMessage());
+                    }
+                });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -109,7 +149,7 @@ public class AppliedJobFragment extends ContainedFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
