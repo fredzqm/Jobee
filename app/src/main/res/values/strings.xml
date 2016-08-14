@@ -62,7 +62,7 @@
     <string name="scan_resume_toast">Scanned resume, added to review section</string>
     <string name="resume_scan_cancelled">Resume scan cancelled</string>
     <string name="resume_scanned">Resume scanned</string>
-    <string name="hello">"Hello, "</string>
+    <string name="hello">"Hello, \n"</string>
     <string name="edit_resume_name">Edit resume name</string>
     <string name="update_submission">Update Submission</string>
 </resources>
