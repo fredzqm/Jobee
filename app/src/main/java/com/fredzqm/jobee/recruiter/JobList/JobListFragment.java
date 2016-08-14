@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
+import com.fredzqm.jobee.model.Recruiter;
 
 /**
  * A fragment representing a list of Items.
@@ -58,7 +59,7 @@ public class JobListFragment extends ContainedFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.re_action_add_job:
-                Job.getReference().push().setValue(Job.newInstance(mCallback.getUserID()));
+                Job.getReference().push().setValue(Job.newInstance(mCallback.getRecruiter()));
                 break;
             default:
                 throw new RuntimeException("Not implemented");
@@ -96,5 +97,7 @@ public class JobListFragment extends ContainedFragment {
     public interface Callback {
         void showJobDetail(String jobKey);
         String getUserID();
+
+        Recruiter getRecruiter();
     }
 }

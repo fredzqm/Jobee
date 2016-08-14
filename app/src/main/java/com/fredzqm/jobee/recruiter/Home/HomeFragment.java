@@ -71,7 +71,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
         companyEditText = (AutoCompleteTextView) view.findViewById(R.id.re_home_company);
         mSaveChangesButton = (Button) view.findViewById(R.id.re_home_save_changes);
 
-        mAccount = Recruiter.newInstance(mCallback.getUserID());
+        mAccount = Recruiter.newInstance();
         nameEditText.setText(mAccount.getName());
         emailEditText.setText(mAccount.getEmailAccount());
         companyEditText.setText(mAccount.getCompany());
@@ -111,12 +111,13 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         mAccount = dataSnapshot.getValue(Recruiter.class);
+        mAccount.setKey(dataSnapshot.getKey());
         if (mAccount == null) {
-            mAccount = Recruiter.newInstance(mCallback.getUserID());
+            mAccount = Recruiter.newInstance();
             mRef.setValue(mAccount);
         } else {
             nameEditText.setText(mAccount.getName());
-            mCallback.setNavTitle(getContext().getString(R.string.hello)+mAccount.getName());
+            mCallback.updateAccount(mAccount);
             emailEditText.setText(mAccount.getEmailAccount());
             companyEditText.setText(mAccount.getCompany());
         }
@@ -132,13 +133,14 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
         String getUserID();
-        void setNavTitle(String str);
+
+        void updateAccount(Recruiter recruiter);
     }
 }

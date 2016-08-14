@@ -34,7 +34,7 @@ public class Recruiter {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
-    public static Recruiter newInstance(String userID) {
+    public static Recruiter newInstance() {
         Recruiter recruiter = new Recruiter();
         return recruiter;
     }

@@ -24,7 +24,7 @@ import java.util.List;
  * specified {@link Callback}.
  */
 public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHolder> implements ChildEventListener {
-    private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
     private final List<Job> mJobs;
     private final Callback mCallback;

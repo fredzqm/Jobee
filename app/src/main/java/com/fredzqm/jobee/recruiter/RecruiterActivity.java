@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.JobSeeker;
+import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
@@ -35,6 +37,8 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     private FloatingActionButton mFab;
     private TextView mNavTitleTextView;
     private TextView mNavSmallTextView;
+
+    private Recruiter mRecruiter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +168,14 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
-    public void setNavTitle(String str) {
-        mNavTitleTextView.setText(str);
+    public Recruiter getRecruiter() {
+        return mRecruiter;
     }
+
+    @Override
+    public void updateAccount(Recruiter recruiter) {
+        mRecruiter = recruiter;
+        mNavTitleTextView.setText(getString(R.string.hello) + recruiter.getName());
+    }
+
 }

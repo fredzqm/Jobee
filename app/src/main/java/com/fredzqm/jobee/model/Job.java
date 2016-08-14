@@ -40,11 +40,11 @@ public class Job implements Parcelable {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
-    public static Job newInstance(String userID) {
+    public static Job newInstance(Recruiter recruiter) {
         Job job = new Job();
-        job.recruiterKey = userID;
+        job.recruiterKey = recruiter.getKey();
         job.title = "title";
-        job.company ="company";
+        job.company = recruiter.getCompany();
         job.city = "city";
         job.details = "details";
         job.date = new Date();
