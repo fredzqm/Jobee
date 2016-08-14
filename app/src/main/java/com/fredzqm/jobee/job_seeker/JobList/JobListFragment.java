@@ -24,7 +24,7 @@ import com.fredzqm.jobee.ContainedFragment;
  */
 public class JobListFragment extends ContainedFragment {
 
-    private Callback mListener;
+    private Callback mCallback;
 
     public static JobListFragment newInstance() {
         JobListFragment fragment = new JobListFragment();
@@ -75,7 +75,7 @@ public class JobListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new JobListAdapter(mListener));
+        recyclerView.setAdapter(new JobListAdapter(mCallback));
         return view;
     }
 
@@ -84,7 +84,7 @@ public class JobListFragment extends ContainedFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Callback) {
-            mListener = (Callback) context;
+            mCallback = (Callback) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement Callback");
@@ -94,7 +94,7 @@ public class JobListFragment extends ContainedFragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mCallback = null;
     }
 
     /**

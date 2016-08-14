@@ -36,6 +36,7 @@ public class AppliedJobFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String TAG = "AppliedJobFragment";
     private static final String JOB_ARGUMENT = "param1";
+    private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
     private Submission mSubmission;
     private Callback mCallback;
@@ -117,7 +118,7 @@ public class AppliedJobFragment extends ContainedFragment {
         Job mJob = mSubmission.getJob();
         mTitleTextView.setText(mJob.getTitle());
         mCompanyTextView.setText(mJob.getCompany());
-        mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+        mDateTextView.setText(DATAFORMAT.format(mJob.getDate()));
         mCityTextView.setText(mJob.getCity());
         mDetailsTextView.setText(mJob.getDetails());
 

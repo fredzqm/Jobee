@@ -3,6 +3,7 @@ package com.fredzqm.jobee.job_seeker.JobList;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 public class JobDetailFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String JOB_ARGUMENT = "param1";
+    private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
     private Job mJob;
     private Callback mCallback;
@@ -75,7 +77,7 @@ public class JobDetailFragment extends ContainedFragment {
 
         mTitleTextView.setText(mJob.getTitle());
         mCompanyTextView.setText(mJob.getCompany());
-        mDateTextView.setText((new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")).format(mJob.getDate()));
+        mDateTextView.setText(DATAFORMAT.format(mJob.getDate()));
         mCityTextView.setText(mJob.getCity());
         mDetailsTextView.setText(mJob.getDetails());
 
