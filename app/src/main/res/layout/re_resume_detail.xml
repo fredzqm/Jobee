@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/re_resume_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Name"
+        android:textSize="40dp"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/re_resume_major"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Major"
+        android:textSize="20dp"
+        android:layout_below="@+id/re_resume_name"
+        android:layout_toEndOf="@+id/re_resume_name" />
+
+    <LinearLayout
+        android:id="@+id/re_resume_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/re_resume_major"
+        android:layout_margin="@dimen/card_view_margin"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="10px"
+            android:paddingBottom="5px"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:src="@android:drawable/divider_horizontal_bright" />
+
+    </LinearLayout>
+</RelativeLayout>

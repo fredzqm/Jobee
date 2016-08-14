@@ -22,6 +22,8 @@ import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
 import com.google.firebase.database.DatabaseReference;
 
+import org.w3c.dom.Text;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -35,7 +37,6 @@ public class ResumeFragment extends ContainedFragment {
     private static final String SUBMISSION = "SUBMISSION";
 
     private Submission mSubmission;
-    private LinearLayout mLinearLayout;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -66,19 +67,21 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mLinearLayout = new LinearLayout(getContext());
-        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        int x = (int) getResources().getDimension(R.dimen.card_view_margin);
-        layoutParams.setMargins(x, x, x, x);
-        mLinearLayout.setLayoutParams(layoutParams);
+        View view = inflater.inflate(R.layout.re_resume_detail, container, false);
+        Resume resume = mSubmission.getResume();
 
-        Resume mResume = mSubmission.getResume();
-        for (int i = 0; i < mResume.size(); i++) {
-            ResumeCategory resumeCategory = mResume.get(i);
-            View itemView = LayoutInflater.from(getContext()).inflate(R.layout.js_resume_category, mLinearLayout, false);
-            TextView mTypeTextView = (TextView) itemView.findViewById(R.id.js_resume_item_content_title);
+        LinearLayout mLinearLayout = (LinearLayout) view.findViewById(R.id.re_resume_linear_layout);
+        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        TextView resumeNameTextview = (TextView) view.findViewById(R.id.re_resume_name);
+        resumeNameTextview.setText(resume.getName());
+        TextView resumeMajorTextview = (TextView) view.findViewById(R.id.re_resume_major);
+        resumeMajorTextview.setText(resume.getMajor());
+
+        for (int i = 0; i < resume.size(); i++) {
+            ResumeCategory resumeCategory = resume.get(i);
+            View itemView = LayoutInflater.from(getContext()).inflate(R.layout.re_resume_category, mLinearLayout, false);
+            TextView mTypeTextView = (TextView) itemView.findViewById(R.id.re_resume_item_content_title);
             LinearLayout mListView = (LinearLayout) itemView.findViewById(R.id.listviewTasks);
             mTypeTextView.setText(resumeCategory.getType());
             mListView.removeAllViews();
@@ -94,7 +97,8 @@ public class ResumeFragment extends ContainedFragment {
             mLinearLayout.addView(itemView);
             Log.d(TAG, "" + resumeCategory);
         }
-        return mLinearLayout;
+
+        return view;
     }
 
 
