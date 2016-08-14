@@ -20,7 +20,8 @@ public class IDService extends FirebaseInstanceIdService {
     public static void updateToken() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
-        Notifier.getReference().child(LoginActivity.getUserID()).setValue(refreshedToken);
+        if (LoginActivity.getUserID() != null)
+            Notifier.getReference().child(LoginActivity.getUserID()).setValue(refreshedToken);
     }
 
 }

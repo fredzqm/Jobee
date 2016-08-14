@@ -100,6 +100,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
         mCityTextView.setOnClickListener(this);
         mDetailsTextView.setOnClickListener(this);
 
+        mCallback.getFab().setImageResource(android.R.drawable.ic_menu_camera);
         mCallback.getFab().show();
         
         return view;

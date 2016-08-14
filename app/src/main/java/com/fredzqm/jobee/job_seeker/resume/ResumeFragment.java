@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
@@ -102,6 +103,7 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mResumeAdapter);
         mRecyclerView.setHasFixedSize(false);
+        mCallback.getFab().setImageResource(R.drawable.qr_icon);
         mCallback.getFab().show();
         return view;
     }
@@ -283,7 +285,10 @@ public class ResumeFragment extends ContainedFragment implements ChildEventListe
 
     @Override
     public void clickFab() {
-        mCallback.showQRCode(mResumes.get(curIndex).getKey());
+        if (mResumes.size() > 0)
+            mCallback.showQRCode(mResumes.get(curIndex).getKey());
+        else
+            Toast.makeText(getContext(), "Please create a resume first!", Toast.LENGTH_SHORT).show();
     }
 
 
