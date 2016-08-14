@@ -65,4 +65,8 @@
     <string name="hello">"Hello, \n"</string>
     <string name="edit_resume_name">Edit resume name</string>
     <string name="update_submission">Update Submission</string>
+    <string name="notif_offer_title">Offer</string>
+    <string name="notif_offer_body">offer</string>
+    <string name="notif_reject_title">Reject</string>
+    <string name="notif_reject_body">Sorry, %s rejected you</string>
 </resources>

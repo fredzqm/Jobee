@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
@@ -31,7 +30,7 @@ import com.fredzqm.jobee.recruiter.ResumeList.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
-        InterviewFragment.Callback, JobFragment.Callback {
+        InterviewFragment.Callback, JobFragment.Callback, ResumeFragment.Callback {
     public static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
@@ -39,6 +38,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     private TextView mNavSmallTextView;
 
     private Recruiter mRecruiter;
+    private ResumeListFragment mResumeListFrag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +124,8 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(HomeFragment.newInstance(), null);
                 break;
             case R.id.re_nav_resume:
-                swapFragment(ResumeListFragment.newInstance(), null);
+                mResumeListFrag = ResumeListFragment.newInstance();
+                swapFragment(mResumeListFrag, null);
                 break;
             case R.id.re_nav_joblist:
                 swapFragment(JobListFragment.newInstance(), null);
@@ -170,6 +171,14 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     @Override
     public Recruiter getRecruiter() {
         return mRecruiter;
+    }
+
+    @Override
+    public void showNext() {
+        getFragmentManager().popBackStackImmediate();
+        if (mResumeListFrag == null)
+            throw new RuntimeException("resumelistfrag is null when showNext");
+        mResumeListFrag.showNext();
     }
 
     @Override

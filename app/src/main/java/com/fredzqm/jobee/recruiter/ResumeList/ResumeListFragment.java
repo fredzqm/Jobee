@@ -22,6 +22,7 @@ import com.fredzqm.jobee.model.Submission;
 public class ResumeListFragment extends ContainedFragment {
 
     private Callback mCallback;
+    private ResumeListAdapter mResumeListAdapter;
 
     public static ResumeListFragment newInstance() {
         ResumeListFragment fragment = new ResumeListFragment();
@@ -49,8 +50,8 @@ public class ResumeListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        recyclerView.setAdapter(new ResumeListAdapter(mCallback));
+        mResumeListAdapter = new ResumeListAdapter(mCallback);
+        recyclerView.setAdapter(mResumeListAdapter);
         return view;
     }
 
@@ -70,6 +71,10 @@ public class ResumeListFragment extends ContainedFragment {
     public void onDetach() {
         super.onDetach();
         mCallback = null;
+    }
+
+    public void showNext() {
+        mResumeListAdapter.showNext();
     }
 
     /**

@@ -27,6 +27,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
 
     private final List<Submission> mSubmissions;
     private final Callback mCallback;
+    private int mLastShownResumeIndex;
 
     private DatabaseReference mRef;
 
@@ -103,6 +104,12 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         Log.d("Error", "onCancelled: " + databaseError.getMessage());
     }
 
+    public void showNext() {
+        mLastShownResumeIndex++;
+        if (mLastShownResumeIndex < mSubmissions.size())
+            mCallback.showResumeDetail(mSubmissions.get(mLastShownResumeIndex));
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mNameTextView;
         //        public final TextView mCityTextView;
@@ -121,6 +128,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     if (null != mCallback) {
+                        mLastShownResumeIndex = mSubmissions.indexOf(mSubmission);
                         mCallback.showResumeDetail(mSubmission);
                     }
                 }

@@ -1,7 +1,9 @@
 package com.fredzqm.jobee.recruiter.ResumeList;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telecom.Call;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,10 +18,13 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.ResumeCategory;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
 import org.w3c.dom.Text;
@@ -37,6 +42,7 @@ public class ResumeFragment extends ContainedFragment {
     private static final String SUBMISSION = "SUBMISSION";
 
     private Submission mSubmission;
+    private Callback mCallback;
 
     public ResumeFragment() {
         // Required empty public constructor
@@ -115,16 +121,16 @@ public class ResumeFragment extends ContainedFragment {
         String jobSeekerKey = mSubmission.getJobSeekerKey();
         switch (item.getItemId()) {
             case R.id.re_action_decide_later:
-                showNext();
+                mCallback.showNext();
                 break;
             case R.id.re_action_offer:
                 mSubmission.setStatus(Submission.OFFERED);
-                Notifier.notify(jobSeekerKey, "Offer", "offer");
+                Notifier.notify(jobSeekerKey, getContext().getString(R.string.notif_offer_title), getContext().getString(R.string.notif_offer_body));
                 ref.setValue(mSubmission);
                 break;
             case R.id.re_action_weed_out:
                 mSubmission.setStatus(Submission.REJECTED);
-                Notifier.notify(jobSeekerKey, "Reject", "Sorry, ... rejected you");
+                Notifier.notify(jobSeekerKey, getContext().getString(R.string.notif_reject_title), getContext().getString(R.string.notif_reject_body, mCallback.getRecruiter().getCompany()));
                 ref.setValue(mSubmission);
                 break;
             case R.id.re_action_schedule_interview:
@@ -135,7 +141,35 @@ public class ResumeFragment extends ContainedFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showNext() {
-        getFragmentManager().popBackStack();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Callback) {
+            mCallback = (Callback) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement Callback");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallback = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p/>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface Callback {
+        Recruiter getRecruiter();
+        void showNext();
     }
 }
