@@ -43,4 +43,20 @@
             android:src="@android:drawable/divider_horizontal_bright" />
 
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/re_resume_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        android:text="Status"
+        android:textSize="40dp"
+        android:fontFamily="sans-serif-condensed"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold|italic" />
+
+
 </RelativeLayout>

@@ -36,7 +36,6 @@ public class Submission implements ValueEventListener, Parcelable {
 
     private String status;
     public static final String SUBMITTED = "Submitted";
-    public static final String REVIEWED = "REVIEWED";
     public static final String OFFERED = "Offer";
     public static final String REJECTED = "Rejected";
     public static final String ACCEPTED = "Accepted";

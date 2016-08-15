@@ -77,7 +77,6 @@ public class ResumeFragment extends ContainedFragment {
         TextView resumeNameTextview = (TextView) view.findViewById(R.id.re_resume_name);
         resumeNameTextview.setText(resume.getName());
         TextView resumeMajorTextview = (TextView) view.findViewById(R.id.re_resume_major);
-        resumeMajorTextview.setText(resume.getMajor());
 
         for (int i = 0; i < resume.size(); i++) {
             ResumeCategory resumeCategory = resume.get(i);
@@ -99,6 +98,21 @@ public class ResumeFragment extends ContainedFragment {
             Log.d(TAG, "" + resumeCategory);
         }
 
+        resumeMajorTextview.setText(resume.getMajor());
+        TextView statusTextView = (TextView) view.findViewById(R.id.re_resume_status);
+        switch (mSubmission.getStatus()) {
+            case Submission.SUBMITTED:
+            case Submission.OFFERED:
+                break;
+            case Submission.ACCEPTED:
+                statusTextView.setVisibility(View.VISIBLE);
+                statusTextView.setText(R.string.notif_accept_offer_body);
+                break;
+            case Submission.REJECTED:
+                statusTextView.setVisibility(View.VISIBLE);
+                statusTextView.setText(R.string.notif_decline_offer_body);
+                break;
+        }
         return view;
     }
 
@@ -119,7 +133,7 @@ public class ResumeFragment extends ContainedFragment {
                 Notifier.notifyOffer(getContext(), mSubmission, mCallback.getRecruiter());
                 break;
             case R.id.re_action_weed_out:
-                Notifier.notifyReject(getContext(), mSubmission,mCallback.getRecruiter());
+                Notifier.notifyReject(getContext(), mSubmission, mCallback.getRecruiter());
                 break;
             default:
                 throw new RuntimeException("Not implemented");
@@ -150,7 +164,7 @@ public class ResumeFragment extends ContainedFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
