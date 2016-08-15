@@ -29,7 +29,10 @@ import com.fredzqm.jobee.job_seeker.JobList.JobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.ResumeFragment;
 import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Submission;
+import com.fredzqm.jobee.notification.Notifier;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
@@ -39,8 +42,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     private FloatingActionButton mFab;
     private TextView mNavTitleTextView;
     private TextView mNavSmallTextView;
-
-    private JobSeeker mJobseeker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,16 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         mNavTitleTextView = (TextView) headView.findViewById(R.id.js_nav_text_title);
         mNavSmallTextView = (TextView) headView.findViewById(R.id.js_nav_text_small);
 
-        if (savedInstanceState == null) {
+        Intent intent = getIntent();
+        if (intent != null && intent.getStringExtra(Notifier.NOTIF_TYPE) != null) {
+            String type = intent.getStringExtra(Notifier.NOTIF_TYPE);
+            if (type.equals(Notifier.OFFER)) {
+                swapFragment(AppliedJobListFragment.newInstance(), null);
+                // TODO:
+            } else if (type.equals(Notifier.REJECT)) {
+                // TODO:
+            }
+        } else if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
     }
@@ -150,6 +160,20 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         getSupportFragmentManager().findFragmentById(R.id.js_fragment_container).onActivityResult(requestCode, resultCode, data);
     }
 
+    // for home fragment
+    private JobSeeker mJobseeker;
+
+    @Override
+    public void updateAccount(JobSeeker jobSeeker) {
+        mJobseeker = jobSeeker;
+        mNavTitleTextView.setText(getString(R.string.hello, jobSeeker.getName()));
+    }
+
+    public JobSeeker getJobSeeker() {
+        return mJobseeker;
+    }
+
+
     @Override
     public void showJobDetail(Submission submission) {
         swapFragment(AppliedJobFragment.newInstance(submission), "Job Detail");
@@ -173,16 +197,6 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     @Override
     public String getUserID() {
         return LoginActivity.getUserID();
-    }
-
-    @Override
-    public void updateAccount(JobSeeker jobSeeker) {
-        mJobseeker = jobSeeker;
-        mNavTitleTextView.setText(getString(R.string.hello) + jobSeeker.getName());
-    }
-
-    public JobSeeker getJobSeeker() {
-        return mJobseeker;
     }
 
 }

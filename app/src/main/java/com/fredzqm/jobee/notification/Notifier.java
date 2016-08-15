@@ -25,10 +25,12 @@ public class Notifier extends TextHttpResponseHandler {
     // notificaton types
     public static final String OFFER = "OFFER";
     public static final String REJECT = "REJECT";
+    public static final String ACCEPT_OFFER = "ACCEPT_OFFER";
     // data payload keys
     public static final String NOTIF_TYPE = "NOTIF_TYPE";
     public static final String TITLE = "TITLE";
     public static final String BODY = "BODY";
+    public static final String SUBMISSION_KEY = "SUBMISSION_KEY";
 
     private static AsyncHttpClient client;
     private static ResponseHandlerInterface requestSender;

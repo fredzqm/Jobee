@@ -21,6 +21,7 @@ import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;
+import com.fredzqm.jobee.notification.Notifier;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
@@ -36,7 +37,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     private TextView mNavTitleTextView;
     private TextView mNavSmallTextView;
 
-    private Recruiter mRecruiter;
     private ResumeListAdapter mResumeListAdapter;
 
     @Override
@@ -68,7 +68,15 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         mNavTitleTextView = (TextView) headView.findViewById(R.id.re_nav_text_title);
         mNavSmallTextView = (TextView) headView.findViewById(R.id.re_nav_text_small);
 
-        if (savedInstanceState == null) {
+
+        Intent intent = getIntent();
+        if (intent != null && intent.getStringExtra(Notifier.NOTIF_TYPE) != null) {
+            String type = intent.getStringExtra(Notifier.NOTIF_TYPE);
+            if (type.equals(Notifier.ACCEPT_OFFER)) {
+                swapFragment(ResumeListFragment.newInstance(), null);
+                mResumeListAdapter = new ResumeListAdapter(this, intent.getStringExtra(Notifier.SUBMISSION_KEY));
+            }
+        } else if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
     }
@@ -142,6 +150,20 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         getSupportFragmentManager().findFragmentById(R.id.re_fragment_container).onActivityResult(requestCode, resultCode, data);
     }
 
+    // for home fragment
+    private Recruiter mRecruiter;
+
+    @Override
+    public Recruiter getRecruiter() {
+        return mRecruiter;
+    }
+
+    @Override
+    public void updateAccount(Recruiter recruiter) {
+        mRecruiter = recruiter;
+        mNavTitleTextView.setText(getString(R.string.hello, recruiter.getName()));
+    }
+
 
     @Override
     public void showJobDetail(String jobKey) {
@@ -170,10 +192,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         return LoginActivity.getUserID();
     }
 
-    @Override
-    public Recruiter getRecruiter() {
-        return mRecruiter;
-    }
 
     @Override
     public void showNext() {
@@ -181,10 +199,5 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         mResumeListAdapter.showNext();
     }
 
-    @Override
-    public void updateAccount(Recruiter recruiter) {
-        mRecruiter = recruiter;
-        mNavTitleTextView.setText(getString(R.string.hello) + recruiter.getName());
-    }
 
 }

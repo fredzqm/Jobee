@@ -10,8 +10,12 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.login.LoginActivity;
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.JobSeeker;
+import com.fredzqm.jobee.model.Recruiter;
+import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -28,10 +32,23 @@ public class MessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Map<String, String> data = remoteMessage.getData();
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent();
         for (String key : data.keySet()) {
             String x = data.get(key);
-            intent.putExtra(key.substring(0, key.length()-1), x);
+            intent.putExtra(key.substring(0, key.length() - 1), x);
+        }
+        if (LoginActivity.getUserID() == null) {
+            intent.setClass(this, LoginActivity.class);
+        } else {
+            switch (intent.getStringExtra(Notifier.NOTIF_TYPE)) {
+                case Notifier.OFFER:
+                case Notifier.REJECT:
+                    intent.setClass(this, JobSeekerActivity.class);
+                    break;
+                case Notifier.ACCEPT_OFFER:
+                    intent.setClass(this, RecruiterActivity.class);
+                    break;
+            }
         }
 
         // launch a notification

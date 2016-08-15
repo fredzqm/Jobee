@@ -26,10 +26,19 @@ import java.util.List;
 public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.ViewHolder> implements ChildEventListener {
 
     private final List<Submission> mSubmissions;
-    private final Callback mCallback;
     private int mLastShownResumeIndex;
+    private String mSubmissionKey;
 
+    private final Callback mCallback;
     private DatabaseReference mRef;
+
+    public ResumeListAdapter(Callback callback, String submissionKey) {
+        mSubmissions = new ArrayList<>();
+        mCallback = callback;
+        this.mSubmissionKey = submissionKey;
+        mRef = Submission.getReference();
+        mRef.orderByChild(Submission.RECRUITER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
+    }
 
     public ResumeListAdapter(Callback callback) {
         mSubmissions = new ArrayList<>();
@@ -37,6 +46,7 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         mRef = Submission.getReference();
         mRef.orderByChild(Submission.RECRUITER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,6 +70,12 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         return mSubmissions.size();
     }
 
+    public void showNext() {
+        mLastShownResumeIndex++;
+        if (mLastShownResumeIndex < mSubmissions.size())
+            mCallback.showResumeDetail(mSubmissions.get(mLastShownResumeIndex));
+    }
+
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         final Submission added = dataSnapshot.getValue(Submission.class);
@@ -67,6 +83,10 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         added.setKey(key);
         mSubmissions.add(0, added);
         notifyDataSetChanged();
+        if (key.equals(mSubmissionKey)){
+            mCallback.showResumeDetail(added);
+            mSubmissionKey = null;
+        }
     }
 
     @Override
@@ -102,12 +122,6 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
     @Override
     public void onCancelled(DatabaseError databaseError) {
         Log.d("Error", "onCancelled: " + databaseError.getMessage());
-    }
-
-    public void showNext() {
-        mLastShownResumeIndex++;
-        if (mLastShownResumeIndex < mSubmissions.size())
-            mCallback.showResumeDetail(mSubmissions.get(mLastShownResumeIndex));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
