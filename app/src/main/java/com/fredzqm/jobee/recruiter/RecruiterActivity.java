@@ -23,6 +23,7 @@ import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
+import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
 import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
@@ -38,7 +39,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     private TextView mNavSmallTextView;
 
     private Recruiter mRecruiter;
-    private ResumeListFragment mResumeListFrag;
+    private ResumeListAdapter mResumeListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +125,7 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
                 swapFragment(HomeFragment.newInstance(), null);
                 break;
             case R.id.re_nav_resume:
-                mResumeListFrag = ResumeListFragment.newInstance();
-                swapFragment(mResumeListFrag, null);
+                swapFragment(ResumeListFragment.newInstance(), null);
                 break;
             case R.id.re_nav_joblist:
                 swapFragment(JobListFragment.newInstance(), null);
@@ -159,6 +159,13 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
     }
 
     @Override
+    public ResumeListAdapter getResumeListAdapter() {
+        if (mResumeListAdapter == null)
+            mResumeListAdapter = new ResumeListAdapter(this);
+        return mResumeListAdapter;
+    }
+
+    @Override
     public FloatingActionButton getFab() {
         return mFab;
     }
@@ -175,10 +182,8 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
 
     @Override
     public void showNext() {
-        getFragmentManager().popBackStackImmediate();
-        if (mResumeListFrag == null)
-            throw new RuntimeException("resumelistfrag is null when showNext");
-        mResumeListFrag.showNext();
+        getSupportFragmentManager().popBackStackImmediate();
+        mResumeListAdapter.showNext();
     }
 
     @Override

@@ -15,7 +15,7 @@ import com.fredzqm.jobee.model.Submission;
 
 /**
  * A fragment representing a list of Items.
- * <p/>
+ * <p>
  * Activities containing this fragment MUST implement the {@link Callback}
  * interface.
  */
@@ -50,7 +50,7 @@ public class ResumeListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mResumeListAdapter = new ResumeListAdapter(mCallback);
+        mResumeListAdapter = mCallback.getResumeListAdapter();
         recyclerView.setAdapter(mResumeListAdapter);
         return view;
     }
@@ -82,13 +82,16 @@ public class ResumeListFragment extends ContainedFragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
         String getUserID();
+
         void showResumeDetail(Submission submission);
+
+        ResumeListAdapter getResumeListAdapter();
     }
 }
