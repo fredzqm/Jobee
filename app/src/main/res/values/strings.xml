@@ -69,4 +69,10 @@
     <string name="notif_offer_body">offer</string>
     <string name="notif_reject_title">Reject</string>
     <string name="notif_reject_body">Sorry, %s rejected you</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
+    <string name="notif_accept_offer_title">Acceptance</string>
+    <string name="notif_accept_offer_body">I accepted!!</string>
+    <string name="notif_decline_offer_title">Decline</string>
+    <string name="notif_decline_offer_body">Sorry, I can\'t take your offer</string>
 </resources>

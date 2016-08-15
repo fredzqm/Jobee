@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment.Callback;
@@ -46,7 +47,6 @@ public class ResumeListAdapter extends RecyclerView.Adapter<ResumeListAdapter.Vi
         mRef = Submission.getReference();
         mRef.orderByChild(Submission.RECRUITER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
-
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

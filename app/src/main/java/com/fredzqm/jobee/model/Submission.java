@@ -20,6 +20,7 @@ public class Submission implements ValueEventListener, Parcelable {
     public static final String PATH = "submission";
     public static final String RECRUITER_KEY = "recruiterKey";
     public static final String JOBSEEKER_KEY = "jobSeekerKey";
+    public static final String DECLINED = "DECLINED";
 
     @Exclude
     private String key;
@@ -125,6 +126,10 @@ public class Submission implements ValueEventListener, Parcelable {
         this.job = job;
     }
 
+    public boolean isOffer() {
+        return OFFERED.equals(status);
+    }
+
     public static void handleNewSubmission(Job mJob, String resumeKey) {
         Submission subs = new Submission();
         subs.jobKey = mJob.getKey();
@@ -189,4 +194,5 @@ public class Submission implements ValueEventListener, Parcelable {
         parcel.writeString(jobSeekerKey);
         parcel.writeString(status);
     }
+
 }

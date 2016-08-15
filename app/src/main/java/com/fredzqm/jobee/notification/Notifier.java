@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Recruiter;
+import com.fredzqm.jobee.model.Submission;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +32,7 @@ public class Notifier extends TextHttpResponseHandler {
     public static final String TITLE = "TITLE";
     public static final String BODY = "BODY";
     public static final String SUBMISSION_KEY = "SUBMISSION_KEY";
+    private static final String DECLINE_OFFER = "DECLINE_OFFER";
 
     private static AsyncHttpClient client;
     private static ResponseHandlerInterface requestSender;
@@ -45,29 +47,60 @@ public class Notifier extends TextHttpResponseHandler {
         return FirebaseDatabase.getInstance().getReference().child(PATH);
     }
 
-    /**
-     * Example here
-     * String token = FirebaseInstanceId.getInstance().getToken();
-     * Log.d(TAG, token);
-     * Notifier requestSender = new Notifier(LoginActivity.this);
-     * requestSender.notifyOffer(token, "Portugal vs. Denmark", "5 to 1");
-     *
-     * @param userID
-     */
-    public static void notifyOffer(Context context, String userID) {
+    public static void notifyOffer(Context context, Submission submission, Recruiter recruiter) {
+        // update firebase
+        submission.setStatus(Submission.OFFERED);
+        DatabaseReference ref = Submission.getReference().child(submission.getKey());
+        ref.setValue(submission);
+        // send fcm message
         Map<String, String> data = new HashMap<>();
         data.put(NOTIF_TYPE, OFFER);
         data.put(TITLE, context.getString(R.string.notif_offer_title));
         data.put(BODY, context.getString(R.string.notif_offer_body));
-        sendNotification(userID, data);
+        data.put(SUBMISSION_KEY, submission.getKey());
+        sendNotification(submission.getJobSeekerKey(), data);
     }
 
-    public static void notifyReject(Context context, String userID, Recruiter recruiter) {
+    public static void notifyReject(Context context, Submission submission, Recruiter recruiter) {
+        // update firebase
+        submission.setStatus(Submission.REJECTED);
+        DatabaseReference ref = Submission.getReference().child(submission.getKey());
+        ref.setValue(submission);
+        // send fcm message
         Map<String, String> data = new HashMap<>();
         data.put(NOTIF_TYPE, REJECT);
         data.put(TITLE, context.getString(R.string.notif_reject_title));
         data.put(BODY, context.getString(R.string.notif_reject_body, recruiter.getCompany()));
-        sendNotification(userID, data);
+        data.put(SUBMISSION_KEY, submission.getKey());
+        sendNotification(submission.getJobSeekerKey(), data);
+    }
+
+    public static void notifyAccpetOffer(Context context, Submission submission) {
+        // update firebase
+        submission.setStatus(Submission.ACCEPTED);
+        DatabaseReference ref = Submission.getReference().child(submission.getKey());
+        ref.setValue(submission);
+        // send fcm message
+        Map<String, String> data = new HashMap<>();
+        data.put(NOTIF_TYPE, ACCEPT_OFFER);
+        data.put(TITLE, context.getString(R.string.notif_accept_offer_title));
+        data.put(BODY, context.getString(R.string.notif_accept_offer_body));
+        data.put(SUBMISSION_KEY, submission.getKey());
+        sendNotification(submission.getRecruiterKey(), data);
+    }
+
+    public static void notifyDeclineOffer(Context context, Submission submission) {
+        // update firebase
+        submission.setStatus(Submission.DECLINED);
+        DatabaseReference ref = Submission.getReference().child(submission.getKey());
+        ref.setValue(submission);
+        // send fcm message
+        Map<String, String> data = new HashMap<>();
+        data.put(NOTIF_TYPE, DECLINE_OFFER);
+        data.put(TITLE, context.getString(R.string.notif_decline_offer_title));
+        data.put(BODY, context.getString(R.string.notif_decline_offer_body));
+        data.put(SUBMISSION_KEY, submission.getKey());
+        sendNotification(submission.getRecruiterKey(), data);
     }
 
     private static void sendNotification(String userID, Map<String, String> data) {

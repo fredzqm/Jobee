@@ -43,7 +43,7 @@ public class AppliedJobListFragment extends ContainedFragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new AppliedJobListAdapter(mCallback));
+        recyclerView.setAdapter(mCallback.getAppliedJobListAdapter());
         return view;
     }
 
@@ -77,6 +77,9 @@ public class AppliedJobListFragment extends ContainedFragment {
      */
     public interface Callback {
         void showJobDetail(Submission mItem);
+
         String getUserID();
+
+        RecyclerView.Adapter getAppliedJobListAdapter();
     }
 }

@@ -10,6 +10,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobFragment;
+import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListAdapter;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.QRCodeFragment;
 import com.fredzqm.jobee.model.Job;
@@ -32,7 +34,6 @@ import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
-import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
@@ -42,6 +43,7 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
     private FloatingActionButton mFab;
     private TextView mNavTitleTextView;
     private TextView mNavSmallTextView;
+    private AppliedJobListAdapter mAppliedJobListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +76,8 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
 
         Intent intent = getIntent();
         if (intent != null && intent.getStringExtra(Notifier.NOTIF_TYPE) != null) {
-            String type = intent.getStringExtra(Notifier.NOTIF_TYPE);
-            if (type.equals(Notifier.OFFER)) {
-                swapFragment(AppliedJobListFragment.newInstance(), null);
-                // TODO:
-            } else if (type.equals(Notifier.REJECT)) {
-                // TODO:
-            }
+            swapFragment(AppliedJobListFragment.newInstance(), null);
+            mAppliedJobListAdapter = new AppliedJobListAdapter(this, intent.getStringExtra(Notifier.SUBMISSION_KEY));
         } else if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
@@ -199,4 +196,11 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         return LoginActivity.getUserID();
     }
 
+    @Override
+    public RecyclerView.Adapter getAppliedJobListAdapter() {
+        if (mAppliedJobListAdapter == null)
+            mAppliedJobListAdapter = new AppliedJobListAdapter(this);
+        return mAppliedJobListAdapter;
+
+    }
 }

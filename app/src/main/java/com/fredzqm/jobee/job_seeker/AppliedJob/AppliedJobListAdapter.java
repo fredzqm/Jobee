@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment.Callback;
+import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.model.Submission;
 import com.google.firebase.database.ChildEventListener;
@@ -28,12 +29,22 @@ public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAd
     private static final SimpleDateFormat DATAFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     private final List<Submission> mSubmissions;
+    private String mSubmissionKey;
+
     private final Callback mCallback;
     private DatabaseReference mRef;
 
     public AppliedJobListAdapter(Callback callback) {
         mSubmissions = new ArrayList<>();
         mCallback = callback;
+        mRef = Submission.getReference();
+        mRef.orderByChild(Submission.JOBSEEKER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
+    }
+
+    public AppliedJobListAdapter(Callback callback, String submissionKey) {
+        mSubmissions = new ArrayList<>();
+        mCallback = callback;
+        this.mSubmissionKey = submissionKey;
         mRef = Submission.getReference();
         mRef.orderByChild(Submission.JOBSEEKER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
@@ -64,6 +75,10 @@ public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAd
         added.setKey(key);
         mSubmissions.add(0, added);
         notifyDataSetChanged();
+        if (key.equals(mSubmissionKey)) {
+            mCallback.showJobDetail(added);
+            mSubmissionKey = null;
+        }
     }
 
     @Override
@@ -71,7 +86,7 @@ public class AppliedJobListAdapter extends RecyclerView.Adapter<AppliedJobListAd
         Submission changedTo = dataSnapshot.getValue(Submission.class);
         String key = dataSnapshot.getKey();
         for (int i = 0; i < mSubmissions.size(); i++) {
-            if (key.equals( mSubmissions.get(i).getKey())) {
+            if (key.equals(mSubmissions.get(i).getKey())) {
                 mSubmissions.set(i, changedTo);
                 notifyDataSetChanged();
                 return;

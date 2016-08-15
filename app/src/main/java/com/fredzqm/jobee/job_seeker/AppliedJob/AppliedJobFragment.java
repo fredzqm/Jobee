@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -18,8 +19,10 @@ import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.Submission;
+import com.fredzqm.jobee.notification.Notifier;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -40,12 +43,6 @@ public class AppliedJobFragment extends ContainedFragment {
 
     private Submission mSubmission;
     private Callback mCallback;
-
-    private TextView mTitleTextView;
-    private TextView mCompanyTextView;
-    private TextView mDetailsTextView;
-    private TextView mDateTextView;
-    private TextView mCityTextView;
 
     public AppliedJobFragment() {
         // Required empty public constructor
@@ -79,7 +76,6 @@ public class AppliedJobFragment extends ContainedFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.js_appliedjob, menu);
-
     }
 
     @Override
@@ -109,11 +105,13 @@ public class AppliedJobFragment extends ContainedFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.js_jobdetail_frag, container, false);
-        mTitleTextView = (TextView) view.findViewById(R.id.js_job_detail_title);
-        mCompanyTextView = (TextView) view.findViewById(R.id.js_job_detail_company);
-        mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
-        mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
-        mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
+        TextView mTitleTextView = (TextView) view.findViewById(R.id.js_job_detail_title);
+        TextView mCompanyTextView = (TextView) view.findViewById(R.id.js_job_detail_company);
+        TextView mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
+        TextView mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
+        TextView mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
+        Button accpetButon = (Button) view.findViewById(R.id.js_job_detail_button);
+        Button rejectButton = (Button) view.findViewById(R.id.js_job_detail_button2);
 
         Job mJob = mSubmission.getJob();
         mTitleTextView.setText(mJob.getTitle());
@@ -121,8 +119,22 @@ public class AppliedJobFragment extends ContainedFragment {
         mDateTextView.setText(DATAFORMAT.format(mJob.getDate()));
         mCityTextView.setText(mJob.getCity());
         mDetailsTextView.setText(mJob.getDetails());
-
-        mTitleTextView.setText(mJob.getTitle());
+        if (mSubmission.isOffer()) {
+            accpetButon.setVisibility(View.VISIBLE);
+            accpetButon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Notifier.notifyAccpetOffer(getContext(), mSubmission);
+                }
+            });
+            rejectButton.setVisibility(View.VISIBLE);
+            rejectButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Notifier.notifyDeclineOffer(getContext(), mSubmission);
+                }
+            });
+        }
         return view;
     }
 

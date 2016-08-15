@@ -112,20 +112,14 @@ public class ResumeFragment extends ContainedFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final EditText editText = new EditText(getContext());
-        DatabaseReference ref = Submission.getReference().child(mSubmission.getKey());
-        String jobSeekerKey = mSubmission.getJobSeekerKey();
         switch (item.getItemId()) {
             case R.id.re_action_decide_later:
                 break;
             case R.id.re_action_offer:
-                mSubmission.setStatus(Submission.OFFERED);
-                Notifier.notifyOffer(getContext(), jobSeekerKey);
-                ref.setValue(mSubmission);
+                Notifier.notifyOffer(getContext(), mSubmission, mCallback.getRecruiter());
                 break;
             case R.id.re_action_weed_out:
-                mSubmission.setStatus(Submission.REJECTED);
-                Notifier.notifyReject(getContext(), jobSeekerKey,mCallback.getRecruiter());
-                ref.setValue(mSubmission);
+                Notifier.notifyReject(getContext(), mSubmission,mCallback.getRecruiter());
                 break;
             default:
                 throw new RuntimeException("Not implemented");
