@@ -3,7 +3,6 @@ package com.fredzqm.jobee.recruiter.ResumeList;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,11 +22,7 @@ import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.ResumeCategory;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-
-import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -124,12 +119,12 @@ public class ResumeFragment extends ContainedFragment {
                 break;
             case R.id.re_action_offer:
                 mSubmission.setStatus(Submission.OFFERED);
-                Notifier.notify(jobSeekerKey, getContext().getString(R.string.notif_offer_title), getContext().getString(R.string.notif_offer_body));
+                Notifier.notifyOffer(getContext(), jobSeekerKey);
                 ref.setValue(mSubmission);
                 break;
             case R.id.re_action_weed_out:
                 mSubmission.setStatus(Submission.REJECTED);
-                Notifier.notify(jobSeekerKey, getContext().getString(R.string.notif_reject_title), getContext().getString(R.string.notif_reject_body, mCallback.getRecruiter().getCompany()));
+                Notifier.notifyReject(getContext(), jobSeekerKey,mCallback.getRecruiter());
                 ref.setValue(mSubmission);
                 break;
             default:
