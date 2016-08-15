@@ -121,7 +121,6 @@ public class ResumeFragment extends ContainedFragment {
         String jobSeekerKey = mSubmission.getJobSeekerKey();
         switch (item.getItemId()) {
             case R.id.re_action_decide_later:
-                mCallback.showNext();
                 break;
             case R.id.re_action_offer:
                 mSubmission.setStatus(Submission.OFFERED);
@@ -133,11 +132,10 @@ public class ResumeFragment extends ContainedFragment {
                 Notifier.notify(jobSeekerKey, getContext().getString(R.string.notif_reject_title), getContext().getString(R.string.notif_reject_body, mCallback.getRecruiter().getCompany()));
                 ref.setValue(mSubmission);
                 break;
-            case R.id.re_action_schedule_interview:
-                break;
             default:
                 throw new RuntimeException("Not implemented");
         }
+        mCallback.showNext();
         return super.onOptionsItemSelected(item);
     }
 

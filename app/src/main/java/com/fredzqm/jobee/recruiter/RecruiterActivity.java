@@ -24,14 +24,12 @@ import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
 import com.fredzqm.jobee.recruiter.JobList.JobListFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
-import com.fredzqm.jobee.recruiter.ScheduledInterview.InterviewFragment;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeFragment;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback,
-        InterviewFragment.Callback, JobFragment.Callback, ResumeFragment.Callback {
+        HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback, JobFragment.Callback, ResumeFragment.Callback {
     public static final String TAG = "JobSeekerActivity";
 
     private FloatingActionButton mFab;
@@ -129,9 +127,6 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
                 break;
             case R.id.re_nav_joblist:
                 swapFragment(JobListFragment.newInstance(), null);
-                break;
-            case R.id.re_nav_interview:
-                swapFragment(InterviewFragment.newInstance(2), null);
                 break;
             default:
                 throw new RuntimeException("Not implemented navigation bar yet");

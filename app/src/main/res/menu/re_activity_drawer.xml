@@ -15,11 +15,6 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/review_resume" />
 
-        <item
-            android:id="@+id/re_nav_interview"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/scheduled_interview" />
-
     </group>
 
 </menu>
