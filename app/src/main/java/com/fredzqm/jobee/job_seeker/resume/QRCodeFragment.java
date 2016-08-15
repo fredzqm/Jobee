@@ -33,14 +33,13 @@ import com.google.zxing.qrcode.QRCodeWriter;
  * Use the {@link QRCodeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QRCodeFragment extends ContainedFragment implements ChildEventListener {
+public class QRCodeFragment extends ContainedFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String RESUME_KEY = "resume key";
 
     private String mResumeKey;
 
     private Callback mCallback;
-    private DatabaseReference mRef;
 
     public QRCodeFragment() {
         // Required empty public constructor
@@ -68,8 +67,6 @@ public class QRCodeFragment extends ContainedFragment implements ChildEventListe
             throw new RuntimeException("getArguments() return null");
         mResumeKey = getArguments().getString(RESUME_KEY);
 
-        mRef = Submission.getReference();
-        mRef.orderByChild(Submission.JOBSEEKER_KEY).equalTo(mCallback.getUserID()).addChildEventListener(this);
     }
 
     @Override
@@ -116,31 +113,6 @@ public class QRCodeFragment extends ContainedFragment implements ChildEventListe
     public void onDetach() {
         super.onDetach();
         mCallback = null;
-    }
-
-    @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Toast.makeText(getContext(), getContext().getString(R.string.resume_scanned), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-        Log.d("Error", "onCancelled: " + databaseError.getMessage());
     }
 
     /**

@@ -18,14 +18,6 @@
     </item>
 
     <item
-        android:id="@+id/js_action_add_category"
-        android:orderInCategory="100"
-        android:title="@string/add_new_category"
-        android:icon="@drawable/ic_add"
-        app:showAsAction="never">
-    </item>
-
-    <item
         android:id="@+id/re_action_offer"
         android:orderInCategory="100"
         android:title="@string/accepted"
