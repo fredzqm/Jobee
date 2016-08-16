@@ -78,10 +78,11 @@
 
 
         <LinearLayout
-            android:id="@+id/linear_layout2"
+            android:id="@+id/js_appliedjoblist_offer_response_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/js_job_detail_detail"
+            android:visibility="invisible"
             android:layout_margin="@dimen/detail_view_margin"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">

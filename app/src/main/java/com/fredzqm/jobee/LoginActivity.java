@@ -183,9 +183,9 @@ public class LoginActivity extends AppCompatActivity
         });
 
         mAuth = FirebaseAuth.getInstance();
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             mAuth.signOut();
-        }else{
+        } else {
             mLoggedIn = savedInstanceState.getString(LOGGING);
             mLoggingMethod = savedInstanceState.getString(LOGGING_METHOD);
         }
@@ -309,6 +309,7 @@ public class LoginActivity extends AppCompatActivity
                 default:
                     throw new RuntimeException("not implemented login method " + mLoggingMethod);
             }
+            mLoggingMethod = null;
         } else {
             switch (mLoggingMethod) {
                 case EMAIL_SIGNUP:
@@ -464,8 +465,8 @@ public class LoginActivity extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mLoggingMethod = null;
         showLoginError("Google connection failed");
+        mLoggingMethod = null;
     }
 
     // loader interface implementation
@@ -614,7 +615,6 @@ public class LoginActivity extends AppCompatActivity
                 .create()
                 .show();
         showProgress(false);
-        mLoggingMethod = null;
     }
 
     private void showLoginMessage(String message) {

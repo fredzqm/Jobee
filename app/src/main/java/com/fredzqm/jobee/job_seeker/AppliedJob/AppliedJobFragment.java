@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.model.Job;
@@ -110,6 +111,7 @@ public class AppliedJobFragment extends ContainedFragment {
         TextView mDateTextView = (TextView) view.findViewById(R.id.js_job_detail_date);
         TextView mCityTextView = (TextView) view.findViewById(R.id.js_job_detail_city);
         TextView mDetailsTextView = (TextView) view.findViewById(R.id.js_job_detail_detail);
+        final LinearLayout buttons = (LinearLayout) view.findViewById(R.id.js_appliedjoblist_offer_response_buttons);
         Button accpetButon = (Button) view.findViewById(R.id.js_job_detail_button);
         Button rejectButton = (Button) view.findViewById(R.id.js_job_detail_button2);
 
@@ -120,17 +122,18 @@ public class AppliedJobFragment extends ContainedFragment {
         mCityTextView.setText(mJob.getCity());
         mDetailsTextView.setText(mJob.getDetails());
         if (mSubmission.isOffer()) {
-            accpetButon.setVisibility(View.VISIBLE);
+            buttons.setVisibility(View.VISIBLE);
             accpetButon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    buttons.setVisibility(View.INVISIBLE);
                     Notifier.notifyAccpetOffer(getContext(), mSubmission);
                 }
             });
-            rejectButton.setVisibility(View.VISIBLE);
             rejectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    buttons.setVisibility(View.INVISIBLE);
                     Notifier.notifyDeclineOffer(getContext(), mSubmission);
                 }
             });
