@@ -23,7 +23,7 @@ import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListAdapter;
 import com.fredzqm.jobee.job_seeker.AppliedJob.AppliedJobListFragment;
 import com.fredzqm.jobee.job_seeker.resume.QRCodeFragment;
 import com.fredzqm.jobee.model.Job;
-import com.fredzqm.jobee.login.LoginActivity;
+import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.job_seeker.Home.HomeFragment;
 import com.fredzqm.jobee.job_seeker.JobList.JobDetailFragment;
@@ -33,7 +33,6 @@ import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
-import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,

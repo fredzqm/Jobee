@@ -17,7 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fredzqm.jobee.ContainedFragment;
-import com.fredzqm.jobee.login.LoginActivity;
+import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;

@@ -11,10 +11,8 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.fredzqm.jobee.job_seeker.JobSeekerActivity;
-import com.fredzqm.jobee.login.LoginActivity;
+import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
-import com.fredzqm.jobee.model.JobSeeker;
-import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.recruiter.RecruiterActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;

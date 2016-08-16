@@ -2,7 +2,7 @@ package com.fredzqm.jobee.notification;
 
 import android.util.Log;
 
-import com.fredzqm.jobee.login.LoginActivity;
+import com.fredzqm.jobee.LoginActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
