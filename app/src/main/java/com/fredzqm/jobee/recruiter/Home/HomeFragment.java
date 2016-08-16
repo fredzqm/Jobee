@@ -111,11 +111,11 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         mAccount = dataSnapshot.getValue(Recruiter.class);
-        mAccount.setKey(dataSnapshot.getKey());
         if (mAccount == null) {
             mAccount = Recruiter.newInstance();
             mRef.setValue(mAccount);
         } else {
+            mAccount.setKey(dataSnapshot.getKey());
             nameEditText.setText(mAccount.getName());
             mCallback.updateAccount(mAccount);
             emailEditText.setText(mAccount.getEmailAccount());

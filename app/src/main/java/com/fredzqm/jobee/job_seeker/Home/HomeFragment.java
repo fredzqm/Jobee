@@ -124,6 +124,7 @@ public class HomeFragment extends ContainedFragment implements ValueEventListene
             mAccount = JobSeeker.newInstance(mCallback.getUserID());
             mRef.setValue(mAccount);
         } else {
+            mAccount.setKey(dataSnapshot.getKey());
             nameEditText.setText(mAccount.getName());
             mCallback.updateAccount(mAccount);
             emailEditText.setText(mAccount.getEmailAccount());
