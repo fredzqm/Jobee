@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +33,7 @@ public class Notifier extends TextHttpResponseHandler {
     public static final String TITLE = "TITLE";
     public static final String BODY = "BODY";
     public static final String SUBMISSION_KEY = "SUBMISSION_KEY";
-    private static final String DECLINE_OFFER = "DECLINE_OFFER";
+    public static final String DECLINE_OFFER = "DECLINE_OFFER";
 
     private static AsyncHttpClient client;
     private static ResponseHandlerInterface requestSender;
@@ -56,7 +57,7 @@ public class Notifier extends TextHttpResponseHandler {
         Map<String, String> data = new HashMap<>();
         data.put(NOTIF_TYPE, OFFER);
         data.put(TITLE, context.getString(R.string.notif_offer_title));
-        data.put(BODY, context.getString(R.string.notif_offer_body));
+        data.put(BODY, context.getString(R.string.notif_offer_body, recruiter.getCompany()));
         data.put(SUBMISSION_KEY, submission.getKey());
         sendNotification(submission.getJobSeekerKey(), data);
     }
@@ -75,7 +76,7 @@ public class Notifier extends TextHttpResponseHandler {
         sendNotification(submission.getJobSeekerKey(), data);
     }
 
-    public static void notifyAccpetOffer(Context context, Submission submission) {
+    public static void notifyAccpetOffer(Context context, Submission submission, JobSeeker jobseeker) {
         // update firebase
         submission.setStatus(Submission.ACCEPTED);
         DatabaseReference ref = Submission.getReference().child(submission.getKey());
@@ -84,12 +85,12 @@ public class Notifier extends TextHttpResponseHandler {
         Map<String, String> data = new HashMap<>();
         data.put(NOTIF_TYPE, ACCEPT_OFFER);
         data.put(TITLE, context.getString(R.string.notif_accept_offer_title));
-        data.put(BODY, context.getString(R.string.notif_accept_offer_body));
+        data.put(BODY, context.getString(R.string.notif_accept_offer_body, jobseeker.getName()));
         data.put(SUBMISSION_KEY, submission.getKey());
         sendNotification(submission.getRecruiterKey(), data);
     }
 
-    public static void notifyDeclineOffer(Context context, Submission submission) {
+    public static void notifyDeclineOffer(Context context, Submission submission, JobSeeker jobseeker) {
         // update firebase
         submission.setStatus(Submission.DECLINED);
         DatabaseReference ref = Submission.getReference().child(submission.getKey());
@@ -98,7 +99,7 @@ public class Notifier extends TextHttpResponseHandler {
         Map<String, String> data = new HashMap<>();
         data.put(NOTIF_TYPE, DECLINE_OFFER);
         data.put(TITLE, context.getString(R.string.notif_decline_offer_title));
-        data.put(BODY, context.getString(R.string.notif_decline_offer_body));
+        data.put(BODY, context.getString(R.string.notif_decline_offer_body, jobseeker.getName()));
         data.put(SUBMISSION_KEY, submission.getKey());
         sendNotification(submission.getRecruiterKey(), data);
     }

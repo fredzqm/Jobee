@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,10 @@ import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
 import com.fredzqm.jobee.recruiter.JobList.JobFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class JobSeekerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         ResumeFragment.Callback, HomeFragment.Callback, JobListFragment.Callback, JobFragment.Callback,
@@ -80,6 +85,18 @@ public class JobSeekerActivity extends AppCompatActivity implements NavigationVi
         } else if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
+        DatabaseReference mRef = JobSeeker.getRefernce().child(getUserID());
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mJobseeker = dataSnapshot.getValue(JobSeeker.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled " + databaseError);
+            }
+        });
     }
 
     private void swapFragment(ContainedFragment fragment, String tag) {

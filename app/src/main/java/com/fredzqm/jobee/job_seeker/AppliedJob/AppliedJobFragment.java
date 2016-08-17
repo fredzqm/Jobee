@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.fredzqm.jobee.model.Job;
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.ContainedFragment;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Resume;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
@@ -127,14 +128,14 @@ public class AppliedJobFragment extends ContainedFragment {
                 @Override
                 public void onClick(View view) {
                     buttons.setVisibility(View.INVISIBLE);
-                    Notifier.notifyAccpetOffer(getContext(), mSubmission);
+                    Notifier.notifyAccpetOffer(getContext(), mSubmission, mCallback.getJobSeeker());
                 }
             });
             rejectButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     buttons.setVisibility(View.INVISIBLE);
-                    Notifier.notifyDeclineOffer(getContext(), mSubmission);
+                    Notifier.notifyDeclineOffer(getContext(), mSubmission, mCallback.getJobSeeker());
                 }
             });
         }
@@ -171,5 +172,6 @@ public class AppliedJobFragment extends ContainedFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface Callback {
+        JobSeeker getJobSeeker();
     }
 }

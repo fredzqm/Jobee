@@ -1,11 +1,13 @@
 package com.fredzqm.jobee.recruiter.JobList;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fredzqm.jobee.R;
 import com.fredzqm.jobee.model.Job;
@@ -27,11 +29,13 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
     public final SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd");
     private final List<com.fredzqm.jobee.model.Job> mJobs;
     private final Callback mCallback;
+    private final Context mContext;
 
     private DatabaseReference mRef;
 
-    public JobListAdapter(Callback callback) {
+    public JobListAdapter(Context context, Callback callback) {
         mJobs = new ArrayList<>();
+        mContext = context;
         mCallback = callback;
         mRef = Job.getReference();
         mRef.orderByChild(Job.RECRUITER_KEY).equalTo(mCallback.getUserID())
@@ -120,6 +124,15 @@ public class JobListAdapter extends RecyclerView.Adapter<JobListAdapter.ViewHold
                     if (null != mCallback) {
                         mCallback.showJobDetail(mJob.getKey());
                     }
+                }
+            });
+
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    mRef.child(mJob.getKey()).removeValue();
+                    Toast.makeText(mContext, mContext.getString(R.string.re_delete_message , mJob.getTitle()), Toast.LENGTH_SHORT).show();
+                    return false;
                 }
             });
         }

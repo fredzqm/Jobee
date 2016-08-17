@@ -102,7 +102,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
 
         mCallback.getFab().setImageResource(android.R.drawable.ic_menu_camera);
         mCallback.getFab().show();
-        
+
         return view;
     }
 
@@ -159,7 +159,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                                 mJob.setTitle(str);
                             } else if (view == mCityTextView) {
                                 mJob.setCity(str);
-                            } else if (view == mDetailsTextView){
+                            } else if (view == mDetailsTextView) {
                                 mJob.setDetails(str);
                             }
                             mRef.setValue(mJob);
@@ -198,11 +198,13 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         mJob = dataSnapshot.getValue(Job.class);
-        mJob.setKey(dataSnapshot.getKey());
-        mTitleTextView.setText(mJob.getTitle());
-        mDateTextView.setText(DATE_FORMAT.format(mJob.getDate()));
-        mCityTextView.setText(mJob.getCity());
-        mDetailsTextView.setText(mJob.getDetails());
+        if (mJob != null) {
+            mJob.setKey(dataSnapshot.getKey());
+            mTitleTextView.setText(mJob.getTitle());
+            mDateTextView.setText(DATE_FORMAT.format(mJob.getDate()));
+            mCityTextView.setText(mJob.getCity());
+            mDetailsTextView.setText(mJob.getDetails());
+        }
     }
 
     @Override
@@ -226,7 +228,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
                 Toast.makeText((Context) mCallback, R.string.resume_scan_cancelled, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText((Context) mCallback, R.string.scan_resume_toast, Toast.LENGTH_LONG).show();
-              Submission.handleNewSubmission(mJob, result.getContents());
+                Submission.handleNewSubmission(mJob, result.getContents());
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -238,7 +240,7 @@ public class JobFragment extends ContainedFragment implements View.OnClickListen
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.

@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.fredzqm.jobee.ContainedFragment;
 import com.fredzqm.jobee.LoginActivity;
 import com.fredzqm.jobee.R;
+import com.fredzqm.jobee.model.JobSeeker;
 import com.fredzqm.jobee.model.Recruiter;
 import com.fredzqm.jobee.model.Submission;
 import com.fredzqm.jobee.notification.Notifier;
@@ -28,6 +30,10 @@ import com.fredzqm.jobee.recruiter.ResumeList.ResumeListAdapter;
 import com.fredzqm.jobee.recruiter.Home.HomeFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeListFragment;
 import com.fredzqm.jobee.recruiter.ResumeList.ResumeFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class RecruiterActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.Callback, ResumeListFragment.Callback, JobListFragment.Callback, JobFragment.Callback, ResumeFragment.Callback {
@@ -68,17 +74,28 @@ public class RecruiterActivity extends AppCompatActivity implements NavigationVi
         mNavTitleTextView = (TextView) headView.findViewById(R.id.re_nav_text_title);
         mNavSmallTextView = (TextView) headView.findViewById(R.id.re_nav_text_small);
 
-
         Intent intent = getIntent();
         if (intent != null && intent.getStringExtra(Notifier.NOTIF_TYPE) != null) {
             String type = intent.getStringExtra(Notifier.NOTIF_TYPE);
-            if (type.equals(Notifier.ACCEPT_OFFER)) {
+            if (type.equals(Notifier.ACCEPT_OFFER) || type.equals(Notifier.DECLINE_OFFER)) {
                 swapFragment(ResumeListFragment.newInstance(), null);
                 mResumeListAdapter = new ResumeListAdapter(this, intent.getStringExtra(Notifier.SUBMISSION_KEY));
             }
         } else if (savedInstanceState == null) {
             swapFragment(HomeFragment.newInstance(), null);
         }
+        DatabaseReference mRef = JobSeeker.getRefernce().child(getUserID());
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mRecruiter = dataSnapshot.getValue(Recruiter.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled " + databaseError);
+            }
+        });
     }
 
     private void swapFragment(ContainedFragment fragment, String tag) {

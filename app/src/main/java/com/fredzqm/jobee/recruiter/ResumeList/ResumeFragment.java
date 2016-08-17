@@ -103,14 +103,15 @@ public class ResumeFragment extends ContainedFragment {
         switch (mSubmission.getStatus()) {
             case Submission.SUBMITTED:
             case Submission.OFFERED:
+            case Submission.REJECTED:
                 break;
             case Submission.ACCEPTED:
                 statusTextView.setVisibility(View.VISIBLE);
-                statusTextView.setText(R.string.notif_accept_offer_body);
+                statusTextView.setText("Offer Accepted");
                 break;
-            case Submission.REJECTED:
+            case Submission.DECLINED:
                 statusTextView.setVisibility(View.VISIBLE);
-                statusTextView.setText(R.string.notif_decline_offer_body);
+                statusTextView.setText("Offer Declined");
                 break;
         }
         return view;

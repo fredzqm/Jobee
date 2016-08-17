@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/re_nav_imageView"
         android:layout_marginTop="@dimen/nav_bar_header_margin"
-        android:text="Job seeker"
+        android:text="Recruiter"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
