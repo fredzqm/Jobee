@@ -296,6 +296,7 @@ public class LoginActivity extends AppCompatActivity
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
                     mPasswordView.requestFocus();
                     showProgress(false);
+                    mLoggingMethod = null;
                     break;
                 case EMAIL_SIGNUP:
                     showLoginError("Sign up failed, account already exist");
@@ -309,7 +310,6 @@ public class LoginActivity extends AppCompatActivity
                 default:
                     throw new RuntimeException("not implemented login method " + mLoggingMethod);
             }
-            mLoggingMethod = null;
         } else {
             switch (mLoggingMethod) {
                 case EMAIL_SIGNUP:
@@ -615,6 +615,7 @@ public class LoginActivity extends AppCompatActivity
                 .create()
                 .show();
         showProgress(false);
+        mLoggingMethod = null;
     }
 
     private void showLoginMessage(String message) {
