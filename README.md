@@ -1,5 +1,6 @@
-# Jobee-FrontEnd
-The frontEnd of Jobee, an Android project for resuming exchanging
+# Jobee
+
+An Android project for resuming exchanging
 
 Design document available at
 
